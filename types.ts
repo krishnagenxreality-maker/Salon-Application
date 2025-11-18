@@ -1,29 +1,21 @@
+export enum TechniqueCategory {
+  FUNDAMENTALS = 'Fundamentals',
+  PRECISIONS = 'Precisions',
+  TRANSIENTS = 'Transients',
+  MENS = 'Mens',
+  CREATIVE_CLASSICS = 'Creative Classics',
+}
 
-export interface TechniqueStep {
-  stepNumber: number;
+export interface TrainingStep {
   title: string;
-  instruction: string;
+  instructions: string;
 }
 
 export interface Technique {
   id: string;
-  name: string;
-  category: Category;
+  title: string;
+  category: TechniqueCategory;
   description: string;
-  steps: TechniqueStep[];
-}
-
-export enum Category {
-  FUNDAMENTALS = "Fundamentals",
-  PRECISION = "Precision",
-  TRANSIENTS = "Transients",
-  MENS = "Mens",
-  CREATIVE_CLASSICS = "Creative Classics"
-}
-
-export enum Screen {
-  HOME,
-  OVERVIEW,
-  TRAINING,
-  COMPLETION
+  steps: TrainingStep[];
+  imageUrl: string;
 }

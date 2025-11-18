@@ -1,19 +1,11 @@
-
 import React from 'react';
-import { ScissorIcon } from './icons';
 
-interface AnimationPlaceholderProps {
-  className?: string;
-}
-
-const AnimationPlaceholder: React.FC<AnimationPlaceholderProps> = ({ className }) => {
+const AnimationPlaceholder: React.FC = () => {
   return (
-    <div className={`relative flex items-center justify-center bg-white/50 border border-white/70 backdrop-blur-sm rounded-3xl overflow-hidden aspect-square ${className}`}>
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-100/50 to-purple-100/50 opacity-50"></div>
-      <div className="z-10 text-purple-300">
-        <ScissorIcon className="w-24 h-24 opacity-50" />
+    <div className="aspect-square w-full bg-light-grey rounded-2xl flex items-center justify-center border border-gray-200/80">
+      <div className="w-16 h-16 border-2 border-gray-300 rounded-full flex items-center justify-center">
+        <div className="w-4 h-4 bg-gray-400 rounded-full animate-subtle-pulse"></div>
       </div>
-      <span className="absolute bottom-4 text-sm font-medium text-purple-400/80">Animation Placeholder</span>
     </div>
   );
 };

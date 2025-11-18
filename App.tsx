@@ -1,66 +1,87 @@
-
 import React, { useState, useCallback } from 'react';
-import { Screen, Technique } from './types';
-import HomeScreen from './screens/HomeScreen';
-import TechniqueOverviewScreen from './screens/TechniqueOverviewScreen';
-import TrainingScreen from './screens/TrainingScreen';
-import CompletionScreen from './screens/CompletionScreen';
+import { Technique } from './types';
+import Header from './components/Header';
+import HomePage from './pages/HomePage';
+import TechniquePage from './pages/TechniquePage';
+import TrainingPage from './pages/TrainingPage';
+import CompletionPage from './pages/CompletionPage';
+
+type Page = 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED';
 
 const App: React.FC = () => {
-  const [screen, setScreen] = useState<Screen>(Screen.HOME);
+  const [currentPage, setCurrentPage] = useState<Page>('HOME');
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
+  
+  const handleNavigate = useCallback((page: 'HOME') => {
+    setCurrentPage('HOME');
+    setSelectedTechnique(null);
+  }, []);
 
   const handleSelectTechnique = useCallback((technique: Technique) => {
     setSelectedTechnique(technique);
-    setScreen(Screen.OVERVIEW);
+    setCurrentPage('TECHNIQUE');
   }, []);
 
-  const handleStartTraining = useCallback(() => {
-    if (selectedTechnique) {
-      setScreen(Screen.TRAINING);
-    }
-  }, [selectedTechnique]);
+  const handleStartTraining = useCallback((technique: Technique) => {
+    setSelectedTechnique(technique);
+    setCurrentPage('TRAINING');
+  }, []);
   
-  const handleCompleteTraining = useCallback(() => {
-    if(selectedTechnique){
-        setScreen(Screen.COMPLETION);
-    }
-  }, [selectedTechnique]);
-
-  const handleRestart = useCallback(() => {
-     if(selectedTechnique){
-        setScreen(Screen.TRAINING);
-     }
-  }, [selectedTechnique]);
-
-  const handleBackToLibrary = useCallback(() => {
+  const handleBackToHome = useCallback(() => {
     setSelectedTechnique(null);
-    setScreen(Screen.HOME);
+    setCurrentPage('HOME');
   }, []);
-  
-  const renderScreen = () => {
-    switch (screen) {
-      case Screen.HOME:
-        return <HomeScreen onSelectTechnique={handleSelectTechnique} />;
-      case Screen.OVERVIEW:
-        if (!selectedTechnique) return <HomeScreen onSelectTechnique={handleSelectTechnique} />;
-        return <TechniqueOverviewScreen technique={selectedTechnique} onStart={handleStartTraining} onBack={handleBackToLibrary} />;
-      case Screen.TRAINING:
-        if (!selectedTechnique) return <HomeScreen onSelectTechnique={handleSelectTechnique} />;
-        return <TrainingScreen technique={selectedTechnique} onComplete={handleCompleteTraining} onBack={handleBackToLibrary} />;
-      case Screen.COMPLETION:
-        if (!selectedTechnique) return <HomeScreen onSelectTechnique={handleSelectTechnique} />;
-        return <CompletionScreen onRestart={handleRestart} onBackToLibrary={handleBackToLibrary} />;
+
+  const handleCompleteTraining = useCallback(() => {
+    setCurrentPage('COMPLETED');
+  }, []);
+
+  const renderContent = () => {
+    switch (currentPage) {
+      case 'HOME':
+        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+      case 'TECHNIQUE':
+        if (selectedTechnique) {
+          return (
+            <TechniquePage
+              technique={selectedTechnique}
+              onStartTraining={handleStartTraining}
+              onBack={handleBackToHome}
+            />
+          );
+        }
+        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+      case 'TRAINING':
+         if (selectedTechnique) {
+          return (
+            <TrainingPage
+              technique={selectedTechnique}
+              onComplete={handleCompleteTraining}
+              onExit={handleBackToHome}
+            />
+          );
+        }
+        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+      case 'COMPLETED':
+         if (selectedTechnique) {
+          return (
+            <CompletionPage
+              technique={selectedTechnique}
+              onRestart={() => handleStartTraining(selectedTechnique)}
+              onBackToLibrary={handleBackToHome}
+            />
+          );
+        }
+        return <HomePage onSelectTechnique={handleSelectTechnique} />;
       default:
-        return <HomeScreen onSelectTechnique={handleSelectTechnique} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-orange-50 text-gray-800 antialiased">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {renderScreen()}
-      </div>
+    <div className="antialiased text-black bg-white">
+      {currentPage !== 'TRAINING' && <Header onNavigate={handleNavigate} />}
+      {renderContent()}
     </div>
   );
 };
