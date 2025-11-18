@@ -46,27 +46,27 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique }) => {
   }, [activeCategory, searchTerm]);
 
   return (
-    <div className="w-full min-h-screen bg-white pt-24">
-      <main className="max-w-screen-2xl mx-auto px-6 md:px-12 animate-fade-in">
+    <div className="w-full min-h-screen bg-white pt-20">
+      <main className="max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12 animate-fade-in">
         {/* Hero Section */}
-        <section className="text-left py-16 md:py-24 border-b border-gray-200">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
+        <section className="text-left py-12 md:py-20 border-b border-gray-200">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
             TONI&GUY
             <br />
             <span className="text-gray-400">VR Haircut Training</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <p className="mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on VR training designed by industry masters.
           </p>
         </section>
 
         {/* Filters & Grid */}
-        <section className="py-16 md:py-24">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+        <section className="py-12 md:py-20">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-10">
              <div className="flex flex-wrap justify-center md:justify-start gap-2">
                 <button
                     onClick={() => setActiveCategory('All')}
-                    className={`px-5 py-2 text-sm font-medium rounded-full transition-colors ${activeCategory === 'All' ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-4 py-2 text-xs sm:text-sm sm:px-5 rounded-full transition-colors ${activeCategory === 'All' ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
                 >
                     All
                 </button>
@@ -74,7 +74,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique }) => {
                 <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-5 py-2 text-sm font-medium rounded-full transition-colors ${activeCategory === category ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-4 py-2 text-xs sm:text-sm sm:px-5 rounded-full transition-colors ${activeCategory === category ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
                 >
                     {category}
                 </button>
@@ -91,7 +91,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique }) => {
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8">
             {filteredTechniques.map(technique => (
               <TechniqueCard key={technique.id} technique={technique} onSelect={onSelectTechnique} />
             ))}

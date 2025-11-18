@@ -7,15 +7,24 @@ import TrainingPage from './pages/TrainingPage';
 import CompletionPage from './pages/CompletionPage';
 
 type Page = 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED';
+type StepTimings = number[];
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('HOME');
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
+  const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
+  const [stepTimings, setStepTimings] = useState<StepTimings>([]);
   
+  const resetTrainingState = useCallback(() => {
+    setTrainingStartTime(null);
+    setStepTimings([]);
+  }, []);
+
   const handleNavigate = useCallback((page: 'HOME') => {
     setCurrentPage('HOME');
     setSelectedTechnique(null);
-  }, []);
+    resetTrainingState();
+  }, [resetTrainingState]);
 
   const handleSelectTechnique = useCallback((technique: Technique) => {
     setSelectedTechnique(technique);
@@ -24,12 +33,19 @@ const App: React.FC = () => {
 
   const handleStartTraining = useCallback((technique: Technique) => {
     setSelectedTechnique(technique);
+    setTrainingStartTime(Date.now());
+    setStepTimings([]);
     setCurrentPage('TRAINING');
   }, []);
   
   const handleBackToHome = useCallback(() => {
     setSelectedTechnique(null);
     setCurrentPage('HOME');
+    resetTrainingState();
+  }, [resetTrainingState]);
+
+  const handleStepComplete = useCallback((duration: number) => {
+    setStepTimings(prev => [...prev, duration]);
   }, []);
 
   const handleCompleteTraining = useCallback(() => {
@@ -52,10 +68,12 @@ const App: React.FC = () => {
         }
         return <HomePage onSelectTechnique={handleSelectTechnique} />;
       case 'TRAINING':
-         if (selectedTechnique) {
+         if (selectedTechnique && trainingStartTime) {
           return (
             <TrainingPage
               technique={selectedTechnique}
+              trainingStartTime={trainingStartTime}
+              onStepComplete={handleStepComplete}
               onComplete={handleCompleteTraining}
               onExit={handleBackToHome}
             />
@@ -67,6 +85,7 @@ const App: React.FC = () => {
           return (
             <CompletionPage
               technique={selectedTechnique}
+              stepTimings={stepTimings}
               onRestart={() => handleStartTraining(selectedTechnique)}
               onBackToLibrary={handleBackToHome}
             />

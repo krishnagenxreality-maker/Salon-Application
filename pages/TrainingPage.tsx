@@ -1,22 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
 import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon } from '../components/Icons';
 
+interface LiveTimerProps {
+  startTime: number;
+}
+
+const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const elapsedMs = now - startTime;
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+  const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+
+  return (
+    <div className="fixed top-6 right-4 sm:right-6 bg-white/80 backdrop-blur-sm px-3 py-1 sm:px-4 sm:py-2 rounded-lg border border-gray-200 shadow-md z-50">
+      <p className="text-base sm:text-lg font-semibold tabular-nums text-black">{minutes}:{seconds}</p>
+    </div>
+  );
+};
+
+
 interface TrainingPageProps {
   technique: Technique;
+  trainingStartTime: number;
+  onStepComplete: (duration: number) => void;
   onComplete: () => void;
   onExit: () => void;
 }
 
-const TrainingPage: React.FC<TrainingPageProps> = ({ technique, onComplete, onExit }) => {
+const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTime, onStepComplete, onComplete, onExit }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [stepStartTime, setStepStartTime] = useState(Date.now());
   const totalSteps = technique.steps.length;
   const stepData = technique.steps[currentStep];
 
   const handleNext = () => {
+    const duration = Date.now() - stepStartTime;
+    onStepComplete(duration);
+
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
+      setStepStartTime(Date.now());
     } else {
       onComplete();
     }
@@ -25,6 +57,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, onComplete, onEx
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
+      setStepStartTime(Date.now());
     }
   };
   
@@ -39,18 +72,20 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, onComplete, onEx
                 style={{ width: `${progressPercentage}%` }}
             ></div>
         </div>
+        
+        <LiveTimer startTime={trainingStartTime} />
 
-      <div className="flex-grow flex items-center justify-center px-6 md:px-12 pt-16 pb-32">
-        <div className="w-full max-w-screen-xl mx-auto grid md:grid-cols-2 gap-12 md:gap-24 items-center">
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 md:px-12 pt-16 pb-32">
+        <div className="w-full max-w-screen-xl mx-auto grid md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Left Column: Instructions */}
           <div className="animate-slide-up">
             <span className="text-sm font-bold text-gray-500 tracking-widest uppercase">
               Step {currentStep + 1} / {totalSteps}
             </span>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-black tracking-tighter mt-2">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black tracking-tighter mt-2">
               {stepData.title}
             </h2>
-            <p className="mt-6 text-base text-gray-700 leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-gray-700 leading-relaxed">
               {stepData.instructions}
             </p>
             <div className="mt-8 flex items-center gap-4">
@@ -72,27 +107,27 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, onComplete, onEx
       
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200/80 z-40">
-        <div className="max-w-screen-xl mx-auto px-6 md:px-12 h-28 flex items-center justify-between">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-12 h-24 flex items-center justify-between">
            <button onClick={onExit} className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
               Exit Training
             </button>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="px-8 h-14 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black"
+              className="h-12 px-4 sm:h-14 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black"
             >
               <ChevronLeftIcon className="w-5 h-5 text-black" />
-               <span className="text-sm font-semibold tracking-wide ml-2">
+               <span className="hidden sm:inline text-sm font-semibold tracking-wide ml-2">
                  Previous
                </span>
             </button>
             <button
               onClick={handleNext}
-              className="h-14 px-10 bg-black text-white flex items-center justify-center transition-colors hover:bg-gray-800 rounded-full"
+              className="h-12 px-6 sm:h-14 sm:px-8 bg-black text-white flex items-center justify-center transition-colors hover:bg-gray-800 rounded-full"
             >
               <span className="text-sm font-semibold tracking-wide mr-2">
-                 {currentStep === totalSteps - 1 ? 'Finish' : 'Next Step'}
+                 {currentStep === totalSteps - 1 ? 'Finish' : 'Next'}
               </span>
               <ChevronRightIcon className="w-5 h-5 text-white" />
             </button>
