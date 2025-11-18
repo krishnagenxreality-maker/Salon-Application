@@ -73,6 +73,12 @@ const App: React.FC = () => {
     setCurrentPage('LOGIN');
   }, []);
 
+  const handleSignOut = useCallback(() => {
+    setCurrentPage('LOGIN');
+    setSelectedTechnique(null);
+    resetTrainingState();
+  }, [resetTrainingState]);
+
 
   const renderContent = () => {
     switch (currentPage) {
@@ -125,7 +131,7 @@ const App: React.FC = () => {
 
   return (
     <div className="antialiased text-black bg-white">
-      {!['LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} />}
+      {!['LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
       {renderContent()}
     </div>
   );
