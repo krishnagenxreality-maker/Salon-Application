@@ -5,12 +5,15 @@ import HomePage from './pages/HomePage';
 import TechniquePage from './pages/TechniquePage';
 import TrainingPage from './pages/TrainingPage';
 import CompletionPage from './pages/CompletionPage';
+import LoginPage from './pages/LoginPage';
+import CreateIdPage from './pages/CreateIdPage';
 
-type Page = 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED';
+
+type Page = 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID';
 type StepTimings = number[];
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('HOME');
+  const [currentPage, setCurrentPage] = useState<Page>('LOGIN');
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
@@ -51,9 +54,32 @@ const App: React.FC = () => {
   const handleCompleteTraining = useCallback(() => {
     setCurrentPage('COMPLETED');
   }, []);
+  
+  const handleLogin = useCallback(() => {
+    setCurrentPage('HOME');
+  }, []);
+  
+  const handleNavigateToCreateId = useCallback(() => {
+    setCurrentPage('CREATE_ID');
+  }, []);
+  
+  const handleCreateId = useCallback(() => {
+    // In a real app, you'd handle registration here.
+    // For now, we'll just navigate back to the login page.
+    setCurrentPage('LOGIN');
+  }, []);
+
+  const handleNavigateToLogin = useCallback(() => {
+    setCurrentPage('LOGIN');
+  }, []);
+
 
   const renderContent = () => {
     switch (currentPage) {
+      case 'LOGIN':
+        return <LoginPage onLogin={handleLogin} onNavigateToCreateId={handleNavigateToCreateId} />;
+      case 'CREATE_ID':
+        return <CreateIdPage onCreateId={handleCreateId} onNavigateToLogin={handleNavigateToLogin} />;
       case 'HOME':
         return <HomePage onSelectTechnique={handleSelectTechnique} />;
       case 'TECHNIQUE':
@@ -93,13 +119,13 @@ const App: React.FC = () => {
         }
         return <HomePage onSelectTechnique={handleSelectTechnique} />;
       default:
-        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+        return <LoginPage onLogin={handleLogin} onNavigateToCreateId={handleNavigateToCreateId} />;
     }
   };
 
   return (
     <div className="antialiased text-black bg-white">
-      {currentPage !== 'TRAINING' && <Header onNavigate={handleNavigate} />}
+      {!['LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} />}
       {renderContent()}
     </div>
   );
