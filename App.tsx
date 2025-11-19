@@ -10,9 +10,12 @@ import LoginPage from './pages/LoginPage';
 import CreateIdPage from './pages/CreateIdPage';
 import AdminPage from './pages/AdminPage';
 import RoleSelectionPage from './pages/RoleSelectionPage';
+import WelcomePage from './pages/WelcomePage';
+import ModeSelectionPage from './pages/ModeSelectionPage';
+import ServiceSelectionPage from './pages/ServiceSelectionPage';
 
 
-type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN';
+type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION';
 type UserRole = 'admin' | 'candidate' | null;
 type StepTimings = number[];
 
@@ -69,9 +72,32 @@ const App: React.FC = () => {
     if (userRole === 'admin') {
         setCurrentPage('ADMIN');
     } else {
-        setCurrentPage('HOME');
+        // Redirect candidates to Mode Selection first
+        setCurrentPage('MODE_SELECTION');
     }
   }, [userRole]);
+
+  const handleModeSelect = useCallback((mode: 'with-customer' | 'without-customer') => {
+      if (mode === 'without-customer') {
+          setCurrentPage('WELCOME');
+      } else {
+          // Placeholder for "On Customer" flow
+          alert("Training on Customer module is coming soon.");
+      }
+  }, []);
+  
+  const handleExploreServices = useCallback(() => {
+    // From Welcome page, go to Service Selection
+    setCurrentPage('SERVICE_SELECTION');
+  }, []);
+
+  const handleServiceSelect = useCallback((serviceId: string) => {
+      if (serviceId === 'hair') {
+          setCurrentPage('HOME');
+      } else {
+          alert("This training module is currently under development.");
+      }
+  }, []);
   
   const handleNavigateToCreateId = useCallback(() => {
     setCurrentPage('CREATE_ID');
@@ -117,6 +143,12 @@ const App: React.FC = () => {
                 onNavigateToLogin={handleNavigateToLogin} 
             />
         );
+      case 'MODE_SELECTION':
+        return <ModeSelectionPage onSelect={handleModeSelect} />;
+      case 'WELCOME':
+        return <WelcomePage onExplore={handleExploreServices} />;
+      case 'SERVICE_SELECTION':
+          return <ServiceSelectionPage onSelectService={handleServiceSelect} />;
       case 'ADMIN':
         return <AdminPage />;
       case 'HOME':
@@ -164,7 +196,7 @@ const App: React.FC = () => {
 
   return (
     <div className="antialiased text-black bg-white">
-      {!['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
+      {!['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING', 'WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
       {renderContent()}
     </div>
   );
