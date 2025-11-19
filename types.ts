@@ -1,3 +1,4 @@
+
 export enum TechniqueCategory {
   FUNDAMENTALS = 'Fundamentals',
   PRECISIONS = 'Precisions',
@@ -18,4 +19,19 @@ export interface Technique {
   description: string;
   steps: TrainingStep[];
   imageUrl: string;
+}
+
+// Admin & Progress Types
+export interface CompletedTechnique {
+  techniqueId: string;
+  completedAt: number; // timestamp
+  stepTimings: number[]; // duration in ms for each step
+}
+
+export interface User {
+  id: string;
+  name: string;
+  applicationNumber: string;
+  joinedAt: number;
+  completedTechniques: CompletedTechnique[];
 }

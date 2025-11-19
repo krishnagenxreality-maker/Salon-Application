@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { Technique } from './types';
 import Header from './components/Header';
@@ -7,13 +8,17 @@ import TrainingPage from './pages/TrainingPage';
 import CompletionPage from './pages/CompletionPage';
 import LoginPage from './pages/LoginPage';
 import CreateIdPage from './pages/CreateIdPage';
+import AdminPage from './pages/AdminPage';
+import RoleSelectionPage from './pages/RoleSelectionPage';
 
 
-type Page = 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID';
+type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN';
+type UserRole = 'admin' | 'candidate' | null;
 type StepTimings = number[];
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('LOGIN');
+  const [currentPage, setCurrentPage] = useState<Page>('ROLE_SELECTION');
+  const [userRole, setUserRole] = useState<UserRole>(null);
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
@@ -28,6 +33,11 @@ const App: React.FC = () => {
     setSelectedTechnique(null);
     resetTrainingState();
   }, [resetTrainingState]);
+
+  const handleRoleSelect = useCallback((role: 'admin' | 'candidate') => {
+    setUserRole(role);
+    setCurrentPage('LOGIN');
+  }, []);
 
   const handleSelectTechnique = useCallback((technique: Technique) => {
     setSelectedTechnique(technique);
@@ -55,9 +65,13 @@ const App: React.FC = () => {
     setCurrentPage('COMPLETED');
   }, []);
   
-  const handleLogin = useCallback(() => {
-    setCurrentPage('HOME');
-  }, []);
+  const handleLoginSuccess = useCallback(() => {
+    if (userRole === 'admin') {
+        setCurrentPage('ADMIN');
+    } else {
+        setCurrentPage('HOME');
+    }
+  }, [userRole]);
   
   const handleNavigateToCreateId = useCallback(() => {
     setCurrentPage('CREATE_ID');
@@ -65,7 +79,7 @@ const App: React.FC = () => {
   
   const handleCreateId = useCallback(() => {
     // In a real app, you'd handle registration here.
-    // For now, we'll just navigate back to the login page.
+    // Navigate back to login after creation
     setCurrentPage('LOGIN');
   }, []);
 
@@ -74,7 +88,9 @@ const App: React.FC = () => {
   }, []);
 
   const handleSignOut = useCallback(() => {
-    setCurrentPage('LOGIN');
+    // Resetting completely back to role selection
+    setCurrentPage('ROLE_SELECTION');
+    setUserRole(null);
     setSelectedTechnique(null);
     resetTrainingState();
   }, [resetTrainingState]);
@@ -82,10 +98,27 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (currentPage) {
+      case 'ROLE_SELECTION':
+        return <RoleSelectionPage onSelect={handleRoleSelect} />;
       case 'LOGIN':
-        return <LoginPage onLogin={handleLogin} onNavigateToCreateId={handleNavigateToCreateId} />;
+        return (
+            <LoginPage 
+                role={userRole || 'candidate'} 
+                onLoginSuccess={handleLoginSuccess} 
+                onNavigateToCreateId={handleNavigateToCreateId}
+                onBack={() => setCurrentPage('ROLE_SELECTION')}
+            />
+        );
       case 'CREATE_ID':
-        return <CreateIdPage onCreateId={handleCreateId} onNavigateToLogin={handleNavigateToLogin} />;
+        return (
+            <CreateIdPage 
+                role={userRole || 'candidate'}
+                onCreateId={handleCreateId} 
+                onNavigateToLogin={handleNavigateToLogin} 
+            />
+        );
+      case 'ADMIN':
+        return <AdminPage />;
       case 'HOME':
         return <HomePage onSelectTechnique={handleSelectTechnique} />;
       case 'TECHNIQUE':
@@ -125,13 +158,13 @@ const App: React.FC = () => {
         }
         return <HomePage onSelectTechnique={handleSelectTechnique} />;
       default:
-        return <LoginPage onLogin={handleLogin} onNavigateToCreateId={handleNavigateToCreateId} />;
+        return <RoleSelectionPage onSelect={handleRoleSelect} />;
     }
   };
 
   return (
     <div className="antialiased text-black bg-white">
-      {!['LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
+      {!['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
       {renderContent()}
     </div>
   );
