@@ -1,9 +1,10 @@
 
 import React from 'react';
-import { ScissorsIcon, SparklesIcon } from '../components/Icons';
+import { ScissorsIcon, SparklesIcon, ChevronLeftIcon } from '../components/Icons';
 
 interface ServiceSelectionPageProps {
   onSelectService: (serviceId: string) => void;
+  onBack: () => void;
 }
 
 const SERVICES = [
@@ -18,13 +19,21 @@ const SERVICES = [
     { id: 'packages', title: 'Packages', icon: SparklesIcon },
 ];
 
-const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService }) => {
+const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white pt-20 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
-      <div className="max-w-screen-xl mx-auto text-center">
+    <div className="w-full min-h-screen bg-white pt-28 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
+      <div className="max-w-screen-xl mx-auto text-center relative">
         
+        {/* Back Button */}
+        <div className="absolute top-0 left-0 z-50">
+            <button onClick={onBack} className="text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
+              <ChevronLeftIcon className="w-5 h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
+              Back
+            </button>
+        </div>
+
         {/* Header */}
-        <div className="mb-16 animate-slide-up">
+        <div className="mb-16 animate-slide-up pt-8">
             <h1 className="text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
                 Choose Your Service
             </h1>

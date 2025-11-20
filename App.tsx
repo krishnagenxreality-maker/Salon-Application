@@ -31,11 +31,15 @@ const App: React.FC = () => {
     setStepTimings([]);
   }, []);
 
-  const handleNavigate = useCallback((page: 'HOME') => {
-    setCurrentPage('HOME');
-    setSelectedTechnique(null);
-    resetTrainingState();
-  }, [resetTrainingState]);
+  // Generalized navigation handler for the Header
+  const handleNavigate = useCallback((page: Page) => {
+    // If leaving a technique/training page, reset state
+    if (currentPage === 'TECHNIQUE' || currentPage === 'TRAINING') {
+        setSelectedTechnique(null);
+        resetTrainingState();
+    }
+    setCurrentPage(page);
+  }, [currentPage, resetTrainingState]);
 
   const handleRoleSelect = useCallback((role: 'admin' | 'candidate') => {
     setUserRole(role);
@@ -121,6 +125,8 @@ const App: React.FC = () => {
     resetTrainingState();
   }, [resetTrainingState]);
 
+  // Logic to determine if Header should be visible
+  const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage);
 
   const renderContent = () => {
     switch (currentPage) {
@@ -146,13 +152,28 @@ const App: React.FC = () => {
       case 'MODE_SELECTION':
         return <ModeSelectionPage onSelect={handleModeSelect} />;
       case 'WELCOME':
-        return <WelcomePage onExplore={handleExploreServices} />;
+        return (
+            <WelcomePage 
+                onExplore={handleExploreServices} 
+                onBack={() => setCurrentPage('MODE_SELECTION')}
+            />
+        );
       case 'SERVICE_SELECTION':
-          return <ServiceSelectionPage onSelectService={handleServiceSelect} />;
+          return (
+            <ServiceSelectionPage 
+                onSelectService={handleServiceSelect} 
+                onBack={() => setCurrentPage('WELCOME')}
+            />
+        );
       case 'ADMIN':
         return <AdminPage />;
       case 'HOME':
-        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+        return (
+            <HomePage 
+                onSelectTechnique={handleSelectTechnique} 
+                onBack={() => setCurrentPage('SERVICE_SELECTION')}
+            />
+        );
       case 'TECHNIQUE':
         if (selectedTechnique) {
           return (
@@ -163,7 +184,7 @@ const App: React.FC = () => {
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
       case 'TRAINING':
          if (selectedTechnique && trainingStartTime) {
           return (
@@ -176,7 +197,7 @@ const App: React.FC = () => {
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
       case 'COMPLETED':
          if (selectedTechnique) {
           return (
@@ -188,7 +209,7 @@ const App: React.FC = () => {
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
       default:
         return <RoleSelectionPage onSelect={handleRoleSelect} />;
     }
@@ -196,7 +217,14 @@ const App: React.FC = () => {
 
   return (
     <div className="antialiased text-black bg-white">
-      {!['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING', 'WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION'].includes(currentPage) && <Header onNavigate={handleNavigate} onSignOut={handleSignOut} />}
+      {showHeader && (
+          <Header 
+            userRole={userRole} 
+            currentPage={currentPage}
+            onNavigate={handleNavigate} 
+            onSignOut={handleSignOut} 
+          />
+      )}
       {renderContent()}
     </div>
   );

@@ -1,7 +1,8 @@
+
 import React, { useState, useMemo } from 'react';
 import { Technique, TechniqueCategory } from '../types';
 import { TECHNIQUES, CATEGORIES } from '../constants';
-import { SearchIcon } from '../components/Icons';
+import { SearchIcon, PhotoIcon, ChevronLeftIcon } from '../components/Icons';
 
 interface TechniqueCardProps {
   technique: Technique;
@@ -9,13 +10,27 @@ interface TechniqueCardProps {
 }
 
 const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <button
       onClick={() => onSelect(technique)}
       className="group w-full text-left bg-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 rounded-2xl overflow-hidden border border-gray-200/80"
     >
-      <div className="w-full aspect-[4/5] bg-light-grey overflow-hidden">
-        <img src={technique.imageUrl} alt={technique.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+      <div className="w-full aspect-[4/5] bg-light-grey overflow-hidden flex items-center justify-center">
+        {!imgError ? (
+            <img 
+                src={technique.imageUrl} 
+                alt={technique.title} 
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                onError={() => setImgError(true)}
+            />
+        ) : (
+            <div className="flex flex-col items-center text-gray-400">
+                <PhotoIcon className="w-8 h-8 mb-2" />
+                <span className="text-xs font-medium">Image Not Found</span>
+            </div>
+        )}
       </div>
       <div className="p-5">
         <p className="text-xs font-bold text-gray-400 tracking-widest uppercase">{technique.category}</p>
@@ -28,9 +43,10 @@ const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) =>
 
 interface HomePageProps {
   onSelectTechnique: (technique: Technique) => void;
+  onBack: () => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique }) => {
+const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
   const [activeCategory, setActiveCategory] = useState<TechniqueCategory | 'All'>('All');
   const [searchTerm, setSearchTerm] = useState('');
   
@@ -46,10 +62,19 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique }) => {
   }, [activeCategory, searchTerm]);
 
   return (
-    <div className="w-full min-h-screen bg-white pt-20">
+    <div className="w-full min-h-screen bg-white pt-28 pb-20">
       <main className="max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12 animate-fade-in">
+        
+        {/* Back Button */}
+        <div className="mb-8">
+            <button onClick={onBack} className="text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
+              <ChevronLeftIcon className="w-5 h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
+              Back to Services
+            </button>
+        </div>
+
         {/* Hero Section */}
-        <section className="text-left py-12 md:py-20 border-b border-gray-200">
+        <section className="text-left py-8 md:py-12 border-b border-gray-200">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
             TONI&GUY
             <br />

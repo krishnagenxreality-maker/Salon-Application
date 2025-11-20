@@ -1,6 +1,7 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Technique } from '../types';
-import { ChevronLeftIcon } from '../components/Icons';
+import { ChevronLeftIcon, PhotoIcon } from '../components/Icons';
 
 interface TechniquePageProps {
   technique: Technique;
@@ -9,20 +10,32 @@ interface TechniquePageProps {
 }
 
 const TechniquePage: React.FC<TechniquePageProps> = ({ technique, onStartTraining, onBack }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="w-full min-h-screen bg-white pt-28 pb-16 px-4 md:px-8 lg:px-12 animate-fade-in">
       <div className="w-full max-w-screen-2xl mx-auto">
-        {/* Improved Back button alignment */}
         <div className="mb-12">
             <button onClick={onBack} className="text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
               <ChevronLeftIcon className="w-5 h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
               Back to Library
             </button>
         </div>
-        {/* Adjusted grid to reduce image size */}
         <div className="grid md:grid-cols-10 gap-8 md:gap-16 items-center">
-          <div className="w-full md:col-span-4 aspect-[4/4.4] bg-light-grey rounded-3xl overflow-hidden animate-slide-up">
-            <img src={technique.imageUrl} alt={technique.title} className="w-full h-full object-cover"/>
+          <div className="w-full md:col-span-4 aspect-[4/4.4] bg-light-grey rounded-3xl overflow-hidden animate-slide-up flex items-center justify-center">
+             {!imgError ? (
+                <img 
+                    src={technique.imageUrl} 
+                    alt={technique.title} 
+                    className="w-full h-full object-cover"
+                    onError={() => setImgError(true)}
+                />
+             ) : (
+                <div className="flex flex-col items-center text-gray-400">
+                    <PhotoIcon className="w-12 h-12 mb-2" />
+                    <span className="text-sm font-medium">Image Not Available</span>
+                </div>
+             )}
           </div>
           <div className="md:col-span-6 text-left animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight">

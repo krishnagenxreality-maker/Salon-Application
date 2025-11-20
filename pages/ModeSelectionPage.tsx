@@ -11,8 +11,8 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
     <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-4 animate-fade-in">
       <div className="mb-16 text-center animate-slide-up">
          <img 
-            src="https://svgshare.com/i/184T.svg" 
-            alt="TONI&GUY Logo" 
+            src="/images/logo.png" 
+            alt="GenXReality Logo" 
             className="h-10 w-auto mx-auto mb-8"
          />
          <h1 className="text-4xl md:text-5xl font-extrabold text-black tracking-tighter">

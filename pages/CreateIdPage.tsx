@@ -26,8 +26,8 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
         <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 animate-fade-in">
             <div className="max-w-md w-full text-center">
                 <img 
-                    src="https://svgshare.com/i/184T.svg" 
-                    alt="TONI&GUY Logo" 
+                    src="/images/logo.png" 
+                    alt="GenXReality Logo" 
                     className="h-8 w-auto mx-auto mb-8"
                 />
                 <h1 className="text-3xl font-extrabold text-black tracking-tighter capitalize">

@@ -1,13 +1,24 @@
 
 import React from 'react';
+import { ChevronLeftIcon } from '../components/Icons';
 
 interface WelcomePageProps {
   onExplore: () => void;
+  onBack: () => void;
 }
 
-const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore }) => {
+const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
   return (
     <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-8 animate-fade-in relative overflow-hidden">
+        {/* Back Button */}
+        <button 
+            onClick={onBack}
+            className="absolute top-28 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
+        >
+            <ChevronLeftIcon className="w-5 h-5 mr-1" />
+            Change Mode
+        </button>
+
         {/* Abstract Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
             <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" />
@@ -16,7 +27,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore }) => {
 
         <div className="relative z-10 max-w-3xl text-center flex flex-col items-center">
             <img
-                src="https://svgshare.com/i/184T.svg"
+                src="/images/logo.png"
                 alt="TONI&GUY Logo"
                 className="h-12 w-auto mb-12 animate-slide-up opacity-0"
                 style={{ animationFillMode: 'forwards' }}

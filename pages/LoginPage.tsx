@@ -49,8 +49,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
 
             <div className="max-w-md w-full text-center">
                 <img 
-                    src="https://svgshare.com/i/184T.svg" 
-                    alt="TONI&GUY Logo" 
+                    src="/images/logo.png" 
+                    alt="GenXReality Logo" 
                     className="h-8 w-auto mx-auto mb-8"
                 />
                 <h1 className="text-3xl font-extrabold text-black tracking-tighter capitalize">
