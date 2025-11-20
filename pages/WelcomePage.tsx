@@ -25,20 +25,17 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
             <div className="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
-        <div className="relative z-10 max-w-3xl text-center flex flex-col items-center">
-            <img
-                src="/images/logo.png"
-                alt="TONI&GUY Logo"
-                className="h-12 w-auto mb-12 animate-slide-up opacity-0"
-                style={{ animationFillMode: 'forwards' }}
-            />
+        <div className="relative z-10 max-w-4xl text-center flex flex-col items-center">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-6 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
+                TONI&GUY
+            </h2>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-black tracking-tighter leading-tight mb-8 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-800 tracking-tight leading-tight mb-8 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                 Welcome to the <br/> Future of Styling.
             </h1>
 
             <p className="text-lg md:text-xl text-gray-500 mb-12 max-w-lg mx-auto leading-relaxed animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-                Immerse yourself in world-class education. Master precision, creativity, and technique through our advanced VR training platform.
+                Immerse yourself in world-class education. Master precision, creativity, and technique through our advanced interactive training platform.
             </p>
 
             <button

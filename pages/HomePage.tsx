@@ -78,10 +78,10 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
             TONI&GUY
             <br />
-            <span className="text-gray-400">VR Haircut Training</span>
+            <span className="text-gray-400">Haircut Training</span>
           </h1>
           <p className="mt-4 sm:mt-6 max-w-2xl text-base sm:text-lg text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on VR training designed by industry masters.
+            Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on training designed by industry masters.
           </p>
         </section>
 

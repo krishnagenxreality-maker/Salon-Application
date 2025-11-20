@@ -1,5 +1,6 @@
 
 {
-  "name": "TONI&GUY VR Training",
-  "description": "A premium, minimal, ultra-modern website UI for a TONI&GUY branded Salon VR Haircut Training Platform, featuring a clean white space, sharp typography, and an elegant, high-fashion aesthetic."
+  "name": "TONI&GUY Training",
+  "description": "A premium, minimal, ultra-modern website UI for a TONI&GUY branded Salon Haircut Training Platform, featuring a clean white space, sharp typography, and an elegant, high-fashion aesthetic.",
+  "requestFramePermissions": []
 }

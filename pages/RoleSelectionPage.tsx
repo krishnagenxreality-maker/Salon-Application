@@ -12,11 +12,11 @@ const RoleSelectionPage: React.FC<RoleSelectionPageProps> = ({ onSelect }) => {
       <div className="mb-12 text-center animate-slide-up">
          <img 
             src="/images/logo.png" 
-            alt="GenXReality Logo" 
-            className="h-10 w-auto mx-auto mb-6"
+            alt="TONI&GUY Logo" 
+            className="h-14 w-auto mx-auto mb-6"
          />
          <h1 className="text-4xl font-extrabold text-black tracking-tighter">
-            VR Training Portal
+            TONI&GUY Portal
          </h1>
          <p className="mt-2 text-gray-500 text-lg">
             Select your role to continue.
