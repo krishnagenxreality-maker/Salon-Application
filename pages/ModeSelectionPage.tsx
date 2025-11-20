@@ -48,9 +48,6 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
           <p className="text-gray-500 leading-relaxed">
              Real-time assistance and step-by-step guidance while working with a live client. Ensure precision with every cut.
           </p>
-          <span className="absolute top-6 right-6 px-3 py-1 bg-gray-100 text-xs font-bold text-gray-400 rounded-full uppercase tracking-wider">
-            Coming Soon
-          </span>
         </button>
       </div>
     </div>

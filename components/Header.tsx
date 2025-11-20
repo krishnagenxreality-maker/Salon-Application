@@ -1,8 +1,6 @@
 
 import React from 'react';
-
-type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION';
-type UserRole = 'admin' | 'candidate' | null;
+import { Page, UserRole } from '../types';
 
 interface HeaderProps {
   userRole: UserRole;

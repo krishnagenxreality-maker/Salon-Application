@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import { Technique } from './types';
+import { Technique, Page, UserRole } from './types';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import TechniquePage from './pages/TechniquePage';
@@ -13,10 +13,9 @@ import RoleSelectionPage from './pages/RoleSelectionPage';
 import WelcomePage from './pages/WelcomePage';
 import ModeSelectionPage from './pages/ModeSelectionPage';
 import ServiceSelectionPage from './pages/ServiceSelectionPage';
+import CustomerServiceWelcomePage from './pages/CustomerServiceWelcomePage';
 
 
-type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION';
-type UserRole = 'admin' | 'candidate' | null;
 type StepTimings = number[];
 
 const App: React.FC = () => {
@@ -85,14 +84,20 @@ const App: React.FC = () => {
       if (mode === 'without-customer') {
           setCurrentPage('WELCOME');
       } else {
-          // Placeholder for "On Customer" flow
-          alert("Training on Customer module is coming soon.");
+          setCurrentPage('CUSTOMER_WELCOME');
       }
   }, []);
   
   const handleExploreServices = useCallback(() => {
     // From Welcome page, go to Service Selection
     setCurrentPage('SERVICE_SELECTION');
+  }, []);
+
+  const handleDiveIntoCustomerService = useCallback(() => {
+    // Placeholder for the next step in Customer Service flow
+    // You can redirect to a service selection specific to customers, or a consultation page
+    alert("Live Client Consultation module starting..."); 
+    // setCurrentPage('CUSTOMER_SERVICE_MENU'); // Example for future
   }, []);
 
   const handleServiceSelect = useCallback((serviceId: string) => {
@@ -155,6 +160,13 @@ const App: React.FC = () => {
         return (
             <WelcomePage 
                 onExplore={handleExploreServices} 
+                onBack={() => setCurrentPage('MODE_SELECTION')}
+            />
+        );
+      case 'CUSTOMER_WELCOME':
+        return (
+            <CustomerServiceWelcomePage
+                onDive={handleDiveIntoCustomerService}
                 onBack={() => setCurrentPage('MODE_SELECTION')}
             />
         );
