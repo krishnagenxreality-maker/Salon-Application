@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon } from '../components/Icons';
 
 interface CustomerDetailsPageProps {
-  onNext: () => void;
+  onNext: (details: { duration: string }) => void;
   onBack: () => void;
 }
 
@@ -16,7 +16,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (customerName && date && time && duration) {
-        onNext();
+        onNext({ duration });
     } else {
         alert("Please fill in all details.");
     }

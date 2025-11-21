@@ -17,6 +17,8 @@ import CustomerServiceWelcomePage from './pages/CustomerServiceWelcomePage';
 import CustomerDetailsPage from './pages/CustomerDetailsPage';
 import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
+import LiveSessionPage from './pages/LiveSessionPage';
+import LiveSessionCompletionPage from './pages/LiveSessionCompletion';
 
 
 type StepTimings = number[];
@@ -29,16 +31,24 @@ const App: React.FC = () => {
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
   
+  // Live Session State
+  const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
+  const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
+  const [customerTargetDuration, setCustomerTargetDuration] = useState<string>('');
+
   const resetTrainingState = useCallback(() => {
     setTrainingStartTime(null);
     setStepTimings([]);
+    setLiveSessionTimings([]);
+    setCustomerTargetDuration('');
   }, []);
 
   // Generalized navigation handler for the Header
   const handleNavigate = useCallback((page: Page) => {
     // If leaving a technique/training page, reset state
-    if (currentPage === 'TECHNIQUE' || currentPage === 'TRAINING') {
+    if (currentPage === 'TECHNIQUE' || currentPage === 'TRAINING' || currentPage === 'LIVE_SESSION') {
         setSelectedTechnique(null);
+        setSelectedLiveService(null);
         resetTrainingState();
     }
     setCurrentPage(page);
@@ -104,8 +114,9 @@ const App: React.FC = () => {
     setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
-  const handleCustomerDetailsSubmit = useCallback(() => {
+  const handleCustomerDetailsSubmit = useCallback((details: { duration: string }) => {
     // After details are entered, go to Customer Service Menu
+    setCustomerTargetDuration(details.duration);
     setCurrentPage('CUSTOMER_SERVICE_MENU');
   }, []);
 
@@ -124,16 +135,32 @@ const App: React.FC = () => {
   }, []);
 
   const handleStartSession = useCallback((subService: string) => {
-      // Logic for starting the live session goes here
-      console.log(`Starting session for: ${subService}`);
-      
-      // Navigation removed as requested.
-      // We just alert for now to confirm the button click works.
-      alert(`Session initialized for: ${subService}. Waiting for next steps...`);
-      
-      // Do NOT navigate: setCurrentPage('HOME'); 
+      setSelectedLiveService(subService);
+      setLiveSessionTimings([]);
+      setCurrentPage('LIVE_SESSION');
   }, []);
   
+  const handleLiveSessionStepComplete = useCallback((duration: number) => {
+      setLiveSessionTimings(prev => [...prev, duration]);
+  }, []);
+
+  const handleLiveSessionFinish = useCallback(() => {
+      setCurrentPage('LIVE_SESSION_COMPLETED');
+  }, []);
+
+  const handleBackToCustomerMenu = useCallback(() => {
+      setSelectedLiveService(null);
+      setLiveSessionTimings([]);
+      setCurrentPage('CUSTOMER_SERVICE_MENU');
+  }, []);
+
+  const handleNewCustomer = useCallback(() => {
+      setSelectedLiveService(null);
+      setLiveSessionTimings([]);
+      setCustomerTargetDuration('');
+      setCurrentPage('CUSTOMER_DETAILS');
+  }, []);
+
   const handleNavigateToCreateId = useCallback(() => {
     setCurrentPage('CREATE_ID');
   }, []);
@@ -158,7 +185,7 @@ const App: React.FC = () => {
   }, [resetTrainingState]);
 
   // Logic to determine if Header should be visible
-  const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING'].includes(currentPage);
+  const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING', 'LIVE_SESSION'].includes(currentPage);
 
   const renderContent = () => {
     switch (currentPage) {
@@ -225,6 +252,31 @@ const App: React.FC = () => {
                 onBack={() => setCurrentPage('CUSTOMER_SERVICE_MENU')}
             />
           );
+      case 'LIVE_SESSION':
+          if (selectedLiveService) {
+              return (
+                  <LiveSessionPage
+                      serviceName={selectedLiveService}
+                      onStepComplete={handleLiveSessionStepComplete}
+                      onFinishSession={handleLiveSessionFinish}
+                      onExit={handleBackToCustomerMenu}
+                  />
+              );
+          }
+          return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
+      case 'LIVE_SESSION_COMPLETED':
+          if (selectedLiveService) {
+              return (
+                  <LiveSessionCompletionPage
+                      serviceName={selectedLiveService}
+                      stepTimings={liveSessionTimings}
+                      targetDuration={customerTargetDuration}
+                      onBackToMenu={handleBackToCustomerMenu}
+                      onNewCustomer={handleNewCustomer}
+                  />
+              );
+          }
+          return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
       case 'ADMIN':
         return <AdminPage />;
       case 'HOME':
