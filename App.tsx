@@ -15,6 +15,8 @@ import ModeSelectionPage from './pages/ModeSelectionPage';
 import ServiceSelectionPage from './pages/ServiceSelectionPage';
 import CustomerServiceWelcomePage from './pages/CustomerServiceWelcomePage';
 import CustomerDetailsPage from './pages/CustomerDetailsPage';
+import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
+import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 
 
 type StepTimings = number[];
@@ -69,7 +71,7 @@ const App: React.FC = () => {
     setStepTimings(prev => [...prev, duration]);
   }, []);
 
-  const handleCompleteTraining = useCallback(() => {
+  const handleCompleteTraining = useCallback((technique: Technique) => {
     setCurrentPage('COMPLETED');
   }, []);
   
@@ -93,7 +95,7 @@ const App: React.FC = () => {
   }, []);
   
   const handleExploreServices = useCallback(() => {
-    // From Welcome page (Virtual Mode), go to Service Selection
+    // From Welcome page (Training Lobby), go to Training Service Selection
     setCurrentPage('SERVICE_SELECTION');
   }, []);
 
@@ -103,16 +105,33 @@ const App: React.FC = () => {
   }, []);
 
   const handleCustomerDetailsSubmit = useCallback(() => {
-    // After details are entered, go to Service Selection
-    setCurrentPage('SERVICE_SELECTION');
+    // After details are entered, go to Customer Service Menu
+    setCurrentPage('CUSTOMER_SERVICE_MENU');
   }, []);
 
   const handleServiceSelect = useCallback((serviceId: string) => {
-      if (serviceId === 'hair') {
+      // Handle navigation from both menus
+      if (serviceId === 'hair-training') {
+          // From Training Lobby
           setCurrentPage('HOME');
+      } else if (serviceId === 'haircuts-styling') {
+          // From Customer Service Lobby
+          setCurrentPage('HAIRCUTS_SELECTION');
       } else {
-          alert("This training module is currently under development.");
+          // For now, other services are placeholders
+          alert("Details for this service will be added in the next update.");
       }
+  }, []);
+
+  const handleStartSession = useCallback((subService: string) => {
+      // Logic for starting the live session goes here
+      console.log(`Starting session for: ${subService}`);
+      
+      // Navigation removed as requested.
+      // We just alert for now to confirm the button click works.
+      alert(`Session initialized for: ${subService}. Waiting for next steps...`);
+      
+      // Do NOT navigate: setCurrentPage('HOME'); 
   }, []);
   
   const handleNavigateToCreateId = useCallback(() => {
@@ -189,17 +208,32 @@ const App: React.FC = () => {
           return (
             <ServiceSelectionPage 
                 onSelectService={handleServiceSelect} 
-                // Dynamic Back button: If in live mode, go back to customer details. If virtual, go back to welcome.
-                onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'WELCOME' : 'CUSTOMER_DETAILS')}
+                onBack={() => setCurrentPage('WELCOME')}
             />
         );
+      case 'CUSTOMER_SERVICE_MENU':
+          return (
+            <CustomerServiceMenuPage
+                onSelectService={handleServiceSelect}
+                onBack={() => setCurrentPage('CUSTOMER_DETAILS')}
+            />
+          );
+      case 'HAIRCUTS_SELECTION':
+          return (
+            <HaircutsSelectionPage
+                onStartSession={handleStartSession}
+                onBack={() => setCurrentPage('CUSTOMER_SERVICE_MENU')}
+            />
+          );
       case 'ADMIN':
         return <AdminPage />;
       case 'HOME':
         return (
             <HomePage 
                 onSelectTechnique={handleSelectTechnique} 
-                onBack={() => setCurrentPage('SERVICE_SELECTION')}
+                // Dynamic back button based on mode
+                // If we came from HAIRCUTS_SELECTION, back should ideally go there, but for simplicity going to menu context
+                onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'SERVICE_SELECTION' : 'HAIRCUTS_SELECTION')}
             />
         );
       case 'TECHNIQUE':
@@ -212,7 +246,7 @@ const App: React.FC = () => {
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'SERVICE_SELECTION' : 'HAIRCUTS_SELECTION')} />;
       case 'TRAINING':
          if (selectedTechnique && trainingStartTime) {
           return (
@@ -220,12 +254,12 @@ const App: React.FC = () => {
               technique={selectedTechnique}
               trainingStartTime={trainingStartTime}
               onStepComplete={handleStepComplete}
-              onComplete={handleCompleteTraining}
+              onComplete={() => handleCompleteTraining(selectedTechnique)}
               onExit={handleBackToHome}
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'SERVICE_SELECTION' : 'HAIRCUTS_SELECTION')} />;
       case 'COMPLETED':
          if (selectedTechnique) {
           return (
@@ -237,7 +271,7 @@ const App: React.FC = () => {
             />
           );
         }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'SERVICE_SELECTION' : 'HAIRCUTS_SELECTION')} />;
       default:
         return <RoleSelectionPage onSelect={handleRoleSelect} />;
     }

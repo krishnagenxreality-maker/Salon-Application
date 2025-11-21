@@ -36,6 +36,6 @@ export interface User {
   completedTechniques: CompletedTechnique[];
 }
 
-export type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION' | 'CUSTOMER_WELCOME' | 'CUSTOMER_DETAILS';
+export type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION' | 'CUSTOMER_WELCOME' | 'CUSTOMER_DETAILS' | 'CUSTOMER_SERVICE_MENU' | 'HAIRCUTS_SELECTION';
 
 export type UserRole = 'admin' | 'candidate' | null;
