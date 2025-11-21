@@ -12,7 +12,7 @@ const RoleSelectionPage: React.FC<RoleSelectionPageProps> = ({ onSelect }) => {
       <div className="mb-12 text-center animate-slide-up">
          <img 
             src="/images/logo.png" 
-            alt="TONI&GUY Logo" 
+            alt="GenXReality Logo" 
             className="h-14 w-auto mx-auto mb-6"
          />
          <h1 className="text-4xl font-extrabold text-black tracking-tighter">

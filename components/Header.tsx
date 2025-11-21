@@ -35,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ userRole, currentPage, onNavigate, onSi
           >
             <img 
               src="/images/logo.png" 
-              alt="TONI&GUY Logo" 
+              alt="GenXReality Logo" 
               className="h-12 w-auto"
             />
           </button>

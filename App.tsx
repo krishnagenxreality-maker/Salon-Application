@@ -14,6 +14,7 @@ import WelcomePage from './pages/WelcomePage';
 import ModeSelectionPage from './pages/ModeSelectionPage';
 import ServiceSelectionPage from './pages/ServiceSelectionPage';
 import CustomerServiceWelcomePage from './pages/CustomerServiceWelcomePage';
+import CustomerDetailsPage from './pages/CustomerDetailsPage';
 
 
 type StepTimings = number[];
@@ -21,6 +22,7 @@ type StepTimings = number[];
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('ROLE_SELECTION');
   const [userRole, setUserRole] = useState<UserRole>(null);
+  const [trainingMode, setTrainingMode] = useState<'virtual' | 'live'>('virtual'); // Track the current mode context
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
@@ -82,22 +84,27 @@ const App: React.FC = () => {
 
   const handleModeSelect = useCallback((mode: 'with-customer' | 'without-customer') => {
       if (mode === 'without-customer') {
+          setTrainingMode('virtual');
           setCurrentPage('WELCOME');
       } else {
+          setTrainingMode('live');
           setCurrentPage('CUSTOMER_WELCOME');
       }
   }, []);
   
   const handleExploreServices = useCallback(() => {
-    // From Welcome page, go to Service Selection
+    // From Welcome page (Virtual Mode), go to Service Selection
     setCurrentPage('SERVICE_SELECTION');
   }, []);
 
   const handleDiveIntoCustomerService = useCallback(() => {
-    // Placeholder for the next step in Customer Service flow
-    // You can redirect to a service selection specific to customers, or a consultation page
-    alert("Live Client Consultation module starting..."); 
-    // setCurrentPage('CUSTOMER_SERVICE_MENU'); // Example for future
+    // Go to Customer Details page
+    setCurrentPage('CUSTOMER_DETAILS');
+  }, []);
+
+  const handleCustomerDetailsSubmit = useCallback(() => {
+    // After details are entered, go to Service Selection
+    setCurrentPage('SERVICE_SELECTION');
   }, []);
 
   const handleServiceSelect = useCallback((serviceId: string) => {
@@ -126,6 +133,7 @@ const App: React.FC = () => {
     // Resetting completely back to role selection
     setCurrentPage('ROLE_SELECTION');
     setUserRole(null);
+    setTrainingMode('virtual');
     setSelectedTechnique(null);
     resetTrainingState();
   }, [resetTrainingState]);
@@ -170,11 +178,19 @@ const App: React.FC = () => {
                 onBack={() => setCurrentPage('MODE_SELECTION')}
             />
         );
+      case 'CUSTOMER_DETAILS':
+          return (
+            <CustomerDetailsPage
+                onNext={handleCustomerDetailsSubmit}
+                onBack={() => setCurrentPage('CUSTOMER_WELCOME')}
+            />
+          );
       case 'SERVICE_SELECTION':
           return (
             <ServiceSelectionPage 
                 onSelectService={handleServiceSelect} 
-                onBack={() => setCurrentPage('WELCOME')}
+                // Dynamic Back button: If in live mode, go back to customer details. If virtual, go back to welcome.
+                onBack={() => setCurrentPage(trainingMode === 'virtual' ? 'WELCOME' : 'CUSTOMER_DETAILS')}
             />
         );
       case 'ADMIN':

@@ -27,7 +27,7 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
             <div className="max-w-md w-full text-center">
                 <img 
                     src="/images/logo.png" 
-                    alt="TONI&GUY Logo" 
+                    alt="GenXReality Logo" 
                     className="h-14 w-auto mx-auto mb-8"
                 />
                 <h1 className="text-3xl font-extrabold text-black tracking-tighter capitalize">
