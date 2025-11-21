@@ -2,7 +2,7 @@
 import { TrainingStep } from '../types';
 
 export const DEFAULT_STEPS: TrainingStep[] = [
-    { title: 'Preparation', instructions: 'Ensure station is clean, tools are sterilized, and client is comfortable.' },
+    { title: 'Preparation', instructions: 'Get ready with your equipments.' },
     { title: 'Consultation', instructions: 'Confirm the desired result and assess hair condition.' },
     { title: 'Service Execution', instructions: 'Perform the primary service.' },
     { title: 'Finish', instructions: 'Finalize the look and check client satisfaction.' },
@@ -11,7 +11,8 @@ export const DEFAULT_STEPS: TrainingStep[] = [
 export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
     // Women's Cut
     "Cut & Blow Dry": [
-        { title: 'Preparation', instructions: 'Gown the client and prepare tools.' },
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
+        { title: 'Client Prep', instructions: 'Gown the client and ensure they are comfortable.' },
         { title: 'Consultation', instructions: 'Discuss length, layers, and desired finish.' },
         { title: 'Wash & Condition', instructions: 'Shampoo and condition at the basin.' },
         { title: 'Sectioning', instructions: 'Create the 4-point sectioning pattern.' },
@@ -21,7 +22,8 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
         { title: 'Finish', instructions: 'Apply finishing product and show the client the back.' }
     ],
     "Cut Only": [
-        { title: 'Preparation', instructions: 'Gown the client.' },
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
+        { title: 'Client Prep', instructions: 'Gown the client.' },
         { title: 'Consultation', instructions: 'Confirm length to be removed.' },
         { title: 'Dampen Hair', instructions: 'Spray hair down with water spray.' },
         { title: 'The Cut', instructions: 'Perform the precision cut.' },
@@ -31,6 +33,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
 
     // Men's Cut
     "Regular": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Consultation', instructions: 'Discuss grade lengths and styling.' },
         { title: 'Clipper Work', instructions: 'Perform back and sides work.' },
         { title: 'Scissor Work', instructions: 'Cut and blend the top section.' },
@@ -39,6 +42,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
         { title: 'Styling', instructions: 'Apply product and style.' }
     ],
     "Stylist-Level Pricing Tiers": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'In-Depth Consultation', instructions: 'Detailed assessment of head shape and hair growth.' },
         { title: 'Precision Cutting', instructions: 'Execute advanced barbering techniques.' },
         { title: 'Detailing', instructions: 'Refine fade and hairline.' },
@@ -48,6 +52,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
 
     // Specialty
     "Kids’ Haircut": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Welcome', instructions: 'Ensure the child is comfortable and cape is secure.' },
         { title: 'Consultation (Parent)', instructions: 'Confirm style with guardian.' },
         { title: 'Dampen/Prep', instructions: 'Spray hair down gently.' },
@@ -55,12 +60,14 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
         { title: 'Quick Dry', instructions: 'Dry hair off to remove loose hairs.' }
     ],
     "Fringe Trims": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Consultation', instructions: 'Determine length and style of fringe.' },
         { title: 'Sectioning', instructions: 'Isolate the triangle section.' },
         { title: 'The Cut', instructions: 'Cut fringe to desired length.' },
         { title: 'Refinement', instructions: 'Point cut for softness.' }
     ],
     "Restyling": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Major Consultation', instructions: 'Discuss the significant change and expectations.' },
         { title: 'Structural Sectioning', instructions: 'Section for the new shape.' },
         { title: 'Removal of Length', instructions: 'Establish new length guidelines.' },
@@ -71,6 +78,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
 
     // Finish Styling
     "Blow-Dry": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Wash', instructions: 'Cleanse hair thoroughly.' },
         { title: 'Product Application', instructions: 'Apply volume or smoothing products.' },
         { title: 'Sectioning', instructions: 'Section for control.' },
@@ -78,6 +86,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
         { title: 'Finish', instructions: 'Spray and shine.' }
     ],
     "Blowout": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Wash', instructions: 'Double cleanse and condition.' },
         { title: 'Volume Prep', instructions: 'Apply mousse or root lift.' },
         { title: 'The Blowout', instructions: 'Create maximum volume and bounce.' },
@@ -85,6 +94,7 @@ export const SERVICE_STEP_MAPPING: Record<string, TrainingStep[]> = {
         { title: 'Dress Out', instructions: 'Brush out and spray.' }
     ],
     "Updos and Occasion Styling": [
+        { title: 'Preparation', instructions: 'Get ready with your equipments.' },
         { title: 'Consultation', instructions: 'Review inspiration photos.' },
         { title: 'Prep', instructions: 'Texturize hair with heat or product.' },
         { title: 'Structure', instructions: 'Create the foundation (ponytails/anchors).' },
