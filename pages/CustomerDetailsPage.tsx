@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon } from '../components/Icons';
+import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon } from '../components/Icons';
 
 interface CustomerDetailsPageProps {
-  onNext: (details: { duration: string }) => void;
+  onNext: (details: { duration: string; isMember: boolean; memberId: string }) => void;
   onBack: () => void;
 }
 
@@ -12,11 +12,24 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [duration, setDuration] = useState(''); 
+  const [isMember, setIsMember] = useState(false);
+  const [memberId, setMemberId] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate Member ID if isMember is true
+    if (isMember && !memberId.trim()) {
+        alert("Please enter the Member ID.");
+        return;
+    }
+
     if (customerName && date && time && duration) {
-        onNext({ duration });
+        onNext({ 
+            duration, 
+            isMember, 
+            memberId: isMember ? memberId : '' 
+        });
     } else {
         alert("Please fill in all details.");
     }
@@ -111,6 +124,55 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                     required
                 />
             </div>
+
+            {/* Membership Toggle */}
+            <div className="space-y-2">
+                <label className="block text-sm font-semibold text-gray-700">Member?</label>
+                <div className="flex gap-4">
+                    <button
+                        type="button"
+                        onClick={() => setIsMember(true)}
+                        className={`flex-1 py-3 px-4 rounded-xl border font-medium transition-all duration-200 ${
+                            isMember 
+                            ? 'bg-black text-white border-black shadow-md' 
+                            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                        }`}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => { setIsMember(false); setMemberId(''); }}
+                        className={`flex-1 py-3 px-4 rounded-xl border font-medium transition-all duration-200 ${
+                            !isMember 
+                            ? 'bg-black text-white border-black shadow-md' 
+                            : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'
+                        }`}
+                    >
+                        No
+                    </button>
+                </div>
+            </div>
+
+            {/* Member ID Input (Conditional) */}
+            {isMember && (
+                <div className="space-y-2 animate-slide-up">
+                    <label className="block text-sm font-semibold text-gray-700">Member ID</label>
+                    <div className="relative">
+                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <UserGroupIcon className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input 
+                            type="text" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-black focus:border-black transition-colors placeholder-gray-400" 
+                            placeholder="Enter member ID"
+                            value={memberId}
+                            onChange={(e) => setMemberId(e.target.value)}
+                            required={isMember}
+                        />
+                    </div>
+                </div>
+            )}
 
             <div className="pt-4">
                 <button

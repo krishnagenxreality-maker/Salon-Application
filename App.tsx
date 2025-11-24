@@ -18,7 +18,7 @@ import CustomerDetailsPage from './pages/CustomerDetailsPage';
 import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 import LiveSessionPage from './pages/LiveSessionPage';
-import LiveSessionCompletionPage from './pages/LiveSessionCompletion';
+import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
 
 
 type StepTimings = number[];
@@ -114,8 +114,9 @@ const App: React.FC = () => {
     setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
-  const handleCustomerDetailsSubmit = useCallback((details: { duration: string }) => {
+  const handleCustomerDetailsSubmit = useCallback((details: { duration: string; isMember: boolean; memberId: string }) => {
     // After details are entered, go to Customer Service Menu
+    // We store the duration for tracking, Member details could be stored if needed.
     setCustomerTargetDuration(details.duration);
     setCurrentPage('CUSTOMER_SERVICE_MENU');
   }, []);
