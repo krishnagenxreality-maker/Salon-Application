@@ -8,6 +8,7 @@ import TrainingPage from './pages/TrainingPage';
 import CompletionPage from './pages/CompletionPage';
 import LoginPage from './pages/LoginPage';
 import CreateIdPage from './pages/CreateIdPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import AdminPage from './pages/AdminPage';
 import RoleSelectionPage from './pages/RoleSelectionPage';
 import WelcomePage from './pages/WelcomePage';
@@ -18,7 +19,7 @@ import CustomerDetailsPage from './pages/CustomerDetailsPage';
 import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 import LiveSessionPage from './pages/LiveSessionPage';
-import LiveSessionCompletionPage from './pages/LiveSessionCompletion';
+import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
 
 
 type StepTimings = number[];
@@ -171,6 +172,14 @@ const App: React.FC = () => {
     // Navigate back to login after creation
     setCurrentPage('LOGIN');
   }, []);
+  
+  const handleNavigateToForgotPassword = useCallback(() => {
+      setCurrentPage('FORGOT_PASSWORD');
+  }, []);
+
+  const handlePasswordResetSuccess = useCallback(() => {
+      setCurrentPage('LOGIN');
+  }, []);
 
   const handleNavigateToLogin = useCallback(() => {
     setCurrentPage('LOGIN');
@@ -186,7 +195,7 @@ const App: React.FC = () => {
   }, [resetTrainingState]);
 
   // Logic to determine if Header should be visible
-  const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'TRAINING', 'LIVE_SESSION'].includes(currentPage);
+  const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'FORGOT_PASSWORD', 'TRAINING', 'LIVE_SESSION'].includes(currentPage);
 
   const renderContent = () => {
     switch (currentPage) {
@@ -198,6 +207,7 @@ const App: React.FC = () => {
                 role={userRole || 'candidate'} 
                 onLoginSuccess={handleLoginSuccess} 
                 onNavigateToCreateId={handleNavigateToCreateId}
+                onNavigateToForgotPassword={handleNavigateToForgotPassword}
                 onBack={() => setCurrentPage('ROLE_SELECTION')}
             />
         );
@@ -209,6 +219,14 @@ const App: React.FC = () => {
                 onNavigateToLogin={handleNavigateToLogin} 
             />
         );
+      case 'FORGOT_PASSWORD':
+          return (
+              <ForgotPasswordPage 
+                role={userRole || 'candidate'}
+                onSubmit={handlePasswordResetSuccess}
+                onNavigateToLogin={handleNavigateToLogin}
+              />
+          );
       case 'MODE_SELECTION':
         return <ModeSelectionPage onSelect={handleModeSelect} />;
       case 'WELCOME':

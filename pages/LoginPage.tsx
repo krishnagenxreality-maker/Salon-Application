@@ -6,10 +6,11 @@ interface LoginPageProps {
     role: 'admin' | 'candidate';
     onLoginSuccess: () => void;
     onNavigateToCreateId: () => void;
+    onNavigateToForgotPassword: () => void;
     onBack: () => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateToCreateId, onBack }) => {
+const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateToCreateId, onNavigateToForgotPassword, onBack }) => {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -108,13 +109,22 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                         </button>
                     </div>
                 </form>
-
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    Don't have an ID?{' '}
-                    <button onClick={onNavigateToCreateId} className="font-medium text-black hover:underline focus:outline-none">
-                        Create one
+                
+                <div className="mt-4 flex flex-col space-y-2 text-center text-sm">
+                    <button 
+                        onClick={onNavigateToForgotPassword} 
+                        className="text-gray-500 hover:text-black hover:underline focus:outline-none transition-colors"
+                    >
+                        Forgot/Change Password
                     </button>
-                </p>
+                    
+                    <p className="text-gray-600">
+                        Don't have an ID?{' '}
+                        <button onClick={onNavigateToCreateId} className="font-medium text-black hover:underline focus:outline-none">
+                            Create one
+                        </button>
+                    </p>
+                </div>
             </div>
         </div>
     );
