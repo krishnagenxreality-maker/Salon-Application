@@ -18,7 +18,7 @@ import CustomerDetailsPage from './pages/CustomerDetailsPage';
 import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 import LiveSessionPage from './pages/LiveSessionPage';
-import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
+import LiveSessionCompletionPage from './pages/LiveSessionCompletion';
 
 
 type StepTimings = number[];
