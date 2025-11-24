@@ -24,7 +24,11 @@ export const TECHNIQUES: Technique[] = [
     description: 'A foundational technique creating a solid, clean line. Essential for mastering precision and control.',
     imageUrl: '/images/one-length.jpeg', 
     steps: [
-      { title: 'Partings & Sections', instructions: 'Create a clean center parting from the forehead to the nape. Section the hair into four equal quadrants.' },
+      { 
+        title: 'Partings & Sections', 
+        instructions: 'Create a clean center parting from the forehead to the nape. Section the hair into four equal quadrants.',
+        videoUrl: '/videos/One Length V1.mp4'
+      },
       { title: 'Establishing the Guideline', instructions: 'Take a thin subsection at the nape. Comb the hair to its natural fall and cut a straight, horizontal line.' },
       { title: 'Working Through the Back', instructions: 'Continue taking horizontal subsections, combing each one down to the stationary guideline and cutting to match.' },
       { title: 'Connecting the Sides', instructions: 'Move to the sides, bringing hair down without elevation. Connect the side sections to the back guideline seamlessly.' },

@@ -10,6 +10,7 @@ export enum TechniqueCategory {
 export interface TrainingStep {
   title: string;
   instructions: string;
+  videoUrl?: string;
 }
 
 export interface Technique {

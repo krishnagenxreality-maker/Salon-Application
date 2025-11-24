@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
@@ -98,9 +99,23 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
             </div>
           </div>
 
-          {/* Right Column: Animation */}
-          <div className="animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <AnimationPlaceholder />
+          {/* Right Column: Animation or Video */}
+          <div className="animate-slide-up flex justify-center" style={{ animationDelay: '0.2s' }}>
+            {stepData.videoUrl ? (
+               <div className="relative w-full max-w-sm aspect-[3/4] bg-black rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-100">
+                  <video
+                    key={stepData.videoUrl}
+                    src={stepData.videoUrl}
+                    className="w-full h-full object-cover"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+               </div>
+            ) : (
+              <AnimationPlaceholder />
+            )}
           </div>
         </div>
       </div>
