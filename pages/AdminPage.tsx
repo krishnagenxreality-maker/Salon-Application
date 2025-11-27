@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UserCircleIcon, CalendarIcon, ClockIcon } from '../components/Icons';
+import { UserCircleIcon, CalendarIcon, ClockIcon } from '@/components/Icons';
 
 const AdminPage: React.FC = () => {
     return (

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronLeftIcon } from '../components/Icons';
+import { ChevronLeftIcon } from '@/components/Icons';
 
 interface CustomerServiceWelcomePageProps {
   onDive: () => void;

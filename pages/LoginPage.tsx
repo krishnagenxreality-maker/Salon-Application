@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon } from '../components/Icons';
+import { ChevronLeftIcon } from '@/components/Icons';
 
 interface LoginPageProps {
     role: 'admin' | 'candidate';

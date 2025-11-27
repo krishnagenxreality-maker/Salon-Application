@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '../components/Icons';
+import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@/components/Icons';
 
 interface HaircutsSelectionPageProps {
   onStartSession: (subService: string) => void;

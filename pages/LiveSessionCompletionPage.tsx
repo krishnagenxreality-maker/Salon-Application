@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ClockIcon, CheckIcon } from '../components/Icons';
-import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/ServiceSteps';
+import { ClockIcon, CheckIcon } from '@/components/Icons';
+import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 
 interface LiveSessionCompletionPageProps {
   serviceName: string;

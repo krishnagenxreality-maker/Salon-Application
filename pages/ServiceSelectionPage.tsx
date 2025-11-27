@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon, MonitorIcon } from '../components/Icons';
+import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon, MonitorIcon } from '@/components/Icons';
 
 interface ServiceSelectionPageProps {
   onSelectService: (serviceId: string) => void;

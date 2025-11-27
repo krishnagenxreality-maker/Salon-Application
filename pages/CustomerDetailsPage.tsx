@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon } from '../components/Icons';
+import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon } from '@/components/Icons';
 
 interface CustomerDetailsPageProps {
   onNext: (details: { duration: string; isMember: boolean; memberId: string }) => void;

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Technique } from '../types';
-import { ChevronLeftIcon, PhotoIcon } from '../components/Icons';
+import { ChevronLeftIcon, PhotoIcon } from '@/components/Icons';
 
 interface TechniquePageProps {
   technique: Technique;

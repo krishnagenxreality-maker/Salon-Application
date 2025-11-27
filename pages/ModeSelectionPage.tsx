@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MonitorIcon, UserGroupIcon } from '../components/Icons';
+import { MonitorIcon, UserGroupIcon } from '@/components/Icons';
 
 interface ModeSelectionPageProps {
   onSelect: (mode: 'with-customer' | 'without-customer') => void;

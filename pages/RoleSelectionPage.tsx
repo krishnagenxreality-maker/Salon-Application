@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UserCircleIcon } from '../components/Icons';
+import { UserCircleIcon } from '@/components/Icons';
 
 interface RoleSelectionPageProps {
   onSelect: (role: 'admin' | 'candidate') => void;
