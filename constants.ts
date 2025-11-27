@@ -25,24 +25,69 @@ export const TECHNIQUES: Technique[] = [
     imageUrl: '/images/one-length.jpeg', 
     steps: [
       { 
-        title: 'Partings & Sections', 
-        instructions: 'Create a clean center parting from the forehead to the nape. Section the hair into four equal quadrants.',
-        videoUrl: '/videos/One Length V1.mp4'
+        title: 'Prepare the Hair and Observe the Natural Fall', 
+        instructions: 'Ensure the hair is fully wet and evenly saturated, then remove all tangles. Comb the hair straight down to observe its natural fall before cutting.',
+        imageUrl: '/images/one-length.jpeg'
       },
       { 
-        title: 'Establishing the Guideline', 
-        instructions: 'Take a thin subsection at the nape. Comb the hair to its natural fall and cut a straight, horizontal line.',
+        title: 'Create the Center Partings', 
+        instructions: 'Create a clean, straight parting from the forehead to the nape. This divides the head evenly into two balanced halves.',
         videoUrl: '/videos/One Length V2.mp4'
       },
       { 
-        title: 'Working Through the Back', 
-        instructions: 'Continue taking horizontal subsections, combing each one down to the stationary guideline and cutting to match.',
+        title: 'Create Ear-to-Ear Partings', 
+        instructions: 'Create an ear-to-ear parting through the crown area. This clearly separates the front and back sections of the head.',
         videoUrl: '/videos/One Length V3.mp4'
       },
       { 
-        title: 'Connecting the Sides', 
-        instructions: 'Move to the sides, bringing hair down without elevation. Connect the side sections to the back guideline seamlessly.',
+        title: 'Secure Four Quadrants', 
+        instructions: 'Divide the head into four clear quadrants using the partings. Secure each section with clips to maintain control and precision.',
         videoUrl: '/videos/One Length V4.mp4'
+      },
+      { 
+        title: 'Release the Nape Area', 
+        instructions: 'Begin by releasing the center nape area at the back of the head. This area is used to establish and control the initial cutting guideline.',
+        videoUrl: '/videos/One Length V5.mp4'
+      },
+      { 
+        title: 'Take the First Nape Subsection', 
+        instructions: 'Take a thin horizontal subsection at the center of the nape. Comb it straight down in its natural fall for accuracy.',
+        videoUrl: '/videos/One Length V6.mp4'
+      },
+      { 
+        title: 'Release the Next Subsection and Cut to the Stationary Guideline', 
+        instructions: 'Release the next horizontal subsection above the guideline. Comb it down and cut bluntly to match the stationary guideline exactly.',
+        videoUrl: '/videos/One Length V7.mp4'
+      },
+      { 
+        title: 'Work Up Through the Back', 
+        instructions: 'Continue releasing horizontal subsections moving upward toward the crown. Maintain the same cutting technique to preserve a consistent one length.',
+        videoUrl: '/videos/One Length V8.mp4'
+      },
+      { 
+        title: 'Complete the Back Area', 
+        instructions: 'Ensure the entire back section forms a solid, even length. Check for balance and a clean weight line across the back.',
+        videoUrl: '/videos/One Length V9.mp4'
+      },
+      { 
+        title: 'Release One Side of the Section', 
+        instructions: 'Release one side section after completing the back area. The back guideline should be clearly visible for reference.',
+        videoUrl: '/videos/One Length V10.mp4'
+      },
+      { 
+        title: 'Take a Vertical Side Section', 
+        instructions: 'Take a vertical subsection near the ear on the released side. Comb the hair straight down following its natural fall.',
+        videoUrl: '/videos/One Length V11.mp4'
+      },
+      { 
+        title: 'Connect the Side to the Back and Repeat on the Opposite Side', 
+        instructions: 'Match the side section to the back guideline and cut bluntly. Repeat the same process on the opposite side to maintain symmetry.',
+        videoUrl: '/videos/One Length V12.mp4'
+      },
+      { 
+        title: 'Cross-Check the Hair and Refine the Perimeter', 
+        instructions: 'Comb hair in multiple directions to check consistency and balance. Refine the perimeter to achieve a clean, sharp one-length finish.',
+        videoUrl: '/videos/One Length V13.mp4'
       },
     ],
   },

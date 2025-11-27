@@ -11,6 +11,7 @@ export interface TrainingStep {
   title: string;
   instructions: string;
   videoUrl?: string;
+  imageUrl?: string;
 }
 
 export interface Technique {

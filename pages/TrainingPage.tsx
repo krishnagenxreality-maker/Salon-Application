@@ -99,10 +99,10 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
             </div>
           </div>
 
-          {/* Right Column: Animation or Video */}
+          {/* Right Column: Animation or Video or Image */}
           <div className="animate-slide-up flex justify-center" style={{ animationDelay: '0.2s' }}>
             {stepData.videoUrl ? (
-               <div className="relative w-full max-w-sm aspect-[3/4] bg-black rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-100">
+               <div className="relative w-full max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-xl">
                   <video
                     key={stepData.videoUrl}
                     src={stepData.videoUrl}
@@ -111,6 +111,14 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                     loop
                     muted
                     playsInline
+                  />
+               </div>
+            ) : stepData.imageUrl ? (
+               <div className="relative w-full max-w-sm aspect-[3/4] bg-light-grey rounded-xl overflow-hidden shadow-xl">
+                  <img 
+                    src={stepData.imageUrl} 
+                    alt={stepData.title} 
+                    className="w-full h-full object-cover"
                   />
                </div>
             ) : (
