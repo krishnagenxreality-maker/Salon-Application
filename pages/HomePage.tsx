@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Technique, TechniqueCategory } from '../types';
 import { TECHNIQUES, CATEGORIES } from '../constants';
-import { SearchIcon, PhotoIcon, ChevronLeftIcon } from '../components/Icons.tsx';
+import { SearchIcon, PhotoIcon, ChevronLeftIcon } from '../components/Icons';
 
 
 interface TechniqueCardProps {
