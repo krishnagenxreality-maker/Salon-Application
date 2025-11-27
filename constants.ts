@@ -27,7 +27,7 @@ export const TECHNIQUES: Technique[] = [
       { 
         title: 'Prepare the Hair and Observe the Natural Fall', 
         instructions: 'Ensure the hair is fully wet and evenly saturated, then remove all tangles. Comb the hair straight down to observe its natural fall before cutting.',
-        imageUrl: '/images/one-length.jpeg'
+        imageUrl: '/images/Hair Preparation.png'
       },
       { 
         title: 'Create the Center Partings', 
