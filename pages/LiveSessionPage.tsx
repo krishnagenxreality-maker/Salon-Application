@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon } from '../components/Icons';
-import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/ServiceSteps';
+import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon } from '../components/Icons';
+import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 
 interface LiveTimerProps {
   startTime: number;
@@ -22,7 +22,7 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
   return (
-    <div className="fixed top-6 right-4 sm:right-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-lg z-50 flex items-center gap-2 animate-fade-in">
+    <div className="fixed top-28 right-4 sm:right-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full border border-gray-200 shadow-lg z-50 flex items-center gap-2 animate-fade-in">
       <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
       <ClockIcon className="w-4 h-4 text-gray-500" />
       <p className="text-lg font-mono font-bold tabular-nums text-black">{minutes}:{seconds}</p>
@@ -43,11 +43,17 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStartTime, setStepStartTime] = useState<number | null>(null);
+  
+  // State to capture customer request during consultation
+  const [customerRequest, setCustomerRequest] = useState('');
 
   // Dynamic Step Loading
   const steps = SERVICE_STEP_MAPPING[serviceName] || DEFAULT_STEPS;
   const totalSteps = steps.length;
   const stepData = steps[currentStep];
+  
+  // Check if current step is a consultation step
+  const isConsultationStep = stepData.title.toLowerCase().includes('consultation');
 
   const handleBeginSession = () => {
       const now = Date.now();
@@ -82,26 +88,26 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
       return (
         <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-6 animate-fade-in">
             <div className="max-w-2xl w-full text-center">
-                <span className="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-xs font-bold tracking-widest uppercase mb-6 inline-block">
+                <span className="px-4 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-500 uppercase tracking-wide mb-6 inline-block">
                     Ready to Start
                 </span>
                 <h1 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-6">
                     {serviceName}
                 </h1>
-                <p className="text-xl text-gray-500 mb-12">
+                <p className="text-xl text-gray-600 mb-12 font-light max-w-lg mx-auto">
                     Prepare your station. When you are ready to begin the service with the client, click the button below.
                 </p>
                 
                 <div className="flex flex-col gap-4 items-center">
                     <button
                         onClick={handleBeginSession}
-                        className="px-10 py-5 bg-black text-white text-lg font-bold rounded-full hover:bg-gray-800 hover:scale-105 transition-all duration-300 shadow-xl"
+                        className="px-12 py-4 bg-black text-white text-lg font-bold rounded-full shadow-xl hover:scale-105 transition-transform duration-300"
                     >
                         Begin Session
                     </button>
                     <button 
                         onClick={onExit}
-                        className="text-gray-400 hover:text-black text-sm font-medium transition-colors mt-4"
+                        className="text-gray-400 hover:text-red-500 text-sm font-semibold transition-colors mt-4"
                     >
                         Cancel
                     </button>
@@ -126,16 +132,16 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
         
         {sessionStartTime && <LiveTimer startTime={sessionStartTime} />}
 
-      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 md:px-12 pt-20 pb-32">
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 md:px-12 pt-32 pb-32">
         <div className="w-full max-w-screen-xl mx-auto grid md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Left Column: Instructions */}
           <div className="animate-slide-up">
-            <div className="mb-2 flex items-center gap-2">
+            <div className="mb-4 flex items-center gap-3">
                 <span className="text-sm font-bold text-gray-500 tracking-widest uppercase">
                 Step {currentStep + 1} / {totalSteps}
                 </span>
                 <span className="h-1 w-1 rounded-full bg-gray-300"></span>
-                <span className="text-sm font-medium text-gray-400 uppercase tracking-wide">
+                <span className="text-sm font-semibold text-black uppercase tracking-wide">
                     {serviceName}
                 </span>
             </div>
@@ -143,9 +149,28 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black tracking-tighter mt-2">
               {stepData.title}
             </h2>
-            <p className="mt-6 text-base sm:text-lg text-gray-700 leading-relaxed border-l-4 border-gray-200 pl-6">
+            <p className="mt-6 text-lg text-gray-700 leading-relaxed border-l-2 border-gray-100 pl-6">
               {stepData.instructions}
             </p>
+
+            {/* Customer Request Input - Only visible on Consultation steps */}
+            {isConsultationStep && (
+                <div className="mt-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                    <label className="block text-sm font-bold text-black mb-3 flex items-center gap-2">
+                        <UserCircleIcon className="w-5 h-5 text-gray-500" />
+                        Customer Request / Style
+                    </label>
+                    <textarea
+                        value={customerRequest}
+                        onChange={(e) => setCustomerRequest(e.target.value)}
+                        placeholder="Enter the customer's desired style, length, or specific requests here..."
+                        className="w-full p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all min-h-[120px] text-base resize-none"
+                    />
+                    <p className="text-xs text-gray-400 mt-2">
+                        Record the specific style requirements discussed with the client.
+                    </p>
+                </div>
+            )}
           </div>
 
           {/* Right Column: Animation */}
@@ -158,14 +183,14 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
       {/* Bottom Navigation */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200/80 z-40">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-12 h-24 flex items-center justify-between">
-           <button onClick={onExit} className="text-sm font-medium text-gray-500 hover:text-red-600 transition-colors">
+           <button onClick={onExit} className="text-sm font-medium text-gray-500 hover:text-red-500 transition-colors">
               Abort Session
             </button>
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="h-12 px-4 sm:h-14 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black hover:bg-gray-50"
+              className="h-12 px-4 sm:h-14 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black"
             >
               <ChevronLeftIcon className="w-5 h-5 text-black" />
                <span className="hidden sm:inline text-sm font-semibold tracking-wide ml-2">
@@ -174,9 +199,9 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
             </button>
             <button
               onClick={handleNext}
-              className={`h-12 px-6 sm:h-14 sm:px-8 text-white flex items-center justify-center transition-colors rounded-full shadow-lg hover:shadow-xl ${
+              className={`h-12 px-6 sm:h-14 sm:px-8 text-white flex items-center justify-center transition-colors rounded-full shadow-lg ${
                   currentStep === totalSteps - 1 
-                    ? 'bg-black hover:bg-green-600' 
+                    ? 'bg-green-600 hover:bg-green-500' 
                     : 'bg-black hover:bg-gray-800'
               }`}
             >
