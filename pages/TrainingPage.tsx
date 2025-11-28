@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
 import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon } from '../components/AppIcons';
@@ -40,8 +40,74 @@ interface TrainingPageProps {
 const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTime, onStepComplete, onComplete, onExit }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStartTime, setStepStartTime] = useState(Date.now());
+  const [isSpeaking, setIsSpeaking] = useState(false); // Track speech state
+  
   const totalSteps = technique.steps.length;
   const stepData = technique.steps[currentStep];
+
+  // Stop speech when component unmounts
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
+
+  // Function to play audio
+  const playInstructions = useCallback(() => {
+      // Cancel any current speech first
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(stepData.instructions);
+      
+      // Get all available voices
+      const voices = window.speechSynthesis.getVoices();
+      
+      // Priority list for "High Quality Female Voices"
+      const preferredVoice = voices.find(voice => 
+        voice.name.includes('Google US English') || 
+        voice.name.includes('Microsoft Zira') || 
+        voice.name.includes('Samantha') ||
+        (voice.lang.startsWith('en') && voice.name.toLowerCase().includes('female'))
+      );
+
+      const fallbackVoice = voices.find(voice => voice.lang === 'en-US');
+
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      } else if (fallbackVoice) {
+        utterance.voice = fallbackVoice;
+      }
+      
+      utterance.pitch = 1.2; // Higher pitch for "girl" voice
+      utterance.rate = 1.0;  // Normal speed
+
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+      
+      window.speechSynthesis.speak(utterance);
+      setIsSpeaking(true);
+  }, [stepData]);
+
+  // Handle Step Change: Reset timer AND Auto-play Audio
+  useEffect(() => {
+    setStepStartTime(Date.now());
+    
+    // Small timeout to ensure browser is ready for the new utterance
+    const timer = setTimeout(() => {
+        playInstructions();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [currentStep, playInstructions]);
+
+  const handleVoiceToggle = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+    } else {
+      playInstructions();
+    }
+  };
 
   const handleNext = () => {
     const duration = Date.now() - stepStartTime;
@@ -49,7 +115,6 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
 
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
-      setStepStartTime(Date.now());
     } else {
       onComplete();
     }
@@ -58,7 +123,6 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
-      setStepStartTime(Date.now());
     }
   };
   
@@ -90,11 +154,22 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
               {stepData.instructions}
             </p>
             <div className="mt-8 flex items-center gap-4">
-              <button className="h-12 w-12 border border-gray-300 rounded-full flex items-center justify-center hover:bg-light-grey transition-colors">
-                <VoiceIcon className="w-6 h-6 text-black" />
+              <button 
+                onClick={handleVoiceToggle}
+                className={`h-12 w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
+                  isSpeaking 
+                    ? 'bg-black border-black text-white scale-110 shadow-lg' 
+                    : 'border-gray-300 text-black hover:bg-light-grey'
+                }`}
+              >
+                {/* Simple animation for the icon when speaking */}
+                <VoiceIcon className={`w-6 h-6 ${isSpeaking ? 'animate-pulse' : ''}`} />
               </button>
-              <button className="text-sm font-medium text-black underline">
-                English (UK)
+              <button 
+                onClick={handleVoiceToggle}
+                className="text-sm font-medium text-black underline decoration-gray-300 hover:decoration-black underline-offset-4 transition-all"
+              >
+                {isSpeaking ? 'Stop Reading' : 'Replay Instructions'}
               </button>
             </div>
           </div>
