@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon } from '@/components/Icons';
+import { ChevronLeftIcon } from '../components/AppIcons';
 
 interface LoginPageProps {
     role: 'admin' | 'candidate';
@@ -20,15 +20,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
         setError('');
 
         if (role === 'admin') {
-            // Hardcoded admin validation
-            // Added trim() to handle accidental spaces
             if (userId.trim().toLowerCase() === 'admin' && password.trim() === 'admin') {
                 onLoginSuccess();
             } else {
                 setError('Invalid credentials. For demo, use ID: "admin" and Password: "admin"');
             }
         } else {
-            // Mock candidate validation (accept anything for demo)
             if (userId.trim() && password.trim()) {
                 onLoginSuccess();
             } else {
@@ -54,16 +51,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                     alt="GenXReality Logo" 
                     className="h-14 w-auto mx-auto mb-8"
                 />
-                <h1 className="text-3xl font-extrabold text-black tracking-tighter capitalize">
+                <h1 className="text-3xl font-extrabold text-black tracking-tight capitalize">
                     {role} Portal
                 </h1>
                 <p className="mt-2 text-gray-500">
                     Sign in to access the {role === 'admin' ? 'Dashboard' : 'Library'}.
                 </p>
 
-                <form onSubmit={handleSubmit} className="mt-8 text-left space-y-6">
+                <form onSubmit={handleSubmit} className="mt-8 text-left space-y-5">
                     <div>
-                        <label htmlFor="userid" className="text-sm font-medium text-gray-700">
+                        <label htmlFor="userid" className="text-sm font-semibold text-black">
                             {role === 'admin' ? 'Admin ID' : 'Candidate ID'}
                         </label>
                         <input
@@ -74,13 +71,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                             required
                             value={userId}
                             onChange={(e) => setUserId(e.target.value)}
-                            className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
+                            className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                             placeholder={role === 'admin' ? "Enter admin ID" : "Enter candidate ID"}
                         />
                     </div>
 
                     <div>
-                         <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+                         <label htmlFor="password" className="text-sm font-semibold text-black">Password</label>
                         <input
                             id="password"
                             name="password"
@@ -89,7 +86,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-black focus:border-black sm:text-sm"
+                            className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                             placeholder="Enter your password"
                         />
                     </div>
@@ -103,24 +100,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
                         >
                             Login
                         </button>
                     </div>
                 </form>
                 
-                <div className="mt-4 flex flex-col space-y-2 text-center text-sm">
+                <div className="mt-6 flex flex-col space-y-3 text-center text-sm">
                     <button 
                         onClick={onNavigateToForgotPassword} 
-                        className="text-gray-500 hover:text-black hover:underline focus:outline-none transition-colors"
+                        className="text-gray-500 hover:text-black transition-colors"
                     >
                         Forgot/Change Password
                     </button>
                     
-                    <p className="text-gray-600">
+                    <p className="text-gray-500">
                         Don't have an ID?{' '}
-                        <button onClick={onNavigateToCreateId} className="font-medium text-black hover:underline focus:outline-none">
+                        <button onClick={onNavigateToCreateId} className="font-semibold text-black hover:underline">
                             Create one
                         </button>
                     </p>

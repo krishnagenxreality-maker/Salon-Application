@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon } from '@/components/Icons';
+import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon } from '../components/AppIcons';
 
 interface LiveTimerProps {
   startTime: number;

@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { UserCircleIcon, CalendarIcon, ClockIcon } from '@/components/Icons';
+import { UserCircleIcon, CalendarIcon, ClockIcon } from '../components/AppIcons';
 
 const AdminPage: React.FC = () => {
     return (
         <div className="w-full min-h-screen bg-white pt-28 pb-16 px-4 md:px-8 lg:px-12 animate-fade-in">
              <div className="max-w-screen-xl mx-auto">
                 {/* Header */}
-                <div className="mb-10 border-b border-gray-200 pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div className="mb-12 border-b border-gray-200 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                     <div>
                         <h1 className="text-3xl sm:text-4xl font-extrabold text-black tracking-tighter">
                             Admin Dashboard
@@ -16,13 +16,13 @@ const AdminPage: React.FC = () => {
                             System Overview & User Management
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-light-grey rounded-full text-sm font-medium text-gray-600">
+                    <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-600">
                             <CalendarIcon className="w-4 h-4" />
                             <span>{new Date().toLocaleDateString()}</span>
                         </div>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full text-sm font-medium">
-                            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-bold">
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                             <span>System Online</span>
                         </div>
                     </div>
@@ -35,10 +35,10 @@ const AdminPage: React.FC = () => {
                         { label: 'Active Sessions', value: '0', icon: ClockIcon },
                         { label: 'Completions', value: '0', icon: CalendarIcon },
                     ].map((stat, idx) => (
-                        <div key={idx} className="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm flex items-center justify-between">
+                        <div key={idx} className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">{stat.label}</p>
-                                <p className="text-3xl font-extrabold text-black mt-1">{stat.value}</p>
+                                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">{stat.label}</p>
+                                <p className="text-3xl font-extrabold text-black">{stat.value}</p>
                             </div>
                             <div className="h-12 w-12 bg-light-grey rounded-full flex items-center justify-center text-black">
                                 <stat.icon className="w-6 h-6" />
@@ -56,7 +56,7 @@ const AdminPage: React.FC = () => {
                     <p className="text-gray-500 max-w-md mx-auto mb-8">
                         The candidate database is currently empty. Integration with the backend API is required to populate real-time training metrics.
                     </p>
-                    <button className="px-6 py-3 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-not-allowed opacity-50">
+                    <button className="px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-400 font-medium cursor-not-allowed shadow-sm">
                         Sync Database
                     </button>
                 </div>

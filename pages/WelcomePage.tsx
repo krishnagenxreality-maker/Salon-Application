@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronLeftIcon } from '@/components/Icons';
+import { ChevronLeftIcon } from '../components/AppIcons';
 
 interface WelcomePageProps {
   onExplore: () => void;
@@ -9,38 +9,32 @@ interface WelcomePageProps {
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-8 animate-fade-in relative overflow-hidden">
+    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-8 animate-fade-in relative">
         {/* Back Button */}
         <button 
             onClick={onBack}
-            className="absolute top-28 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
+            className="absolute top-24 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
         >
             <ChevronLeftIcon className="w-5 h-5 mr-1" />
             Change Mode
         </button>
 
-        {/* Abstract Background Elements */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
-            <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" />
-            <div className="absolute bottom-[10%] right-[10%] w-[40%] h-[40%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-
-        <div className="relative z-10 max-w-4xl text-center flex flex-col items-center">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-6 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
+        <div className="max-w-4xl text-center">
+            <h2 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-4 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
                 TONI&GUY
             </h2>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-gray-800 tracking-tight leading-tight mb-8 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight mb-6 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                 Welcome to the <br/> Future of Styling.
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-500 mb-12 max-w-lg mx-auto leading-relaxed animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
+            <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
                 Immerse yourself in world-class education. Master precision, creativity, and technique through our advanced interactive training platform.
             </p>
 
             <button
                 onClick={onExplore}
-                className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-black rounded-full overflow-hidden transition-all duration-300 hover:bg-gray-900 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black animate-slide-up opacity-0 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-black rounded-full transition-all duration-300 hover:bg-gray-800 hover:scale-105 focus:outline-none animate-slide-up opacity-0"
                 style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
             >
                 <span className="mr-2">Explore our services</span>
@@ -50,7 +44,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
                     viewBox="0 0 24 24"
                     strokeWidth={2}
                     stroke="currentColor"
-                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                    className="w-5 h-5"
                 >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                 </svg>

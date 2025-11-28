@@ -2,8 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Technique, TechniqueCategory } from '../types';
 import { TECHNIQUES, CATEGORIES } from '../constants';
-import { SearchIcon, PhotoIcon, ChevronLeftIcon } from '@/components/Icons';
-
+import { SearchIcon, PhotoIcon, ChevronLeftIcon } from '../components/AppIcons';
 
 interface TechniqueCardProps {
   technique: Technique;
@@ -29,7 +28,7 @@ const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) =>
         ) : (
             <div className="flex flex-col items-center text-gray-400">
                 <PhotoIcon className="w-8 h-8 mb-2" />
-                <span className="text-xs font-medium">Image Not Found</span>
+                <span className="text-xs">Image Not Found</span>
             </div>
         )}
       </div>
@@ -63,7 +62,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
   }, [activeCategory, searchTerm]);
 
   return (
-    <div className="w-full min-h-screen bg-white pt-28 pb-20">
+    <div className="w-full min-h-screen bg-white pt-24 pb-20">
       <main className="max-w-screen-2xl mx-auto px-4 md:px-8 lg:px-12 animate-fade-in">
         
         {/* Back Button */}

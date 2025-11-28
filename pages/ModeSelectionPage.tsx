@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MonitorIcon, UserGroupIcon } from '@/components/Icons';
+import { MonitorIcon, UserGroupIcon } from '../components/AppIcons';
 
 interface ModeSelectionPageProps {
   onSelect: (mode: 'with-customer' | 'without-customer') => void;
@@ -17,7 +17,7 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
             Select Modes
          </h1>
          <p className="mt-4 text-gray-500 text-lg max-w-md mx-auto">
-            Choose your preferred training environment to begin your session.
+            Choose your preferred training environment.
          </p>
       </div>
 
@@ -25,12 +25,12 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
         {/* Training Lobby */}
         <button
           onClick={() => onSelect('without-customer')}
-          className="group relative bg-white border border-gray-200 rounded-3xl p-10 text-center hover:shadow-2xl hover:border-black hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
+          className="group relative bg-white border border-gray-200 rounded-2xl p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
         >
-          <div className="h-24 w-24 bg-light-grey rounded-full flex items-center justify-center mb-8 group-hover:bg-black transition-colors duration-500">
+          <div className="h-20 w-20 bg-light-grey rounded-full flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-500">
              <MonitorIcon className="w-10 h-10 text-black group-hover:text-white transition-colors duration-500" />
           </div>
-          <h2 className="text-2xl font-bold text-black mb-4">Training Lobby</h2>
+          <h2 className="text-2xl font-bold text-black mb-3">Training Lobby</h2>
           <p className="text-gray-500 leading-relaxed">
             Practice techniques on digital models in a controlled, self-paced environment. Perfect your skills before hitting the floor.
           </p>
@@ -39,12 +39,12 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
         {/* Customer Service */}
         <button
           onClick={() => onSelect('with-customer')}
-          className="group relative bg-white border border-gray-200 rounded-3xl p-10 text-center hover:shadow-2xl hover:border-black hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
+          className="group relative bg-white border border-gray-200 rounded-2xl p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
         >
-          <div className="h-24 w-24 bg-light-grey rounded-full flex items-center justify-center mb-8 group-hover:bg-black transition-colors duration-500">
+          <div className="h-20 w-20 bg-light-grey rounded-full flex items-center justify-center mb-6 group-hover:bg-black transition-colors duration-500">
              <UserGroupIcon className="w-10 h-10 text-black group-hover:text-white transition-colors duration-500" />
           </div>
-          <h2 className="text-2xl font-bold text-black mb-4">Customer Service</h2>
+          <h2 className="text-2xl font-bold text-black mb-3">Customer Service</h2>
           <p className="text-gray-500 leading-relaxed">
              Real-time assistance and step-by-step guidance while working with a live client. Ensure precision with every cut.
           </p>

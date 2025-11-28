@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@/components/Icons';
+import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '../components/AppIcons';
 
 interface HaircutsSelectionPageProps {
   onStartSession: (subService: string) => void;
@@ -54,7 +54,7 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
   };
 
   return (
-    <div className="w-full min-h-screen bg-white pt-28 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
+    <div className="w-full min-h-screen bg-white pt-24 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
       <div className="max-w-2xl mx-auto relative">
         
         {/* Back Button */}
@@ -65,8 +65,8 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
             </button>
         </div>
 
-        <div className="mt-12 text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-black tracking-tighter">
+        <div className="mt-12 text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
                 Haircuts & Styling
             </h1>
             <p className="mt-2 text-gray-500">
@@ -76,12 +76,12 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
 
         <div className="space-y-4 animate-slide-up">
             {HAIRCUT_OPTIONS.map((category) => (
-                <div key={category.title} className="border border-gray-200 rounded-2xl overflow-hidden transition-all duration-300 hover:border-gray-300 bg-white">
+                <div key={category.title} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-300">
                     <button 
                         onClick={() => toggleCategory(category.title)}
                         className="w-full flex items-center justify-between p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                     >
-                        <span className="text-lg font-bold text-black">{category.title}</span>
+                        <span className="text-xl font-bold text-black">{category.title}</span>
                         {openCategory === category.title ? (
                             <ChevronUpIcon className="w-5 h-5 text-black" />
                         ) : (
@@ -90,20 +90,20 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
                     </button>
                     
                     {openCategory === category.title && (
-                        <div className="bg-gray-50 border-t border-gray-100 p-4 space-y-2">
+                        <div className="bg-gray-50 border-t border-gray-100 p-2 space-y-1">
                             {category.options.map((option) => (
                                 <button
                                     key={option}
                                     onClick={() => handleOptionSelect(option)}
-                                    className={`w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 flex items-center justify-between ${
+                                    className={`w-full text-left px-6 py-4 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between ${
                                         selectedOption === option 
-                                            ? 'bg-black text-white shadow-md' 
-                                            : 'text-gray-600 hover:bg-white hover:shadow-sm'
+                                            ? 'bg-black text-white' 
+                                            : 'text-gray-600 hover:bg-gray-200'
                                     }`}
                                 >
                                     {option}
                                     {selectedOption === option && (
-                                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                                        <div className="w-2 h-2 bg-white rounded-full"></div>
                                     )}
                                 </button>
                             ))}
@@ -113,11 +113,11 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
             ))}
         </div>
 
-        <div className="mt-12 flex justify-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <div className="mt-16 flex justify-center animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <button
                 onClick={() => selectedOption ? onStartSession(selectedOption) : alert("Please select a specific service option first.")}
                 disabled={!selectedOption}
-                className={`px-12 py-4 rounded-full font-bold text-lg shadow-lg transition-all duration-300 ${
+                className={`px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg ${
                     selectedOption 
                         ? 'bg-black text-white hover:scale-105 hover:bg-gray-800 cursor-pointer' 
                         : 'bg-gray-200 text-gray-400 cursor-not-allowed'

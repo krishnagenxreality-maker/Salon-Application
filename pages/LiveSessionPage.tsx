@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon } from '@/components/Icons';
+import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon } from '../components/AppIcons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 
 interface LiveTimerProps {

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ClockIcon, CheckIcon, UserCircleIcon, CalendarIcon, UserGroupIcon } from '@/components/Icons';
+import { ClockIcon, CheckIcon, UserCircleIcon, CalendarIcon, UserGroupIcon } from '../components/AppIcons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 import { CustomerDetails } from '../types';
 

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon, MonitorIcon } from '@/components/Icons';
+import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon } from '../components/AppIcons';
 
 interface ServiceSelectionPageProps {
   onSelectService: (serviceId: string) => void;
@@ -22,7 +22,7 @@ const TRAINING_MODULES = [
 
 const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white pt-28 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
+    <div className="w-full min-h-screen bg-white pt-24 pb-20 px-4 md:px-8 lg:px-12 animate-fade-in">
       <div className="max-w-screen-xl mx-auto text-center relative">
         
         {/* Back Button */}
@@ -49,7 +49,7 @@ const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectSer
                 <button
                     key={module.id}
                     onClick={() => onSelectService(module.id)}
-                    className="group relative bg-white border border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:border-black hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[180px]"
+                    className="group relative bg-white border border-gray-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[180px]"
                 >
                     <div className="h-12 w-12 bg-light-grey rounded-full flex items-center justify-center mb-4 group-hover:bg-black transition-colors duration-300">
                         <module.icon className="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" />
@@ -57,7 +57,7 @@ const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectSer
                     <h3 className="text-lg font-bold text-black leading-tight">{module.title}</h3>
                     
                     {module.id === 'hair-training' && (
-                         <span className="mt-3 text-[10px] font-bold text-black bg-gray-100 px-2 py-1 rounded-full uppercase tracking-wide">
+                         <span className="mt-2 text-xs font-semibold text-white bg-black px-2 py-0.5 rounded-full">
                             Available
                         </span>
                     )}
