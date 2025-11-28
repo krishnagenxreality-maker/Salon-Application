@@ -38,6 +38,15 @@ export interface User {
   completedTechniques: CompletedTechnique[];
 }
 
+export interface CustomerDetails {
+    name: string;
+    date: string;
+    time: string;
+    duration: string;
+    isMember: boolean;
+    memberId?: string;
+}
+
 export type Page = 'ROLE_SELECTION' | 'HOME' | 'TECHNIQUE' | 'TRAINING' | 'COMPLETED' | 'LOGIN' | 'CREATE_ID' | 'FORGOT_PASSWORD' | 'ADMIN' | 'WELCOME' | 'MODE_SELECTION' | 'SERVICE_SELECTION' | 'CUSTOMER_WELCOME' | 'CUSTOMER_DETAILS' | 'CUSTOMER_SERVICE_MENU' | 'HAIRCUTS_SELECTION' | 'LIVE_SESSION' | 'LIVE_SESSION_COMPLETED';
 
 export type UserRole = 'admin' | 'candidate' | null;

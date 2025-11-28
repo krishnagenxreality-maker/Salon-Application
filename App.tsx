@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import { Technique, Page, UserRole } from './types';
+import { Technique, Page, UserRole, CustomerDetails } from './types';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import TechniquePage from './pages/TechniquePage';
@@ -35,13 +35,13 @@ const App: React.FC = () => {
   // Live Session State
   const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
   const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
-  const [customerTargetDuration, setCustomerTargetDuration] = useState<string>('');
+  const [currentCustomer, setCurrentCustomer] = useState<CustomerDetails | null>(null);
 
   const resetTrainingState = useCallback(() => {
     setTrainingStartTime(null);
     setStepTimings([]);
     setLiveSessionTimings([]);
-    setCustomerTargetDuration('');
+    setCurrentCustomer(null);
   }, []);
 
   // Generalized navigation handler for the Header
@@ -115,10 +115,9 @@ const App: React.FC = () => {
     setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
-  const handleCustomerDetailsSubmit = useCallback((details: { duration: string; isMember: boolean; memberId: string }) => {
-    // After details are entered, go to Customer Service Menu
-    // We store the duration for tracking, Member details could be stored if needed.
-    setCustomerTargetDuration(details.duration);
+  const handleCustomerDetailsSubmit = useCallback((details: CustomerDetails) => {
+    // Store full customer details
+    setCurrentCustomer(details);
     setCurrentPage('CUSTOMER_SERVICE_MENU');
   }, []);
 
@@ -159,7 +158,7 @@ const App: React.FC = () => {
   const handleNewCustomer = useCallback(() => {
       setSelectedLiveService(null);
       setLiveSessionTimings([]);
-      setCustomerTargetDuration('');
+      setCurrentCustomer(null);
       setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
@@ -289,7 +288,7 @@ const App: React.FC = () => {
                   <LiveSessionCompletionPage
                       serviceName={selectedLiveService}
                       stepTimings={liveSessionTimings}
-                      targetDuration={customerTargetDuration}
+                      customerDetails={currentCustomer}
                       onBackToMenu={handleBackToCustomerMenu}
                       onNewCustomer={handleNewCustomer}
                   />
@@ -349,7 +348,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="antialiased text-black bg-white">
+    <div className="antialiased text-black bg-white font-sans min-h-screen">
       {showHeader && (
           <Header 
             userRole={userRole} 
