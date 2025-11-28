@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon } from '@/components/Icons';
+import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon } from '../components/Icons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 
 interface LiveTimerProps {
@@ -53,7 +53,7 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   const stepData = steps[currentStep];
   
   // Check if current step is a consultation step
-  const isConsultationStep = stepData.title.toLowerCase().includes('consultation');
+  const isConsultationStep = stepData.title.toLowerCase().includes('customer requirements');
 
   const handleBeginSession = () => {
       const now = Date.now();

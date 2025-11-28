@@ -55,7 +55,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                 Customer Details
              </h1>
              <p className="text-gray-500">
-                Capture consultation data before starting the session.
+                Customer requirements.
              </p>
         </div>
 

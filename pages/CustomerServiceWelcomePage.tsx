@@ -1,63 +1,194 @@
 
-import React from 'react';
-import { ChevronLeftIcon } from '@/components/Icons';
+import React, { useState } from 'react';
+import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon } from '../components/Icons';
+import { CustomerDetails } from '../types';
 
-interface CustomerServiceWelcomePageProps {
-  onDive: () => void;
+interface CustomerDetailsPageProps {
+  onNext: (details: CustomerDetails) => void;
   onBack: () => void;
 }
 
-const CustomerServiceWelcomePage: React.FC<CustomerServiceWelcomePageProps> = ({ onDive, onBack }) => {
+const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBack }) => {
+  const [customerName, setCustomerName] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [duration, setDuration] = useState(''); 
+  const [isMember, setIsMember] = useState(false);
+  const [memberId, setMemberId] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (isMember && !memberId.trim()) {
+        alert("Please enter the Member ID.");
+        return;
+    }
+
+    if (customerName && date && time && duration) {
+        onNext({ 
+            name: customerName,
+            date,
+            time,
+            duration, 
+            isMember, 
+            memberId: isMember ? memberId : '' 
+        });
+    } else {
+        alert("Please fill in all details.");
+    }
+  };
+
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-8 animate-fade-in relative overflow-hidden">
-        {/* Back Button */}
-        <button 
+    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 pt-20 animate-fade-in relative">
+         {/* Back Button */}
+         <button 
             onClick={onBack}
-            className="absolute top-28 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
+            className="absolute top-24 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
         >
             <ChevronLeftIcon className="w-5 h-5 mr-1" />
-            Change Mode
+            Back
         </button>
 
-        {/* Abstract Background Elements - Different positioning for distinction */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
-            <div className="absolute top-[20%] -right-[10%] w-[50%] h-[50%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" />
-            <div className="absolute -bottom-[10%] left-[10%] w-[40%] h-[40%] bg-gray-50 rounded-full blur-3xl opacity-50 animate-subtle-pulse" style={{ animationDelay: '1.5s' }} />
+      <div className="max-w-lg w-full">
+        <div className="mb-10 text-center animate-slide-up">
+             <h1 className="text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2">
+                Customer Details
+             </h1>
+             <p className="text-gray-500">
+                Customer requirements.
+             </p>
         </div>
 
-        <div className="relative z-10 max-w-4xl text-center flex flex-col items-center">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-6 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
-                TONI&GUY
-            </h2>
+        <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            
+            {/* Customer Name */}
+            <div className="space-y-2">
+                <label className="block text-sm font-semibold text-black">Customer Name</label>
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <UserCircleIcon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input 
+                        type="text" 
+                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                        placeholder="Enter client's full name"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                        required
+                    />
+                </div>
+            </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-gray-800 tracking-tight leading-tight mb-8 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-                Elevate the <br/> Client Experience.
-            </h1>
+            <div className="grid grid-cols-2 gap-4">
+                {/* Date */}
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-black">Date</label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <CalendarIcon className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input 
+                            type="date" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
 
-            <p className="text-lg md:text-xl text-gray-500 mb-12 max-w-lg mx-auto leading-relaxed animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-                Seamlessly integrate advanced consultation tools and live technical guidance directly into your client sessions.
-            </p>
+                {/* Time */}
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-black">Time</label>
+                    <div className="relative">
+                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <ClockIcon className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input 
+                            type="time" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
 
-            <button
-                onClick={onDive}
-                className="group relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-black rounded-full overflow-hidden transition-all duration-300 hover:bg-gray-900 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black animate-slide-up opacity-0 shadow-lg hover:shadow-xl"
-                style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
-            >
-                <span className="mr-2">Dive into customer services</span>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+             {/* Duration */}
+             <div className="space-y-2">
+                <label className="block text-sm font-semibold text-black">Service Duration (Minutes)</label>
+                <input 
+                    type="text" 
+                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                    placeholder="Enter time (e.g., 60 or 0)"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    required
+                />
+            </div>
+
+            {/* Membership Toggle */}
+            <div className="space-y-2">
+                <label className="block text-sm font-semibold text-black">Member?</label>
+                <div className="flex gap-4">
+                    <button
+                        type="button"
+                        onClick={() => setIsMember(true)}
+                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 ${
+                            isMember 
+                            ? 'bg-black text-white border-black' 
+                            : 'bg-white text-gray-500 border-gray-300 hover:border-black'
+                        }`}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => { setIsMember(false); setMemberId(''); }}
+                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 ${
+                            !isMember 
+                            ? 'bg-black text-white border-black' 
+                            : 'bg-white text-gray-500 border-gray-300 hover:border-black'
+                        }`}
+                    >
+                        No
+                    </button>
+                </div>
+            </div>
+
+            {/* Member ID Input (Conditional) */}
+            {isMember && (
+                <div className="space-y-2 animate-slide-up">
+                    <label className="block text-sm font-semibold text-black">Member ID</label>
+                    <div className="relative">
+                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <UserGroupIcon className="h-5 w-5 text-gray-400" />
+                        </div>
+                        <input 
+                            type="text" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            placeholder="Enter member ID"
+                            value={memberId}
+                            onChange={(e) => setMemberId(e.target.value)}
+                            required={isMember}
+                        />
+                    </div>
+                </div>
+            )}
+
+            <div className="pt-6">
+                <button
+                    type="submit"
+                    className="w-full flex items-center justify-center py-4 px-8 border border-transparent rounded-full shadow-lg text-base font-bold text-white bg-black hover:bg-gray-800 transition-colors"
                 >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-            </button>
-        </div>
+                    Select Service
+                </button>
+            </div>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default CustomerServiceWelcomePage;
+export default CustomerDetailsPage;
