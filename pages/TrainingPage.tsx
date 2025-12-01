@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon } from '../components/AppIcons';
+import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon } from '../components/AppIcons';
 
 interface LiveTimerProps {
   startTime: number;
@@ -40,7 +40,8 @@ interface TrainingPageProps {
 const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTime, onStepComplete, onComplete, onExit }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStartTime, setStepStartTime] = useState(Date.now());
-  const [isSpeaking, setIsSpeaking] = useState(false); // Track speech state
+  const [isSpeaking, setIsSpeaking] = useState(false); // Track active speech state
+  const [isPaused, setIsPaused] = useState(false); // Track paused state
   
   const totalSteps = technique.steps.length;
   const stepData = technique.steps[currentStep];
@@ -56,6 +57,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const playInstructions = useCallback(() => {
       // Cancel any current speech first
       window.speechSynthesis.cancel();
+      setIsPaused(false);
 
       const utterance = new SpeechSynthesisUtterance(stepData.instructions);
       
@@ -81,8 +83,14 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
       utterance.pitch = 1.2; // Higher pitch for "girl" voice
       utterance.rate = 1.0;  // Normal speed
 
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
       
       window.speechSynthesis.speak(utterance);
       setIsSpeaking(true);
@@ -102,10 +110,18 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
 
   const handleVoiceToggle = () => {
     if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
+        if (isPaused) {
+            // Resume if currently paused
+            window.speechSynthesis.resume();
+            setIsPaused(false);
+        } else {
+            // Pause if currently speaking
+            window.speechSynthesis.pause();
+            setIsPaused(true);
+        }
     } else {
-      playInstructions();
+        // Play if stopped
+        playInstructions();
     }
   };
 
@@ -158,19 +174,23 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
               <button 
                 onClick={handleVoiceToggle}
                 className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isSpeaking 
-                    ? 'bg-black border-black text-white scale-110 shadow-lg' 
+                  isSpeaking && !isPaused
+                    ? 'bg-black border-black text-white shadow-lg' 
                     : 'border-gray-300 text-black hover:bg-light-grey'
                 }`}
               >
-                {/* Simple animation for the icon when speaking */}
-                <VoiceIcon className={`w-5 h-5 sm:w-6 sm:h-6 ${isSpeaking ? 'animate-pulse' : ''}`} />
+                {/* Dynamically show Play/Pause/Voice icon */}
+                {isSpeaking ? (
+                    isPaused ? <PlayIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <PauseIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                ) : (
+                    <VoiceIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                )}
               </button>
               <button 
                 onClick={handleVoiceToggle}
                 className="text-sm font-medium text-black underline decoration-gray-300 hover:decoration-black underline-offset-4 transition-all"
               >
-                {isSpeaking ? 'Stop Reading' : 'Replay Instructions'}
+                {isSpeaking ? (isPaused ? 'Resume Instructions' : 'Pause Instructions') : 'Replay Instructions'}
               </button>
             </div>
           </div>
