@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon } from '../components/AppIcons';
+import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowPathIcon } from '../components/AppIcons';
 
 interface LiveTimerProps {
   startTime: number;
@@ -43,6 +43,10 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const [isSpeaking, setIsSpeaking] = useState(false); // Track active speech state
   const [isPaused, setIsPaused] = useState(false); // Track paused state
   
+  // Video Controls State
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
   const totalSteps = technique.steps.length;
   const stepData = technique.steps[currentStep];
 
@@ -100,6 +104,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   useEffect(() => {
     setStepStartTime(Date.now());
     
+    // Reset video state on step change
+    setIsVideoPlaying(true);
+
     // Small timeout to ensure browser is ready for the new utterance
     const timer = setTimeout(() => {
         playInstructions();
@@ -122,6 +129,26 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
     } else {
         // Play if stopped
         playInstructions();
+    }
+  };
+
+  const toggleVideo = () => {
+    if (videoRef.current) {
+      if (isVideoPlaying) {
+        videoRef.current.pause();
+        setIsVideoPlaying(false);
+      } else {
+        videoRef.current.play();
+        setIsVideoPlaying(true);
+      }
+    }
+  };
+
+  const replayVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play();
+      setIsVideoPlaying(true);
     }
   };
 
@@ -198,8 +225,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
           {/* Right Column: Animation or Video or Image */}
           <div className="animate-slide-up flex justify-center order-1 md:order-2" style={{ animationDelay: '0.2s' }}>
             {stepData.videoUrl ? (
-               <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-xl">
+               <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-xl group">
                   <video
+                    ref={videoRef}
                     key={stepData.videoUrl}
                     src={stepData.videoUrl}
                     className="w-full h-full object-cover"
@@ -208,6 +236,25 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                     muted
                     playsInline
                   />
+                  
+                  {/* Video Controls Overlay */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 px-4 py-2 bg-black/50 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <button 
+                        onClick={toggleVideo} 
+                        className="text-white hover:text-gray-200 transition-colors p-1"
+                        title={isVideoPlaying ? "Pause Video" : "Play Video"}
+                    >
+                        {isVideoPlaying ? <PauseIcon className="w-6 h-6" /> : <PlayIcon className="w-6 h-6" />}
+                    </button>
+                    <div className="w-px h-4 bg-white/30"></div>
+                    <button 
+                        onClick={replayVideo} 
+                        className="text-white hover:text-gray-200 transition-colors p-1"
+                        title="Replay Video"
+                    >
+                        <ArrowPathIcon className="w-6 h-6" />
+                    </button>
+                  </div>
                </div>
             ) : stepData.imageUrl ? (
                <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-light-grey rounded-xl overflow-hidden shadow-xl">
