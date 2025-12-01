@@ -39,30 +39,32 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 pt-20 animate-fade-in relative">
+    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 pt-20 sm:pt-24 animate-fade-in relative">
          {/* Back Button */}
-         <button 
-            onClick={onBack}
-            className="absolute top-24 left-8 md:left-12 z-50 flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
-        >
-            <ChevronLeftIcon className="w-5 h-5 mr-1" />
-            Back
-        </button>
+         <div className="absolute top-24 left-4 sm:left-12 z-50">
+             <button 
+                onClick={onBack}
+                className="flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
+            >
+                <ChevronLeftIcon className="w-5 h-5 mr-1" />
+                Back
+            </button>
+         </div>
 
-      <div className="max-w-lg w-full">
-        <div className="mb-10 text-center animate-slide-up">
-             <h1 className="text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2">
+      <div className="max-w-lg w-full mt-8 sm:mt-0">
+        <div className="mb-8 sm:mb-10 text-center animate-slide-up">
+             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2">
                 Customer Details
              </h1>
-             <p className="text-gray-500">
+             <p className="text-gray-500 text-sm sm:text-base">
                 Customer requirements.
              </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             
             {/* Customer Name */}
-            <div className="space-y-2">
+            <div className="space-y-1 sm:space-y-2">
                 <label className="block text-sm font-semibold text-black">Customer Name</label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -70,7 +72,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                     </div>
                     <input 
                         type="text" 
-                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
                         placeholder="Enter client's full name"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
@@ -79,9 +81,9 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                 </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Date */}
-                <div className="space-y-2">
+                <div className="space-y-1 sm:space-y-2">
                     <label className="block text-sm font-semibold text-black">Date</label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -89,7 +91,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                         </div>
                         <input 
                             type="date" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                             required
@@ -98,7 +100,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                 </div>
 
                 {/* Time */}
-                <div className="space-y-2">
+                <div className="space-y-1 sm:space-y-2">
                     <label className="block text-sm font-semibold text-black">Time</label>
                     <div className="relative">
                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -106,7 +108,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                         </div>
                         <input 
                             type="time" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
                             required
@@ -116,11 +118,11 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
             </div>
 
              {/* Duration */}
-             <div className="space-y-2">
+             <div className="space-y-1 sm:space-y-2">
                 <label className="block text-sm font-semibold text-black">Service Duration (Minutes)</label>
                 <input 
                     type="text" 
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
                     placeholder="Enter time (e.g., 60 or 0)"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
@@ -129,13 +131,13 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
             </div>
 
             {/* Membership Toggle */}
-            <div className="space-y-2">
+            <div className="space-y-1 sm:space-y-2">
                 <label className="block text-sm font-semibold text-black">Member?</label>
                 <div className="flex gap-4">
                     <button
                         type="button"
                         onClick={() => setIsMember(true)}
-                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 ${
+                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 text-sm sm:text-base ${
                             isMember 
                             ? 'bg-black text-white border-black' 
                             : 'bg-white text-gray-500 border-gray-300 hover:border-black'
@@ -146,7 +148,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                     <button
                         type="button"
                         onClick={() => { setIsMember(false); setMemberId(''); }}
-                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 ${
+                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 text-sm sm:text-base ${
                             !isMember 
                             ? 'bg-black text-white border-black' 
                             : 'bg-white text-gray-500 border-gray-300 hover:border-black'
@@ -159,7 +161,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
 
             {/* Member ID Input (Conditional) */}
             {isMember && (
-                <div className="space-y-2 animate-slide-up">
+                <div className="space-y-1 sm:space-y-2 animate-slide-up">
                     <label className="block text-sm font-semibold text-black">Member ID</label>
                     <div className="relative">
                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -167,7 +169,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
                         </div>
                         <input 
                             type="text" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all" 
+                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
                             placeholder="Enter member ID"
                             value={memberId}
                             onChange={(e) => setMemberId(e.target.value)}
@@ -180,7 +182,7 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
             <div className="pt-6">
                 <button
                     type="submit"
-                    className="w-full flex items-center justify-center py-4 px-8 border border-transparent rounded-full shadow-lg text-base font-bold text-white bg-black hover:bg-gray-800 transition-colors"
+                    className="w-full flex items-center justify-center py-3 sm:py-4 px-8 border border-transparent rounded-full shadow-lg text-sm sm:text-base font-bold text-white bg-black hover:bg-gray-800 transition-colors"
                 >
                     Select Service
                 </button>
