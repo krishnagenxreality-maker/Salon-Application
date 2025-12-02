@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback } from 'react';
-import { Technique, Page, UserRole, CustomerDetails } from './types';
+import { Technique, Page, UserRole, CustomerDetails, SessionImage } from './types';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import TechniquePage from './pages/TechniquePage';
@@ -36,12 +36,14 @@ const App: React.FC = () => {
   const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
   const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
   const [currentCustomer, setCurrentCustomer] = useState<CustomerDetails | null>(null);
+  const [sessionImages, setSessionImages] = useState<SessionImage[]>([]);
 
   const resetTrainingState = useCallback(() => {
     setTrainingStartTime(null);
     setStepTimings([]);
     setLiveSessionTimings([]);
     setCurrentCustomer(null);
+    setSessionImages([]);
   }, []);
 
   // Generalized navigation handler for the Header
@@ -138,6 +140,7 @@ const App: React.FC = () => {
   const handleStartSession = useCallback((subService: string) => {
       setSelectedLiveService(subService);
       setLiveSessionTimings([]);
+      setSessionImages([]);
       setCurrentPage('LIVE_SESSION');
   }, []);
   
@@ -145,13 +148,15 @@ const App: React.FC = () => {
       setLiveSessionTimings(prev => [...prev, duration]);
   }, []);
 
-  const handleLiveSessionFinish = useCallback(() => {
+  const handleLiveSessionFinish = useCallback((images: SessionImage[]) => {
+      setSessionImages(images);
       setCurrentPage('LIVE_SESSION_COMPLETED');
   }, []);
 
   const handleBackToCustomerMenu = useCallback(() => {
       setSelectedLiveService(null);
       setLiveSessionTimings([]);
+      setSessionImages([]);
       setCurrentPage('CUSTOMER_SERVICE_MENU');
   }, []);
 
@@ -159,6 +164,7 @@ const App: React.FC = () => {
       setSelectedLiveService(null);
       setLiveSessionTimings([]);
       setCurrentCustomer(null);
+      setSessionImages([]);
       setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
@@ -289,6 +295,7 @@ const App: React.FC = () => {
                       serviceName={selectedLiveService}
                       stepTimings={liveSessionTimings}
                       customerDetails={currentCustomer}
+                      sessionImages={sessionImages}
                       onBackToMenu={handleBackToCustomerMenu}
                       onNewCustomer={handleNewCustomer}
                   />
