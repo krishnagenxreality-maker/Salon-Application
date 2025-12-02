@@ -39,9 +39,9 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   };
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 pt-20 sm:pt-24 animate-fade-in relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 pt-28 md:pt-32 animate-fade-in relative transition-colors duration-300">
          {/* Back Button */}
-         <div className="absolute top-24 left-4 sm:left-12 z-50">
+         <div className="absolute top-28 md:top-32 left-4 sm:left-12 z-50">
              <button 
                 onClick={onBack}
                 className="flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"

@@ -79,7 +79,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
   const targetDuration = customerDetails?.duration;
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center p-4 sm:p-6 pt-20 sm:pt-24 animate-fade-in confetti-container transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center p-4 sm:p-6 pt-32 md:pt-40 animate-fade-in confetti-container transition-colors duration-300">
       <Confetti />
       <div className="max-w-4xl w-full">
         <div className="text-center mb-6 sm:mb-8">

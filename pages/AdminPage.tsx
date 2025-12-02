@@ -4,7 +4,7 @@ import { UserCircleIcon, CalendarIcon, ClockIcon } from '../components/AppIcons'
 
 const AdminPage: React.FC = () => {
     return (
-        <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-24 sm:pt-28 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in transition-colors duration-300">
+        <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-28 md:pt-32 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in transition-colors duration-300">
              <div className="max-w-screen-xl mx-auto">
                 {/* Header */}
                 <div className="mb-8 sm:mb-12 border-b border-gray-200 dark:border-gray-800 pb-6 sm:pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">

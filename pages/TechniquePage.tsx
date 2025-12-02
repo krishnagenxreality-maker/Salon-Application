@@ -13,7 +13,7 @@ const TechniquePage: React.FC<TechniquePageProps> = ({ technique, onStartTrainin
   const [imgError, setImgError] = useState(false);
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-24 sm:pt-28 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-28 md:pt-32 pb-16 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in transition-colors duration-300">
       <div className="w-full max-w-screen-2xl mx-auto">
         <div className="mb-8 sm:mb-12">
             <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center group">

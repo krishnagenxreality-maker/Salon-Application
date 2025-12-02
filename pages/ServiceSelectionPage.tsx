@@ -22,11 +22,11 @@ const TRAINING_MODULES = [
 
 const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-24 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-28 md:pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative transition-colors duration-300">
       <div className="max-w-screen-xl mx-auto text-center">
         
         {/* Back Button */}
-        <div className="absolute top-24 left-4 sm:left-6 md:left-12 z-50">
+        <div className="absolute top-28 md:top-32 left-4 sm:left-6 md:left-12 z-50">
             <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center group">
               <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
               Back

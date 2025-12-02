@@ -9,9 +9,9 @@ interface CustomerServiceWelcomePageProps {
 
 const CustomerServiceWelcomePage: React.FC<CustomerServiceWelcomePageProps> = ({ onDive, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-8 pt-24 md:pt-32 animate-fade-in relative transition-colors duration-300">
         {/* Back Button */}
-        <div className="absolute top-4 left-4 sm:top-24 sm:left-12 z-50">
+        <div className="absolute top-24 left-4 sm:top-28 sm:left-12 z-50">
             <button 
                 onClick={onBack}
                 className="flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"

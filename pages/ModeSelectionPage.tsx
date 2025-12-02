@@ -8,7 +8,7 @@ interface ModeSelectionPageProps {
 
 const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 animate-fade-in transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 pt-24 md:pt-32 animate-fade-in transition-colors duration-300">
       <div className="mb-8 sm:mb-16 text-center animate-slide-up w-full px-4">
          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black dark:text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none">
             TONI&GUY

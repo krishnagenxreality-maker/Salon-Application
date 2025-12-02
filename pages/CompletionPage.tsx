@@ -40,7 +40,7 @@ const CompletionPage: React.FC<CompletionPageProps> = ({ technique, stepTimings,
   const totalTime = stepTimings.reduce((sum, time) => sum + time, 0);
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center text-center p-4 sm:p-6 pt-20 animate-fade-in confetti-container transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center text-center p-4 sm:p-6 pt-32 md:pt-40 animate-fade-in confetti-container transition-colors duration-300">
       <Confetti />
       <div className="max-w-3xl w-full">
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black dark:text-white tracking-tighter leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
