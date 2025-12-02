@@ -52,6 +52,7 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [capturedImages, setCapturedImages] = useState<SessionImage[]>([]);
   const [cameraError, setCameraError] = useState(false);
+  const [isFlashing, setIsFlashing] = useState(false); // State for flash effect
 
   // Dynamic Step Loading
   const steps = SERVICE_STEP_MAPPING[serviceName] || DEFAULT_STEPS;
@@ -126,8 +127,11 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
                 }
             ]);
             
-            // Visual feedback (optional flash effect could go here)
-            alert("Image Captured!");
+            // Trigger Flash Effect
+            setIsFlashing(true);
+            setTimeout(() => {
+                setIsFlashing(false);
+            }, 150);
           }
       }
   };
@@ -247,13 +251,19 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
           <div className="animate-slide-up order-1 md:order-2 flex justify-center" style={{ animationDelay: '0.2s' }}>
              <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-2xl group">
                  {!cameraError ? (
-                     <video
-                        ref={videoRef}
-                        autoPlay
-                        playsInline
-                        muted
-                        className="w-full h-full object-cover transform scale-x-[-1]" // Mirror effect
-                     />
+                     <div className="relative w-full h-full">
+                         <video
+                            ref={videoRef}
+                            autoPlay
+                            playsInline
+                            muted
+                            className="w-full h-full object-cover transform scale-x-[-1]" // Mirror effect
+                         />
+                         {/* Flash Effect Overlay */}
+                         <div 
+                            className={`absolute inset-0 bg-white pointer-events-none transition-opacity duration-150 ease-out z-10 ${isFlashing ? 'opacity-100' : 'opacity-0'}`}
+                         />
+                     </div>
                  ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center bg-gray-800 text-white p-4 text-center">
                          <p className="font-bold mb-2">Camera Unavailable</p>
@@ -265,7 +275,7 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
                  <canvas ref={canvasRef} className="hidden" />
 
                  {/* Capture Overlay */}
-                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
                     <button 
                         onClick={handleCapture}
                         disabled={cameraError}
@@ -277,7 +287,7 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
                  </div>
                  
                  {/* Live Badge */}
-                 <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 animate-pulse">
+                 <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 animate-pulse z-20">
                      <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                      LIVE
                  </div>
