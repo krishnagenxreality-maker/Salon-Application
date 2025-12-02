@@ -15,9 +15,9 @@ const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) =>
   return (
     <button
       onClick={() => onSelect(technique)}
-      className="group w-full text-left bg-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 rounded-2xl overflow-hidden border border-gray-200/80"
+      className="group w-full text-left bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 rounded-2xl overflow-hidden border border-gray-200/80 dark:border-gray-700"
     >
-      <div className="w-full aspect-[4/5] bg-light-grey overflow-hidden flex items-center justify-center">
+      <div className="w-full aspect-[4/5] bg-light-grey dark:bg-gray-700 overflow-hidden flex items-center justify-center">
         {!imgError ? (
             <img 
                 src={technique.imageUrl} 
@@ -33,8 +33,8 @@ const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) =>
         )}
       </div>
       <div className="p-4 sm:p-5">
-        <p className="text-[10px] sm:text-xs font-bold text-gray-400 tracking-widest uppercase">{technique.category}</p>
-        <h3 className="text-base sm:text-lg font-bold tracking-tight text-black mt-1">{technique.title}</h3>
+        <p className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 tracking-widest uppercase">{technique.category}</p>
+        <h3 className="text-base sm:text-lg font-bold tracking-tight text-black dark:text-white mt-1">{technique.title}</h3>
       </div>
     </button>
   );
@@ -62,25 +62,25 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
   }, [activeCategory, searchTerm]);
 
   return (
-    <div className="w-full min-h-screen bg-white pt-24 pb-20">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-24 pb-20 transition-colors duration-300">
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in">
         
         {/* Back Button */}
         <div className="mb-6 sm:mb-8">
-            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
+            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center group">
+              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
               Back to Services
             </button>
         </div>
 
         {/* Hero Section */}
-        <section className="text-left py-8 md:py-12 border-b border-gray-200">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
+        <section className="text-left py-8 md:py-12 border-b border-gray-200 dark:border-gray-800">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-black dark:text-white tracking-tighter leading-tight animate-slide-up">
             TONI&GUY
             <br />
-            <span className="text-gray-400">Haircut Training</span>
+            <span className="text-gray-400 dark:text-gray-500">Haircut Training</span>
           </h1>
-          <p className="mt-4 sm:mt-6 max-w-2xl text-sm sm:text-base md:text-lg text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <p className="mt-4 sm:mt-6 max-w-2xl text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on training designed by industry masters.
           </p>
         </section>
@@ -91,7 +91,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
              <div className="flex flex-wrap justify-start gap-2">
                 <button
                     onClick={() => setActiveCategory('All')}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === 'All' ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === 'All' ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-light-grey dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                 >
                     All
                 </button>
@@ -99,7 +99,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
                 <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === category ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === category ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-light-grey dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}`}
                 >
                     {category}
                 </button>
@@ -111,7 +111,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
                     placeholder="Search techniques..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full md:w-64 pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-full bg-white focus:ring-2 focus:ring-black focus:border-black outline-none transition"
+                    className="w-full md:w-64 pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-full bg-white dark:bg-gray-800 text-black dark:text-white focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-black dark:focus:border-white outline-none transition"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             </div>

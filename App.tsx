@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Technique, Page, UserRole, CustomerDetails, SessionImage } from './types';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
@@ -20,11 +20,36 @@ import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 import LiveSessionPage from './pages/LiveSessionPage';
 import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
+import { SunIcon, MoonIcon } from './components/AppIcons';
 
 
 type StepTimings = number[];
 
 const App: React.FC = () => {
+  // Theme State
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Initialize Theme from Local Storage or System Preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => {
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', newTheme);
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+      return newTheme;
+    });
+  }, []);
+
   const [currentPage, setCurrentPage] = useState<Page>('ROLE_SELECTION');
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [trainingMode, setTrainingMode] = useState<'virtual' | 'live'>('virtual'); // Track the current mode context
@@ -201,6 +226,11 @@ const App: React.FC = () => {
 
   // Logic to determine if Header should be visible
   const showHeader = !['ROLE_SELECTION', 'LOGIN', 'CREATE_ID', 'FORGOT_PASSWORD', 'TRAINING', 'LIVE_SESSION'].includes(currentPage);
+  
+  // Dynamic positioning for theme toggle button when header is hidden
+  // Training Page has timer at top-right, so we move toggle to top-left
+  // Other pages (Login, Role) usually have top-right free
+  const themeButtonPosition = currentPage === 'TRAINING' ? 'top-4 left-4' : 'top-4 right-4';
 
   const renderContent = () => {
     switch (currentPage) {
@@ -355,15 +385,30 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="antialiased text-black bg-white font-sans min-h-screen">
+    <div className="antialiased text-black dark:text-white bg-white dark:bg-gray-900 font-sans min-h-screen transition-colors duration-300">
       {showHeader && (
           <Header 
             userRole={userRole} 
             currentPage={currentPage}
+            theme={theme}
+            onToggleTheme={toggleTheme}
             onNavigate={handleNavigate} 
             onSignOut={handleSignOut} 
           />
       )}
+      
+      {/* Floating Theme Toggle for pages without Header */}
+      {!showHeader && (
+        <button
+          onClick={toggleTheme}
+          className={`fixed p-2.5 rounded-full bg-white/50 dark:bg-black/50 backdrop-blur-md shadow-sm border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-black transition-all duration-300 z-[60] ${themeButtonPosition}`}
+          title="Toggle Theme"
+          aria-label="Toggle Theme"
+        >
+           {theme === 'dark' ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+        </button>
+      )}
+
       {renderContent()}
     </div>
   );

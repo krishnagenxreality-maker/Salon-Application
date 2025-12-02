@@ -22,23 +22,23 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
     };
 
     return (
-        <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 sm:p-8 animate-fade-in">
+        <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 sm:p-8 animate-fade-in transition-colors duration-300">
             <div className="max-w-md w-full text-center">
                 <img 
                     src="/images/logo.png" 
                     alt="GenXReality Logo" 
                     className="h-10 sm:h-14 w-auto mx-auto mb-6 sm:mb-8"
                 />
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight capitalize">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-black dark:text-white tracking-tight capitalize">
                     Create {role} ID
                 </h1>
-                <p className="mt-2 text-gray-500 text-sm sm:text-base">
+                <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm sm:text-base">
                     Enter your details to register as a new {role}.
                 </p>
 
                 <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 text-left space-y-4 sm:space-y-5">
                     <div>
-                        <label htmlFor="applicationNumber" className="text-sm font-semibold text-black">
+                        <label htmlFor="applicationNumber" className="text-sm font-semibold text-black dark:text-gray-200">
                             {role === 'admin' ? 'Admin Reference Code' : 'Application Number'}
                         </label>
                         <input
@@ -48,13 +48,13 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                             required
                             value={applicationNumber}
                             onChange={(e) => setApplicationNumber(e.target.value)}
-                            className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base"
+                            className="mt-1 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all text-sm sm:text-base"
                             placeholder={role === 'admin' ? "Enter reference code" : "Enter application number"}
                         />
                     </div>
 
                     <div>
-                        <label htmlFor="create-password" className="text-sm font-semibold text-black">Create Password</label>
+                        <label htmlFor="create-password" className="text-sm font-semibold text-black dark:text-gray-200">Create Password</label>
                         <input
                             id="create-password"
                             name="password"
@@ -62,13 +62,13 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base"
+                            className="mt-1 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all text-sm sm:text-base"
                             placeholder="Create a strong password"
                         />
                     </div>
                     
                     <div>
-                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black">Confirm Password</label>
+                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black dark:text-gray-200">Confirm Password</label>
                         <input
                             id="confirm-password"
                             name="confirm-password"
@@ -76,7 +76,7 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                             required
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="mt-1 block w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base"
+                            className="mt-1 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-black dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all text-sm sm:text-base"
                             placeholder="Confirm your password"
                         />
                     </div>
@@ -84,16 +84,16 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-colors"
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors"
                         >
                             Create {role} ID
                         </button>
                     </div>
                 </form>
 
-                <p className="mt-6 text-center text-sm text-gray-500">
+                <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
                     Already have an ID?{' '}
-                    <button onClick={onNavigateToLogin} className="font-semibold text-black hover:underline">
+                    <button onClick={onNavigateToLogin} className="font-semibold text-black dark:text-white hover:underline">
                         Login
                     </button>
                 </p>

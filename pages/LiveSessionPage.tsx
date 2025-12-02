@@ -22,10 +22,10 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
   return (
-    <div className="fixed top-20 sm:top-24 right-4 sm:right-6 bg-white/90 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 shadow-lg z-40 flex items-center gap-2 animate-fade-in">
+    <div className="fixed top-20 sm:top-24 right-4 sm:right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 dark:border-gray-700 shadow-lg z-40 flex items-center gap-2 animate-fade-in transition-colors duration-300">
       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full animate-pulse"></div>
-      <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-      <p className="text-sm sm:text-lg font-mono font-bold tabular-nums text-black">{minutes}:{seconds}</p>
+      <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-400" />
+      <p className="text-sm sm:text-lg font-mono font-bold tabular-nums text-black dark:text-white">{minutes}:{seconds}</p>
     </div>
   );
 };
@@ -160,22 +160,22 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   // Initial "Begin Session" View
   if (!hasStarted) {
       return (
-        <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-6 animate-fade-in text-center">
+        <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-6 animate-fade-in text-center transition-colors duration-300">
             <div className="max-w-2xl w-full">
-                <span className="px-3 py-1 sm:px-4 sm:py-1 bg-gray-100 rounded-full text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6 inline-block">
+                <span className="px-3 py-1 sm:px-4 sm:py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4 sm:mb-6 inline-block">
                     Ready to Start
                 </span>
-                <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-4 sm:mb-6 leading-tight">
+                <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-black dark:text-white tracking-tighter mb-4 sm:mb-6 leading-tight">
                     {serviceName}
                 </h1>
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12 font-light max-w-lg mx-auto">
+                <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-12 font-light max-w-lg mx-auto">
                     Prepare your station. When you are ready to begin the service with the client, click the button below.
                 </p>
                 
                 <div className="flex flex-col gap-4 items-center">
                     <button
                         onClick={handleBeginSession}
-                        className="px-8 sm:px-12 py-3 sm:py-4 bg-black text-white text-base sm:text-lg font-bold rounded-full shadow-xl hover:scale-105 transition-transform duration-300 w-full sm:w-auto"
+                        className="px-8 sm:px-12 py-3 sm:py-4 bg-black dark:bg-white text-white dark:text-black text-base sm:text-lg font-bold rounded-full shadow-xl hover:scale-105 transition-transform duration-300 w-full sm:w-auto"
                     >
                         Begin Session
                     </button>
@@ -195,11 +195,11 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col animate-fade-in relative">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col animate-fade-in relative transition-colors duration-300">
         {/* Progress Bar */}
-        <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey z-50">
+        <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey dark:bg-gray-800 z-50">
             <div 
-                className="h-1 bg-black transition-all duration-500 ease-in-out"
+                className="h-1 bg-black dark:bg-white transition-all duration-500 ease-in-out"
                 style={{ width: `${progressPercentage}%` }}
             ></div>
         </div>
@@ -211,36 +211,36 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
           {/* Left Column: Instructions */}
           <div className="animate-slide-up order-2 md:order-1">
             <div className="mb-2 sm:mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
-                <span className="text-xs sm:text-sm font-bold text-gray-500 tracking-widest uppercase">
+                <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase">
                 Step {currentStep + 1} / {totalSteps}
                 </span>
-                <span className="h-1 w-1 rounded-full bg-gray-300 hidden sm:block"></span>
-                <span className="text-xs sm:text-sm font-semibold text-black uppercase tracking-wide hidden sm:block">
+                <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600 hidden sm:block"></span>
+                <span className="text-xs sm:text-sm font-semibold text-black dark:text-white uppercase tracking-wide hidden sm:block">
                     {serviceName}
                 </span>
             </div>
             
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-black tracking-tighter mt-1 sm:mt-2">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-black dark:text-white tracking-tighter mt-1 sm:mt-2">
               {stepData.title}
             </h2>
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 leading-relaxed border-l-2 border-gray-100 pl-4 sm:pl-6">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed border-l-2 border-gray-100 dark:border-gray-800 pl-4 sm:pl-6">
               {stepData.instructions}
             </p>
 
             {/* Customer Request Input - Only visible on Consultation steps */}
             {isConsultationStep && (
                 <div className="mt-6 sm:mt-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                    <label className="block text-sm font-bold text-black mb-2 sm:mb-3 flex items-center gap-2">
-                        <UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+                    <label className="block text-sm font-bold text-black dark:text-white mb-2 sm:mb-3 flex items-center gap-2">
+                        <UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400" />
                         Customer Request / Style
                     </label>
                     <textarea
                         value={customerRequest}
                         onChange={(e) => setCustomerRequest(e.target.value)}
                         placeholder="Enter the customer's desired style, length, or specific requests here..."
-                        className="w-full p-3 sm:p-4 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all min-h-[100px] sm:min-h-[120px] text-sm sm:text-base resize-none"
+                        className="w-full p-3 sm:p-4 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-black dark:text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all min-h-[100px] sm:min-h-[120px] text-sm sm:text-base resize-none"
                     />
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
                         Record the specific style requirements discussed with the client.
                     </p>
                 </div>
@@ -297,34 +297,34 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
       </div>
       
       {/* Bottom Navigation */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200/80 z-40">
+      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-t border-gray-200/80 dark:border-gray-800 z-40 transition-colors duration-300">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-12 h-20 sm:h-24 flex items-center justify-between">
-           <button onClick={onExit} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-red-500 transition-colors">
+           <button onClick={onExit} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors">
               Abort
             </button>
           <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="h-10 px-4 sm:h-12 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black"
+              className="h-10 px-4 sm:h-12 sm:px-6 border border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black dark:hover:border-white text-black dark:text-white"
             >
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black dark:text-white" />
                <span className="hidden sm:inline text-sm font-semibold tracking-wide ml-2">
                  Previous
                </span>
             </button>
             <button
               onClick={handleNext}
-              className={`h-10 px-5 sm:h-12 sm:px-8 text-white flex items-center justify-center transition-colors rounded-full shadow-lg ${
+              className={`h-10 px-5 sm:h-12 sm:px-8 text-white dark:text-black flex items-center justify-center transition-colors rounded-full shadow-lg ${
                   currentStep === totalSteps - 1 
                     ? 'bg-green-600 hover:bg-green-500' 
-                    : 'bg-black hover:bg-gray-800'
+                    : 'bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-200'
               }`}
             >
               <span className="text-xs sm:text-sm font-semibold tracking-wide mr-2 whitespace-nowrap">
                  {currentStep === totalSteps - 1 ? 'Finish Session' : 'Next Step'}
               </span>
-              <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
             </button>
           </div>
         </div>

@@ -8,15 +8,15 @@ interface ModeSelectionPageProps {
 
 const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-4 sm:p-6 animate-fade-in">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-6 animate-fade-in transition-colors duration-300">
       <div className="mb-8 sm:mb-16 text-center animate-slide-up w-full px-4">
-         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2 sm:mb-4 uppercase leading-none">
+         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black dark:text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none">
             TONI&GUY
          </h2>
-         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
+         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-200 tracking-tight">
             Select Modes
          </h1>
-         <p className="mt-2 sm:mt-4 text-gray-500 text-sm sm:text-lg max-w-md mx-auto">
+         <p className="mt-2 sm:mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-lg max-w-md mx-auto">
             Choose your preferred training environment.
          </p>
       </div>
@@ -25,13 +25,13 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
         {/* Training Lobby */}
         <button
           onClick={() => onSelect('without-customer')}
-          className="group relative bg-white border border-gray-200 rounded-2xl p-6 sm:p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
+          className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 sm:p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
         >
-          <div className="h-16 w-16 sm:h-20 sm:w-20 bg-light-grey rounded-full flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-black transition-colors duration-500">
-             <MonitorIcon className="w-8 h-8 sm:w-10 sm:h-10 text-black group-hover:text-white transition-colors duration-500" />
+          <div className="h-16 w-16 sm:h-20 sm:w-20 bg-light-grey dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-black dark:group-hover:bg-white transition-colors duration-500">
+             <MonitorIcon className="w-8 h-8 sm:w-10 sm:h-10 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-500" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-black mb-2 sm:mb-3">Training Lobby</h2>
-          <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white mb-2 sm:mb-3">Training Lobby</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
             Practice techniques on digital models in a controlled, self-paced environment. Perfect your skills before hitting the floor.
           </p>
         </button>
@@ -39,13 +39,13 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
         {/* Customer Service */}
         <button
           onClick={() => onSelect('with-customer')}
-          className="group relative bg-white border border-gray-200 rounded-2xl p-6 sm:p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
+          className="group relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 sm:p-10 text-center hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 flex flex-col items-center"
         >
-          <div className="h-16 w-16 sm:h-20 sm:w-20 bg-light-grey rounded-full flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-black transition-colors duration-500">
-             <UserGroupIcon className="w-8 h-8 sm:w-10 sm:h-10 text-black group-hover:text-white transition-colors duration-500" />
+          <div className="h-16 w-16 sm:h-20 sm:w-20 bg-light-grey dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-black dark:group-hover:bg-white transition-colors duration-500">
+             <UserGroupIcon className="w-8 h-8 sm:w-10 sm:h-10 text-black dark:text-white group-hover:text-white dark:group-hover:text-black transition-colors duration-500" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-black mb-2 sm:mb-3">Customer Service</h2>
-          <p className="text-gray-500 text-sm sm:text-base leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-bold text-black dark:text-white mb-2 sm:mb-3">Customer Service</h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
              Real-time assistance and step-by-step guidance while working with a live client. Ensure precision with every cut.
           </p>
         </button>

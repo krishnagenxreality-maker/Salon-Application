@@ -22,8 +22,8 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
   return (
-    <div className="fixed top-4 sm:top-6 right-4 sm:right-6 bg-white/80 backdrop-blur-sm px-3 py-1 sm:px-4 sm:py-2 rounded-lg border border-gray-200 shadow-md z-50">
-      <p className="text-sm sm:text-base md:text-lg font-semibold tabular-nums text-black">{minutes}:{seconds}</p>
+    <div className="fixed top-4 sm:top-6 right-4 sm:right-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm px-3 py-1 sm:px-4 sm:py-2 rounded-lg border border-gray-200 dark:border-gray-700 shadow-md z-50 transition-colors duration-300">
+      <p className="text-sm sm:text-base md:text-lg font-semibold tabular-nums text-black dark:text-white">{minutes}:{seconds}</p>
     </div>
   );
 };
@@ -199,11 +199,11 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col animate-fade-in relative">
+    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col animate-fade-in relative transition-colors duration-300">
         {/* Progress Bar */}
-        <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey z-50">
+        <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey dark:bg-gray-800 z-50">
             <div 
-                className="h-1 bg-black transition-all duration-500 ease-in-out"
+                className="h-1 bg-black dark:bg-white transition-all duration-500 ease-in-out"
                 style={{ width: `${progressPercentage}%` }}
             ></div>
         </div>
@@ -215,13 +215,13 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
         <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* Left Column: Instructions */}
           <div className="animate-slide-up order-2 md:order-1">
-            <span className="text-xs sm:text-sm font-bold text-gray-500 tracking-widest uppercase block mb-2">
+            <span className="text-xs sm:text-sm font-bold text-gray-500 dark:text-gray-400 tracking-widest uppercase block mb-2">
               Step {currentStep + 1} / {totalSteps}
             </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-black tracking-tighter">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-black dark:text-white tracking-tighter">
               {stepData.title}
             </h2>
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 leading-relaxed">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               {stepData.instructions}
             </p>
             <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4">
@@ -233,10 +233,10 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                 disabled={isMuted}
                 className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
                   isMuted 
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed'
                     : isSpeaking && !isPaused
-                        ? 'bg-black border-black text-white shadow-lg' 
-                        : 'border-gray-300 text-black hover:bg-light-grey'
+                        ? 'bg-black dark:bg-white border-black dark:border-white text-white dark:text-black shadow-lg' 
+                        : 'border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-light-grey dark:hover:bg-gray-800'
                 }`}
                 title={isSpeaking ? (isPaused ? 'Resume' : 'Pause') : 'Play'}
               >
@@ -253,8 +253,8 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                 disabled={isMuted}
                 className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
                     isMuted 
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-black hover:bg-light-grey'
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed'
+                    : 'border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-light-grey dark:hover:bg-gray-800'
                 }`}
                 title="Replay Voice Instructions"
               >
@@ -266,8 +266,8 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                 onClick={toggleMute}
                 className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
                     isMuted 
-                     ? 'bg-gray-100 border-gray-300 text-gray-500' 
-                     : 'border-gray-300 text-black hover:bg-light-grey'
+                     ? 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400' 
+                     : 'border-gray-300 dark:border-gray-600 text-black dark:text-white hover:bg-light-grey dark:hover:bg-gray-800'
                 }`}
                 title={isMuted ? "Unmute Voice" : "Mute Voice"}
               >
@@ -275,10 +275,10 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
               </button>
 
               <div className="flex flex-col ml-1">
-                 <span className={`text-sm font-medium transition-colors ${isMuted ? 'text-gray-400' : 'text-black'}`}>
+                 <span className={`text-sm font-medium transition-colors ${isMuted ? 'text-gray-400 dark:text-gray-600' : 'text-black dark:text-white'}`}>
                     {isMuted ? 'Voice Muted' : (isSpeaking ? (isPaused ? 'Paused' : 'Speaking...') : 'Read Instructions')}
                  </span>
-                 {isMuted && <span className="text-[10px] text-gray-400">Auto-play disabled</span>}
+                 {isMuted && <span className="text-[10px] text-gray-400 dark:text-gray-600">Auto-play disabled</span>}
               </div>
 
             </div>
@@ -320,7 +320,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                   </div>
                </div>
             ) : stepData.imageUrl ? (
-               <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-light-grey rounded-xl overflow-hidden shadow-xl">
+               <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-light-grey dark:bg-gray-800 rounded-xl overflow-hidden shadow-xl">
                   <img 
                     src={stepData.imageUrl} 
                     alt={stepData.title} 
@@ -335,30 +335,30 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
       </div>
       
       {/* Bottom Navigation */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200/80 z-40">
+      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-t border-gray-200/80 dark:border-gray-800 z-40 transition-colors duration-300">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-12 h-20 sm:h-24 flex items-center justify-between">
-           <button onClick={onExit} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors">
+           <button onClick={onExit} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
               Exit
             </button>
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="h-10 px-4 sm:h-12 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black"
+              className="h-10 px-4 sm:h-12 sm:px-6 border border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black dark:hover:border-white text-black dark:text-white"
             >
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
+              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black dark:text-white" />
                <span className="hidden sm:inline text-sm font-semibold tracking-wide ml-2">
                  Previous
                </span>
             </button>
             <button
               onClick={handleNext}
-              className="h-10 px-5 sm:h-12 sm:px-8 bg-black text-white flex items-center justify-center transition-colors hover:bg-gray-800 rounded-full"
+              className="h-10 px-5 sm:h-12 sm:px-8 bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full"
             >
               <span className="text-sm font-semibold tracking-wide mr-2">
                  {currentStep === totalSteps - 1 ? 'Finish' : 'Next'}
               </span>
-              <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white dark:text-black" />
             </button>
           </div>
         </div>
