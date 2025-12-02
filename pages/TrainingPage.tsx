@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Technique } from '../types';
 import AnimationPlaceholder from '../components/AnimationPlaceholder';
-import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowPathIcon } from '../components/AppIcons';
+import { VoiceIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon, PauseIcon, ArrowPathIcon, SpeakerWaveIcon, SpeakerXMarkIcon } from '../components/AppIcons';
 
 interface LiveTimerProps {
   startTime: number;
@@ -42,10 +42,12 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const [stepStartTime, setStepStartTime] = useState(Date.now());
   const [isSpeaking, setIsSpeaking] = useState(false); // Track active speech state
   const [isPaused, setIsPaused] = useState(false); // Track paused state
+  const [isMuted, setIsMuted] = useState(false); // Track mute state
   
   // Video Controls State
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  const [videoError, setVideoError] = useState(false); // Track video loading errors
 
   const totalSteps = technique.steps.length;
   const stepData = technique.steps[currentStep];
@@ -59,6 +61,9 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
 
   // Function to play audio
   const playInstructions = useCallback(() => {
+      // Don't play if muted
+      if (isMuted) return;
+
       // Cancel any current speech first
       window.speechSynthesis.cancel();
       setIsPaused(false);
@@ -98,24 +103,29 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
       
       window.speechSynthesis.speak(utterance);
       setIsSpeaking(true);
-  }, [stepData]);
+  }, [stepData, isMuted]);
 
-  // Handle Step Change: Reset timer AND Auto-play Audio
+  // Handle Step Change: Reset timer, video error state AND Auto-play Audio
   useEffect(() => {
     setStepStartTime(Date.now());
     
     // Reset video state on step change
     setIsVideoPlaying(true);
+    setVideoError(false);
 
     // Small timeout to ensure browser is ready for the new utterance
-    const timer = setTimeout(() => {
-        playInstructions();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [currentStep, playInstructions]);
+    // Only auto-play if NOT muted
+    if (!isMuted) {
+      const timer = setTimeout(() => {
+          playInstructions();
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [currentStep, playInstructions, isMuted]);
 
   const handleVoiceToggle = () => {
+    if (isMuted) return; // Controls are disabled if muted
+
     if (isSpeaking) {
         if (isPaused) {
             // Resume if currently paused
@@ -129,6 +139,23 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
     } else {
         // Play if stopped
         playInstructions();
+    }
+  };
+
+  const handleReplayVoice = () => {
+    if (isMuted) return;
+    playInstructions();
+  };
+
+  const toggleMute = () => {
+    if (isMuted) {
+        setIsMuted(false);
+        // We don't auto-play immediately when unmute, waiting for next step or manual play is better UX
+    } else {
+        setIsMuted(true);
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        setIsPaused(false);
     }
   };
 
@@ -197,34 +224,69 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
             <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 leading-relaxed">
               {stepData.instructions}
             </p>
-            <div className="mt-6 sm:mt-8 flex items-center gap-4">
+            <div className="mt-6 sm:mt-8 flex items-center gap-3 sm:gap-4">
+              {/* Voice Controls */}
+              
+              {/* Play/Pause Button */}
               <button 
                 onClick={handleVoiceToggle}
+                disabled={isMuted}
                 className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
-                  isSpeaking && !isPaused
-                    ? 'bg-black border-black text-white shadow-lg' 
-                    : 'border-gray-300 text-black hover:bg-light-grey'
+                  isMuted 
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : isSpeaking && !isPaused
+                        ? 'bg-black border-black text-white shadow-lg' 
+                        : 'border-gray-300 text-black hover:bg-light-grey'
                 }`}
+                title={isSpeaking ? (isPaused ? 'Resume' : 'Pause') : 'Play'}
               >
-                {/* Dynamically show Play/Pause/Voice icon */}
                 {isSpeaking ? (
                     isPaused ? <PlayIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <PauseIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                 ) : (
                     <VoiceIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </button>
+
+              {/* Replay Button */}
               <button 
-                onClick={handleVoiceToggle}
-                className="text-sm font-medium text-black underline decoration-gray-300 hover:decoration-black underline-offset-4 transition-all"
+                onClick={handleReplayVoice}
+                disabled={isMuted}
+                className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isMuted 
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-black hover:bg-light-grey'
+                }`}
+                title="Replay Voice Instructions"
               >
-                {isSpeaking ? (isPaused ? 'Resume Instructions' : 'Pause Instructions') : 'Replay Instructions'}
+                 <ArrowPathIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
+
+              {/* Mute Button */}
+              <button 
+                onClick={toggleMute}
+                className={`h-10 w-10 sm:h-12 sm:w-12 border rounded-full flex items-center justify-center transition-all duration-300 ${
+                    isMuted 
+                     ? 'bg-gray-100 border-gray-300 text-gray-500' 
+                     : 'border-gray-300 text-black hover:bg-light-grey'
+                }`}
+                title={isMuted ? "Unmute Voice" : "Mute Voice"}
+              >
+                 {isMuted ? <SpeakerXMarkIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <SpeakerWaveIcon className="w-5 h-5 sm:w-6 sm:h-6" />}
+              </button>
+
+              <div className="flex flex-col ml-1">
+                 <span className={`text-sm font-medium transition-colors ${isMuted ? 'text-gray-400' : 'text-black'}`}>
+                    {isMuted ? 'Voice Muted' : (isSpeaking ? (isPaused ? 'Paused' : 'Speaking...') : 'Read Instructions')}
+                 </span>
+                 {isMuted && <span className="text-[10px] text-gray-400">Auto-play disabled</span>}
+              </div>
+
             </div>
           </div>
 
           {/* Right Column: Animation or Video or Image */}
           <div className="animate-slide-up flex justify-center order-1 md:order-2" style={{ animationDelay: '0.2s' }}>
-            {stepData.videoUrl ? (
+            {stepData.videoUrl && !videoError ? (
                <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-xl group">
                   <video
                     ref={videoRef}
@@ -235,6 +297,7 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                     loop
                     muted
                     playsInline
+                    onError={() => setVideoError(true)}
                   />
                   
                   {/* Video Controls Overlay */}
