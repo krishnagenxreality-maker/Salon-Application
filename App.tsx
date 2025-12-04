@@ -69,9 +69,10 @@ const App: React.FC = () => {
     if (savedUserId && savedUserRole) {
         setCurrentUserId(savedUserId);
         setUserRole(savedUserRole);
-        // If restoring session, maybe go to mode selection or dashboard, 
-        // but for safety let's stick to ROLE_SELECTION -> LOGIN logic or just verify token.
-        // For simplicity in this demo, if we have ID, we assume logged in.
+        // If restoring session, we stay on the current page logic or default to login if needed.
+        // For smoother UX, let's keep them at role selection/login to ensure clear entry
+        // but pre-fill if we wanted. For now, let's just restore state but force login flow for security/clarity in this demo.
+        // Or better: Auto-route if authenticated.
         if (savedUserRole === 'admin') setCurrentPage('ADMIN');
         else setCurrentPage('MODE_SELECTION');
     }
@@ -277,7 +278,7 @@ const App: React.FC = () => {
     setSelectedTechnique(null);
     setTrainingMode('virtual');
     resetTrainingState();
-    setCurrentPage('LOGIN');
+    setCurrentPage('ROLE_SELECTION');
   }, [resetTrainingState]);
 
   // Determine if Header should be visible
