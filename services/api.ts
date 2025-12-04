@@ -1,5 +1,7 @@
 import { User, CompletedTechnique, CustomerSession } from '../types';
 
+// REPLACED localhost with the Render URL. 
+// NOTE: Verify that 'https://salon-backend.onrender.com' matches your actual Render service URL exactly.
 const API_URL = 'https://salon-backend-06j6.onrender.com';
 
 export const api = {
