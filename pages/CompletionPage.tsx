@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Technique } from '../types';
 
@@ -46,7 +45,7 @@ const CompletionPage: React.FC<CompletionPageProps> = ({ technique, stepTimings,
         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black dark:text-white tracking-tighter leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
           Technique Completed
         </h1>
-        <p className="mt-2 sm:mt-4 text-base sm:text-xl text-gray-600 dark:text-gray-300 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+        <p className="mt-2 sm:mt-4 text-base sm:text-xl text-gray-600 dark:text-gray-400 animate-slide-up" style={{ animationDelay: '0.2s' }}>
           You have successfully mastered the <span className="font-semibold text-black dark:text-white">{technique.title}</span> technique.
         </p>
 
@@ -79,7 +78,7 @@ const CompletionPage: React.FC<CompletionPageProps> = ({ technique, stepTimings,
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up pb-8" style={{ animationDelay: '0.6s' }}>
           <button
             onClick={onRestart}
-            className="border border-gray-300 dark:border-gray-600 text-black dark:text-white text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:border-black dark:hover:border-white transition-colors rounded-full"
+            className="border border-gray-300 dark:border-white text-black dark:text-white text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:border-black dark:hover:bg-gray-200 dark:hover:text-black transition-colors rounded-full"
           >
             Restart Technique
           </button>

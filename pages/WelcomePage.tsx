@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronLeftIcon } from '../components/AppIcons';
 
@@ -26,7 +25,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
                 TONI&GUY
             </h2>
 
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 dark:text-gray-200 tracking-tight leading-tight mb-4 sm:mb-6 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-tight mb-4 sm:mb-6 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                 Welcome to the <br/> Future of Styling.
             </h1>
 

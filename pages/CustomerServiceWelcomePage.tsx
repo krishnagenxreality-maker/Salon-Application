@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ChevronLeftIcon, UserGroupIcon } from '../components/AppIcons';
 

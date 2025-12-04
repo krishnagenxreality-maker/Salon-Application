@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Page, UserRole } from '../types';
 import { SunIcon, MoonIcon } from './AppIcons';
@@ -65,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ userRole, currentPage, theme, onToggleT
 
               <button 
                 onClick={onSignOut} 
-                className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-white border border-gray-300 dark:border-gray-600 px-3 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 whitespace-nowrap"
+                className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-black dark:text-white border border-gray-300 dark:border-white px-3 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-300 whitespace-nowrap"
               >
                 Sign Out
               </button>

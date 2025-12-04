@@ -1,4 +1,3 @@
-
 import { TrainingStep } from '../types';
 
 export const DEFAULT_STEPS: TrainingStep[] = [

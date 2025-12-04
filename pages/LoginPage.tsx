@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { ChevronLeftIcon } from '../components/AppIcons';
+import { api } from '../services/api';
 
 interface LoginPageProps {
     role: 'admin' | 'candidate';
-    onLoginSuccess: () => void;
+    onLoginSuccess: (userId: string) => void;
     onNavigateToCreateId: () => void;
     onNavigateToForgotPassword: () => void;
     onBack: () => void;
@@ -14,23 +14,24 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
 
-        if (role === 'admin') {
-            if (userId.trim().toLowerCase() === 'admin' && password.trim() === 'admin') {
-                onLoginSuccess();
+        try {
+            const data = await api.login(userId.trim(), password.trim(), role);
+            if (data.success) {
+                onLoginSuccess(data.user.id);
             } else {
-                setError('Invalid credentials. For demo, use ID: "admin" and Password: "admin"');
+                setError(data.message || 'Invalid credentials');
             }
-        } else {
-            if (userId.trim() && password.trim()) {
-                onLoginSuccess();
-            } else {
-                setError('Please enter your credentials');
-            }
+        } catch (err) {
+            setError('Connection failed. Is the server running?');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -62,7 +63,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
 
                 <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 text-left space-y-4 sm:space-y-5">
                     <div>
-                        <label htmlFor="userid" className="text-sm font-semibold text-black dark:text-gray-200">
+                        <label htmlFor="userid" className="text-sm font-semibold text-black dark:text-white">
                             {role === 'admin' ? 'Admin ID' : 'Candidate ID'}
                         </label>
                         <input
@@ -79,7 +80,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                     </div>
 
                     <div>
-                         <label htmlFor="password" className="text-sm font-semibold text-black dark:text-gray-200">Password</label>
+                         <label htmlFor="password" className="text-sm font-semibold text-black dark:text-white">Password</label>
                         <input
                             id="password"
                             name="password"
@@ -102,9 +103,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ role, onLoginSuccess, onNavigateT
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors"
+                            disabled={isLoading}
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors disabled:opacity-50"
                         >
-                            Login
+                            {isLoading ? 'Logging in...' : 'Login'}
                         </button>
                     </div>
                 </form>

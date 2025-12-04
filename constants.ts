@@ -1,4 +1,3 @@
-
 import { Technique, TechniqueCategory } from './types';
 
 export const CATEGORIES: TechniqueCategory[] = [
@@ -8,12 +7,6 @@ export const CATEGORIES: TechniqueCategory[] = [
   TechniqueCategory.MENS,
   TechniqueCategory.CREATIVE_CLASSICS,
 ];
-
-// INSTRUCTIONS FOR LOCAL IMAGES:
-// 1. Create a folder named 'public' in your project root if it doesn't exist.
-// 2. Inside 'public', create a folder named 'images'.
-// 3. Move your image files into 'public/images/'.
-// 4. Update the 'imageUrl' below to match your filenames (e.g., '/images/my-photo.jpg').
 
 export const TECHNIQUES: Technique[] = [
   // Fundamentals

@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { api } from '../services/api';
 
 interface ForgotPasswordPageProps {
     role: 'admin' | 'candidate';
@@ -11,27 +11,42 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ role, onSubmit,
     const [userId, setUserId] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
         
         if (!userId.trim()) {
-            alert(`Please enter your ${role === 'admin' ? 'Admin' : 'Candidate'} ID.`);
+            setError(`Please enter your ${role === 'admin' ? 'Admin' : 'Candidate'} ID.`);
             return;
         }
 
         if (newPassword.length < 4) {
-             alert("Password must be at least 4 characters long.");
+             setError("Password must be at least 4 characters long.");
              return;
         }
 
         if (newPassword !== confirmPassword) {
-            alert("Passwords don't match!");
+            setError("Passwords don't match!");
             return;
         }
 
-        alert("Password updated successfully!");
-        onSubmit();
+        setIsLoading(true);
+        try {
+            const data = await api.resetPassword(userId.trim(), newPassword, role);
+            if (data.success) {
+                alert("Password updated successfully!");
+                onSubmit();
+            } else {
+                setError(data.message || 'Failed to reset password');
+            }
+        } catch (err) {
+            setError('Connection failed. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -51,7 +66,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ role, onSubmit,
 
                 <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 text-left space-y-4 sm:space-y-5">
                     <div>
-                        <label htmlFor="userid" className="text-sm font-semibold text-black dark:text-gray-200">
+                        <label htmlFor="userid" className="text-sm font-semibold text-black dark:text-white">
                             {role === 'admin' ? 'Admin ID' : 'Candidate ID'}
                         </label>
                         <input
@@ -67,7 +82,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ role, onSubmit,
                     </div>
 
                     <div>
-                        <label htmlFor="new-password" className="text-sm font-semibold text-black dark:text-gray-200">New Password</label>
+                        <label htmlFor="new-password" className="text-sm font-semibold text-black dark:text-white">New Password</label>
                         <input
                             id="new-password"
                             name="new-password"
@@ -81,7 +96,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ role, onSubmit,
                     </div>
                     
                     <div>
-                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black dark:text-gray-200">Confirm Password</label>
+                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black dark:text-white">Confirm Password</label>
                         <input
                             id="confirm-password"
                             name="confirm-password"
@@ -94,12 +109,19 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({ role, onSubmit,
                         />
                     </div>
 
+                    {error && (
+                        <div className="text-red-500 dark:text-red-400 text-xs sm:text-sm text-center font-medium bg-red-50 dark:bg-red-900/20 py-2 rounded">
+                            {error}
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors"
+                            disabled={isLoading}
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors disabled:opacity-50"
                         >
-                            Update Password
+                            {isLoading ? 'Updating...' : 'Update Password'}
                         </button>
                     </div>
                 </form>

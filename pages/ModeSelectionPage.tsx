@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MonitorIcon, UserGroupIcon } from '../components/AppIcons';
 
@@ -13,7 +12,7 @@ const ModeSelectionPage: React.FC<ModeSelectionPageProps> = ({ onSelect }) => {
          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black dark:text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none">
             TONI&GUY
          </h2>
-         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-200 tracking-tight">
+         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
             Select Modes
          </h1>
          <p className="mt-2 sm:mt-4 text-gray-500 dark:text-gray-400 text-sm sm:text-lg max-w-md mx-auto">

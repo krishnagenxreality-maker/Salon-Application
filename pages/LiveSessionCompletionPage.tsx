@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ClockIcon, CheckIcon, UserCircleIcon, CalendarIcon, UserGroupIcon, PhotoIcon } from '../components/AppIcons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
@@ -89,7 +88,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
             <h1 className="text-3xl sm:text-5xl font-extrabold text-black dark:text-white tracking-tighter leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 Session Complete
             </h1>
-            <p className="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-300 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <p className="mt-2 text-base sm:text-lg text-gray-600 dark:text-gray-400 animate-slide-up" style={{ animationDelay: '0.2s' }}>
                 Service: <span className="font-bold text-black dark:text-white">{serviceName}</span>
             </p>
         </div>
@@ -102,11 +101,11 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                     <h2 className="text-lg sm:text-xl font-bold text-black dark:text-white tracking-tight">Time Analysis</h2>
                     <div className="flex items-center gap-2">
                         {targetDuration && targetDuration !== '0' && (
-                            <div className="text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+                            <div className="text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
                                 Target: {targetDuration} mins
                             </div>
                         )}
-                        <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+                        <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 dark:text-gray-500" />
                     </div>
                 </div>
                 
@@ -118,7 +117,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                             <div key={index} className="flex justify-between items-center pb-2">
                                 <div className="max-w-[70%]">
                                     <p className="font-semibold text-black dark:text-white text-xs sm:text-sm">{step.title}</p>
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-wider">Step {index + 1}</p>
+                                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider">Step {index + 1}</p>
                                 </div>
                                 <p className="text-sm sm:text-base font-mono font-medium text-black dark:text-white tabular-nums">
                                     {formatTime(stepTimings[index] || 0)}
@@ -149,25 +148,25 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                      {customerDetails ? (
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <UserCircleIcon className="w-6 h-6 text-gray-400" />
+                                <UserCircleIcon className="w-6 h-6 text-gray-400 dark:text-gray-500" />
                                 <div>
-                                    <p className="text-xs text-gray-400 uppercase tracking-wider">Name</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider">Name</p>
                                     <p className="text-base sm:text-lg font-bold text-black dark:text-white">{customerDetails.name}</p>
                                 </div>
                             </div>
                             
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex items-center gap-3">
-                                    <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
+                                    <CalendarIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 dark:text-gray-500" />
                                     <div>
-                                        <p className="text-xs text-gray-400 uppercase tracking-wider">Date</p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider">Date</p>
                                         <p className="text-sm sm:text-base font-medium text-black dark:text-white">{customerDetails.date}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
+                                    <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 dark:text-gray-500" />
                                     <div>
-                                        <p className="text-xs text-gray-400 uppercase tracking-wider">Time</p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider">Time</p>
                                         <p className="text-sm sm:text-base font-medium text-black dark:text-white">{customerDetails.time}</p>
                                     </div>
                                 </div>
@@ -176,7 +175,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                             <div className="flex items-center gap-3 pt-2">
                                 <UserGroupIcon className={`w-5 h-5 sm:w-6 sm:h-6 ${customerDetails.isMember ? 'text-black dark:text-white' : 'text-gray-300 dark:text-gray-600'}`} />
                                 <div>
-                                    <p className="text-xs text-gray-400 uppercase tracking-wider">Membership</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider">Membership</p>
                                     <div className="flex items-center gap-2">
                                         <span className={`px-2 py-0.5 rounded text-xs font-bold ${customerDetails.isMember ? 'bg-black text-white dark:bg-white dark:text-black' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'}`}>
                                             {customerDetails.isMember ? 'MEMBER' : 'GUEST'}
@@ -189,7 +188,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                             </div>
                         </div>
                      ) : (
-                         <div className="text-center py-8 text-gray-400">
+                         <div className="text-center py-8 text-gray-400 dark:text-gray-500">
                              <p>No customer details provided.</p>
                          </div>
                      )}
@@ -236,7 +235,7 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
           </button>
           <button
             onClick={onBackToMenu}
-            className="border border-gray-300 dark:border-gray-600 text-black dark:text-white text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:border-black dark:hover:border-white transition-colors rounded-full"
+            className="border border-gray-300 dark:border-white text-black dark:text-white text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:border-black dark:hover:border-white transition-colors rounded-full"
           >
             Back to Menu
           </button>

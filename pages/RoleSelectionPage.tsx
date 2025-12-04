@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { UserCircleIcon } from '../components/AppIcons';
 

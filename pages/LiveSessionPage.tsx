@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon, CameraIcon } from '../components/AppIcons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
@@ -24,7 +23,7 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   return (
     <div className="fixed top-20 sm:top-24 right-4 sm:right-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 dark:border-gray-700 shadow-lg z-40 flex items-center gap-2 animate-fade-in transition-colors duration-300">
       <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full animate-pulse"></div>
-      <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 dark:text-gray-400" />
+      <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 dark:text-white" />
       <p className="text-sm sm:text-lg font-mono font-bold tabular-nums text-black dark:text-white">{minutes}:{seconds}</p>
     </div>
   );

@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { api } from '../services/api';
 
 interface CreateIdPageProps {
     role: 'admin' | 'candidate';
@@ -11,14 +11,32 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
     const [applicationNumber, setApplicationNumber] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError('');
+
         if (password !== confirmPassword) {
-            alert("Passwords don't match!");
+            setError("Passwords don't match!");
             return;
         }
-        onCreateId();
+
+        setIsLoading(true);
+        try {
+            const data = await api.register(applicationNumber, password, role);
+            if (data.success) {
+                alert(`${role === 'admin' ? 'Admin' : 'Candidate'} ID created successfully!`);
+                onCreateId();
+            } else {
+                setError(data.message || 'Registration failed');
+            }
+        } catch (err) {
+            setError('Connection failed. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -38,7 +56,7 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
 
                 <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 text-left space-y-4 sm:space-y-5">
                     <div>
-                        <label htmlFor="applicationNumber" className="text-sm font-semibold text-black dark:text-gray-200">
+                        <label htmlFor="applicationNumber" className="text-sm font-semibold text-black dark:text-white">
                             {role === 'admin' ? 'Admin Reference Code' : 'Application Number'}
                         </label>
                         <input
@@ -54,7 +72,7 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                     </div>
 
                     <div>
-                        <label htmlFor="create-password" className="text-sm font-semibold text-black dark:text-gray-200">Create Password</label>
+                        <label htmlFor="create-password" className="text-sm font-semibold text-black dark:text-white">Create Password</label>
                         <input
                             id="create-password"
                             name="password"
@@ -68,7 +86,7 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                     </div>
                     
                     <div>
-                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black dark:text-gray-200">Confirm Password</label>
+                        <label htmlFor="confirm-password" className="text-sm font-semibold text-black dark:text-white">Confirm Password</label>
                         <input
                             id="confirm-password"
                             name="confirm-password"
@@ -81,12 +99,19 @@ const CreateIdPage: React.FC<CreateIdPageProps> = ({ role, onCreateId, onNavigat
                         />
                     </div>
 
+                    {error && (
+                        <div className="text-red-500 dark:text-red-400 text-xs sm:text-sm text-center font-medium bg-red-50 dark:bg-red-900/20 py-2 rounded">
+                            {error}
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors"
+                            disabled={isLoading}
+                            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-sm text-sm font-bold text-white bg-black dark:bg-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black dark:focus:ring-white transition-colors disabled:opacity-50"
                         >
-                            Create {role} ID
+                            {isLoading ? 'Creating ID...' : `Create ${role} ID`}
                         </button>
                     </div>
                 </form>

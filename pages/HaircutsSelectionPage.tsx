@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '../components/AppIcons';
 
@@ -85,7 +84,7 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
                         {openCategory === category.title ? (
                             <ChevronUpIcon className="w-5 h-5 text-black dark:text-white" />
                         ) : (
-                            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+                            <ChevronDownIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                         )}
                     </button>
                     

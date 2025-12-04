@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Technique } from '../types';
 import { ChevronLeftIcon, PhotoIcon } from '../components/AppIcons';
@@ -41,13 +40,13 @@ const TechniquePage: React.FC<TechniquePageProps> = ({ technique, onStartTrainin
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-black dark:text-white tracking-tighter leading-tight">
               {technique.title}
             </h1>
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-lg leading-relaxed">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed">
               {technique.description}
             </p>
             <div className="mt-8 sm:mt-12">
               <button
                 onClick={() => onStartTraining(technique)}
-                className="bg-white dark:bg-gray-800 text-black dark:text-white text-sm sm:text-base font-medium tracking-widest uppercase py-3 px-6 sm:py-5 sm:px-12 w-full sm:w-auto border-2 border-black dark:border-white hover:bg-light-grey dark:hover:bg-gray-700 transition-colors rounded-full sm:rounded-none"
+                className="bg-white dark:bg-white text-black dark:text-black text-sm sm:text-base font-medium tracking-widest uppercase py-3 px-6 sm:py-5 sm:px-12 w-full sm:w-auto border-2 border-black dark:border-white hover:bg-light-grey dark:hover:bg-gray-200 transition-colors rounded-full sm:rounded-none"
               >
                 Start Training
               </button>
