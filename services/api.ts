@@ -1,6 +1,6 @@
 import { User, CompletedTechnique, CustomerSession } from '../types';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'https://salon-backend-06j6.onrender.com';
 
 export const api = {
     async login(id: string, password: string, role: 'admin' | 'candidate') {
