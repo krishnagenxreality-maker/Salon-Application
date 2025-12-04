@@ -1,17 +1,27 @@
 import { User, CompletedTechnique, CustomerSession } from '../types';
 
-// REPLACED localhost with the Render URL. 
-// NOTE: Verify that 'https://salon-backend.onrender.com' matches your actual Render service URL exactly.
-const API_URL = 'https://salon-backend-06j6.onrender.com';
+// SMART CONFIGURATION:
+// This looks for an environment variable 'VITE_API_URL'.
+// If found (on Vercel), it uses that.
+// If not found (Localhost), it defaults to 'http://localhost:3001/api'.
+
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api';
+
+console.log("Using Backend URL:", API_URL); // Debug log to check connection
 
 export const api = {
     async login(id: string, password: string, role: 'admin' | 'candidate') {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, password, role }),
-        });
-        return response.json();
+        try {
+            const response = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, password, role }),
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Login Error:", error);
+            throw error;
+        }
     },
 
     async register(applicationNumber: string, password: string, role: 'admin' | 'candidate') {
