@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Technique, Page, UserRole, CustomerDetails, SessionImage, CustomerSession } from './types';
 import Header from './components/Header';
@@ -5,13 +6,12 @@ import HomePage from './pages/HomePage';
 import TechniquePage from './pages/TechniquePage';
 import TrainingPage from './pages/TrainingPage';
 import CompletionPage from './pages/CompletionPage';
-import LoginPage from './pages/LoginPage';
 import CreateIdPage from './pages/CreateIdPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import AdminPage from './pages/AdminPage';
 import AdminCandidateDetailsPage from './pages/AdminCandidateDetailsPage';
 import AdminSessionDetailsPage from './pages/AdminSessionDetailsPage';
-import RoleSelectionPage from './pages/RoleSelectionPage';
+import AuthPage from './pages/AuthPage';
 import WelcomePage from './pages/WelcomePage';
 import ModeSelectionPage from './pages/ModeSelectionPage';
 import ServiceSelectionPage from './pages/ServiceSelectionPage';
@@ -69,10 +69,6 @@ const App: React.FC = () => {
     if (savedUserId && savedUserRole) {
         setCurrentUserId(savedUserId);
         setUserRole(savedUserRole);
-        // If restoring session, we stay on the current page logic or default to login if needed.
-        // For smoother UX, let's keep them at role selection/login to ensure clear entry
-        // but pre-fill if we wanted. For now, let's just restore state but force login flow for security/clarity in this demo.
-        // Or better: Auto-route if authenticated.
         if (savedUserRole === 'admin') setCurrentPage('ADMIN');
         else setCurrentPage('MODE_SELECTION');
     }
@@ -108,11 +104,6 @@ const App: React.FC = () => {
     }
     setCurrentPage(page);
   }, [currentPage, resetTrainingState]);
-
-  const handleRoleSelect = useCallback((role: 'admin' | 'candidate') => {
-    setUserRole(role);
-    setCurrentPage('LOGIN');
-  }, []);
 
   const handleSelectTechnique = useCallback((technique: Technique) => {
     setSelectedTechnique(technique);
@@ -151,17 +142,18 @@ const App: React.FC = () => {
     setCurrentPage('COMPLETED');
   }, [stepTimings, trainingStartTime, currentUserId]);
   
-  const handleLoginSuccess = useCallback((userId: string) => {
+  const handleLoginSuccess = useCallback((userId: string, role: UserRole) => {
     setCurrentUserId(userId);
+    setUserRole(role);
     localStorage.setItem('currentUserId', userId);
-    if (userRole) localStorage.setItem('userRole', userRole);
+    if (role) localStorage.setItem('userRole', role);
 
-    if (userRole === 'admin') {
+    if (role === 'admin') {
         setCurrentPage('ADMIN');
     } else {
         setCurrentPage('MODE_SELECTION');
     }
-  }, [userRole]);
+  }, []);
 
   const handleModeSelect = useCallback((mode: 'with-customer' | 'without-customer') => {
       if (mode === 'without-customer') {
@@ -217,11 +209,11 @@ const App: React.FC = () => {
                timestamp: Date.now(),
                serviceName: 'Haircuts & Styling',
                subService: selectedLiveService,
-               customerRequest: '', // In a real app we'd capture this from state if needed
+               customerRequest: '', 
                customerDetails: currentCustomer,
                stepTimings: liveSessionTimings,
                images: images,
-               rating: 0 // Will be updated on rating selection
+               rating: 0 
            });
       }
 
@@ -254,20 +246,22 @@ const App: React.FC = () => {
       setCurrentPage('ADMIN_SESSION_DETAILS');
   }, []);
 
-  const handleNavigateToCreateId = useCallback(() => {
+  const handleNavigateToCreateId = useCallback((role: UserRole) => {
+    setUserRole(role);
     setCurrentPage('CREATE_ID');
   }, []);
   
   const handleCreateId = useCallback(() => {
-    setCurrentPage('LOGIN');
+    setCurrentPage('ROLE_SELECTION');
   }, []);
 
-  const handleNavigateToForgotPassword = useCallback(() => {
+  const handleNavigateToForgotPassword = useCallback((role: UserRole) => {
+    setUserRole(role);
     setCurrentPage('FORGOT_PASSWORD');
   }, []);
   
   const handlePasswordReset = useCallback(() => {
-    setCurrentPage('LOGIN');
+    setCurrentPage('ROLE_SELECTION');
   }, []);
 
   const handleSignOut = useCallback(() => {
@@ -287,21 +281,17 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (currentPage) {
       case 'ROLE_SELECTION':
-        return <RoleSelectionPage onSelect={handleRoleSelect} />;
-      case 'LOGIN':
         return (
-            <LoginPage 
-                role={userRole || 'candidate'} 
-                onLoginSuccess={handleLoginSuccess}
-                onNavigateToCreateId={handleNavigateToCreateId}
-                onNavigateToForgotPassword={handleNavigateToForgotPassword}
-                onBack={() => setCurrentPage('ROLE_SELECTION')}
-            />
+          <AuthPage 
+            onLoginSuccess={handleLoginSuccess}
+            onNavigateToCreateId={handleNavigateToCreateId}
+            onNavigateToForgotPassword={handleNavigateToForgotPassword}
+          />
         );
       case 'CREATE_ID':
-        return <CreateIdPage role={userRole || 'candidate'} onCreateId={handleCreateId} onNavigateToLogin={() => setCurrentPage('LOGIN')} />;
+        return <CreateIdPage role={userRole || 'candidate'} onCreateId={handleCreateId} onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} />;
       case 'FORGOT_PASSWORD':
-        return <ForgotPasswordPage role={userRole || 'candidate'} onSubmit={handlePasswordReset} onNavigateToLogin={() => setCurrentPage('LOGIN')} />;
+        return <ForgotPasswordPage role={userRole || 'candidate'} onSubmit={handlePasswordReset} onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} />;
       case 'MODE_SELECTION':
         return <ModeSelectionPage onSelect={handleModeSelect} />;
       case 'WELCOME':
@@ -408,7 +398,13 @@ const App: React.FC = () => {
           }
           return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
       default:
-        return <RoleSelectionPage onSelect={handleRoleSelect} />;
+        return (
+          <AuthPage 
+            onLoginSuccess={handleLoginSuccess}
+            onNavigateToCreateId={handleNavigateToCreateId}
+            onNavigateToForgotPassword={handleNavigateToForgotPassword}
+          />
+        );
     }
   };
 
