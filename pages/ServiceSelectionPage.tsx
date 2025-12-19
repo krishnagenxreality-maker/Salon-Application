@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon } from '../components/AppIcons';
+import { ScissorsIcon, SparklesIcon, UserGroupIcon } from '../components/AppIcons';
 
 interface ServiceSelectionPageProps {
   onSelectService: (serviceId: string) => void;
@@ -20,44 +20,39 @@ const TRAINING_MODULES = [
     { id: 'packages', title: 'Packages', icon: UserGroupIcon },
 ];
 
-const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService, onBack }) => {
+const ServiceSelectionPage: React.FC<ServiceSelectionPageProps> = ({ onSelectService }) => {
   return (
-    <div className="w-full min-h-screen bg-white pt-28 md:pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
-      <div className="max-w-screen-xl mx-auto text-center">
+    <div className="flex-1 flex flex-col bg-white pb-10 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
+      <div className="max-w-screen-xl mx-auto text-center w-full">
         
-        {/* Back Button */}
-        <div className="absolute top-28 md:top-32 left-4 sm:left-6 md:left-12 z-50">
-            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
-              Back
-            </button>
-        </div>
+        {/* Moderate spacer for perfect vertical balance */}
+        <div className="h-4 md:h-6" />
 
         {/* Header */}
-        <div className="mb-12 sm:mb-16 animate-slide-up pt-12 sm:pt-8 px-4">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
+        <div className="mb-6 sm:mb-8 animate-slide-up px-4">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black tracking-tighter">
                 Training Modules
             </h1>
-            <p className="mt-2 sm:mt-4 text-gray-500 text-sm sm:text-lg">
+            <p className="mt-1 sm:mt-2 text-gray-500 text-xs sm:text-base font-medium">
                 Select a module to begin your virtual practice session.
             </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 animate-slide-up pb-8" style={{ animationDelay: '0.2s' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4 animate-slide-up pb-8" style={{ animationDelay: '0.2s' }}>
             {TRAINING_MODULES.map((module) => (
                 <button
                     key={module.id}
                     onClick={() => onSelectService(module.id)}
-                    className="group relative bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[160px] sm:min-h-[180px]"
+                    className="group relative bg-white border border-gray-200 rounded-xl p-4 sm:p-6 flex flex-col items-center justify-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 min-h-[120px] sm:min-h-[160px]"
                 >
-                    <div className="h-10 w-10 sm:h-12 sm:w-12 bg-light-grey rounded-full flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-black transition-colors duration-300">
-                        <module.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black group-hover:text-white transition-colors duration-300" />
+                    <div className="h-8 w-8 sm:h-10 sm:w-10 bg-light-grey rounded-full flex items-center justify-center mb-2 sm:mb-3 group-hover:bg-black transition-colors duration-300">
+                        <module.icon className="w-4 h-4 sm:w-5 sm:h-5 text-black group-hover:text-white transition-colors duration-300" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-black leading-tight">{module.title}</h3>
+                    <h3 className="text-xs sm:text-sm font-bold text-black leading-tight">{module.title}</h3>
                     
                     {module.id === 'hair-training' && (
-                         <span className="mt-2 text-[10px] sm:text-xs font-semibold text-white bg-black px-2 py-0.5 rounded-full">
+                         <span className="mt-1 text-[8px] sm:text-[10px] font-bold text-white bg-black px-2 py-0.5 rounded-full">
                             Available
                         </span>
                     )}

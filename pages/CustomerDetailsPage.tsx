@@ -56,19 +56,8 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 pt-28 md:pt-32 animate-fade-in relative">
-         {/* Back Button */}
-         <div className="absolute top-28 md:top-32 left-4 sm:left-12 z-50">
-             <button 
-                onClick={onBack}
-                className="flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
-            >
-                <ChevronLeftIcon className="w-5 h-5 mr-1" />
-                Back
-            </button>
-         </div>
-
-      <div className="max-w-lg w-full mt-8 sm:mt-0">
+    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 animate-fade-in relative">
+      <div className="max-w-lg w-full">
         <div className="mb-8 sm:mb-10 text-center animate-slide-up">
              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2">
                 Customer Details

@@ -22,10 +22,9 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
   return (
-    <div className="fixed top-20 sm:top-24 right-4 sm:right-6 bg-white/90 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-gray-200 shadow-lg z-40 flex items-center gap-2 animate-fade-in">
-      <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full animate-pulse"></div>
-      <ClockIcon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-      <p className="text-sm sm:text-lg font-mono font-bold tabular-nums text-black">{minutes}:{seconds}</p>
+    <div className="fixed top-20 right-4 sm:right-10 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-gray-100 shadow-xl z-40 flex items-center gap-2 animate-fade-in">
+      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+      <p className="text-sm sm:text-lg font-mono font-black tabular-nums text-black">{minutes}:{seconds}</p>
     </div>
   );
 };
@@ -108,14 +107,14 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
 
   if (!hasStarted) {
       return (
-        <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-6 animate-fade-in text-center">
+        <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-in text-center">
             <div className="max-w-2xl w-full">
-                <span className="px-3 py-1 sm:px-4 sm:py-1 bg-gray-100 rounded-full text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wide mb-4 sm:mb-6 inline-block">Ready to Start</span>
-                <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-4 sm:mb-6 leading-tight">{serviceName}</h1>
-                <p className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12 font-light max-w-lg mx-auto">Prepare your station. When you are ready to begin the service with the client, click the button below.</p>
+                <span className="px-4 py-1.5 bg-black text-white rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-8 inline-block shadow-lg">Session Lobby</span>
+                <h1 className="text-4xl sm:text-6xl font-black text-black tracking-tighter mb-6 leading-[0.9]">{serviceName}</h1>
+                <p className="text-lg sm:text-xl text-gray-500 mb-12 font-medium max-w-lg mx-auto">Ensure your workstation is prepared. Click below to begin the live service with the client.</p>
                 <div className="flex flex-col gap-4 items-center">
-                    <button onClick={handleBeginSession} className="px-8 sm:px-12 py-3 sm:py-4 bg-black text-white text-base sm:text-lg font-bold rounded-full shadow-xl hover:scale-105 transition-transform duration-300 w-full sm:w-auto">Begin Session</button>
-                    <button onClick={onExit} className="text-gray-400 hover:text-red-500 text-xs sm:text-sm font-semibold transition-colors mt-2 sm:mt-4">Cancel</button>
+                    <button onClick={handleBeginSession} className="h-14 px-14 bg-black text-white text-xs font-black uppercase tracking-[0.2em] rounded-full shadow-2xl hover:scale-105 transition-all">Begin Session</button>
+                    <button onClick={onExit} className="text-gray-400 hover:text-red-500 text-xs font-black uppercase tracking-widest transition-colors mt-4">Cancel Session</button>
                 </div>
             </div>
         </div>
@@ -125,30 +124,28 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
   const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col animate-fade-in relative">
+    <div className="flex-1 flex flex-col animate-fade-in relative overflow-hidden h-full">
         <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey z-50">
             <div className="h-1 bg-black transition-all duration-500 ease-in-out" style={{ width: `${progressPercentage}%` }}></div>
         </div>
         {sessionStartTime && <LiveTimer startTime={sessionStartTime} />}
-      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 md:px-12 pt-28 pb-32 sm:pb-36 min-h-[calc(100vh-100px)]">
+      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 md:px-16 pt-8 pb-28">
         <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           <div className="animate-slide-up order-2 md:order-1">
-            <div className="mb-2 sm:mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
-                <span className="text-xs sm:text-sm font-bold text-gray-500 tracking-widest uppercase">Step {currentStep + 1} / {totalSteps}</span>
-                <span className="h-1 w-1 rounded-full bg-gray-300 hidden sm:block"></span>
-                <span className="text-xs sm:text-sm font-semibold text-black uppercase tracking-wide hidden sm:block">{serviceName}</span>
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+                <span className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase">Step {currentStep + 1} / {totalSteps}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-black tracking-tighter mt-1 sm:mt-2">{stepData.title}</h2>
-            <p className="mt-4 sm:mt-6 text-base sm:text-lg text-gray-700 leading-relaxed border-l-2 border-gray-100 pl-4 sm:pl-6">{stepData.instructions}</p>
+            <h2 className="text-3xl sm:text-5xl font-black text-black tracking-tighter leading-[0.95]">{stepData.title}</h2>
+            <p className="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed font-medium border-l-4 border-black pl-6">{stepData.instructions}</p>
             {isConsultationStep && (
-                <div className="mt-6 sm:mt-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                    <label className="block text-sm font-bold text-black mb-2 sm:mb-3 flex items-center gap-2"><UserCircleIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />Customer Request / Style</label>
-                    <textarea value={customerRequest} onChange={(e) => setCustomerRequest(e.target.value)} placeholder="Enter the customer's desired style, length, or specific requests here..." className="w-full p-3 sm:p-4 border border-gray-300 bg-white text-black rounded-xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all min-h-[100px] sm:min-h-[120px] text-sm sm:text-base resize-none" />
+                <div className="mt-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                    <label className="block text-[10px] font-black text-black tracking-widest uppercase mb-3">Consultation Notes</label>
+                    <textarea value={customerRequest} onChange={(e) => setCustomerRequest(e.target.value)} placeholder="Note the client's specific requests here..." className="w-full p-4 border border-gray-200 bg-gray-50/50 text-black rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all min-h-[100px] sm:min-h-[140px] text-sm sm:text-base resize-none shadow-inner" />
                 </div>
             )}
           </div>
           <div className="animate-slide-up order-1 md:order-2 flex justify-center" style={{ animationDelay: '0.2s' }}>
-             <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-xl overflow-hidden shadow-2xl group">
+             <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-3xl overflow-hidden shadow-2xl group border-4 border-white">
                  {!cameraError ? (
                      <div className="relative w-full h-full">
                          <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform scale-x-[-1]" />
@@ -159,19 +156,19 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
                  )}
                  <canvas ref={canvasRef} className="hidden" />
                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-                    <button onClick={handleCapture} disabled={cameraError} className="h-16 w-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform duration-200 border-4 border-gray-200"><CameraIcon className="w-8 h-8 text-black" /></button>
+                    <button onClick={handleCapture} disabled={cameraError} className="h-16 w-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform duration-200 border-4 border-gray-100"><CameraIcon className="w-8 h-8 text-black" /></button>
                  </div>
-                 <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1 animate-pulse z-20"><div className="w-1.5 h-1.5 bg-white rounded-full"></div>LIVE</div>
+                 <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-full flex items-center gap-1.5 animate-pulse z-20"><div className="w-1.5 h-1.5 bg-white rounded-full"></div>LIVE</div>
              </div>
           </div>
         </div>
       </div>
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200/80 z-40">
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 md:px-12 h-20 sm:h-24 flex items-center justify-between">
-           <button onClick={onExit} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-red-500 transition-colors">Abort</button>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <button onClick={handlePrev} disabled={currentStep === 0} className="h-10 px-4 sm:h-12 sm:px-6 border border-gray-300 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black text-black"><ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 text-black" /><span className="hidden sm:inline text-sm font-semibold tracking-wide ml-2">Previous</span></button>
-            <button onClick={handleNext} className={`h-10 px-5 sm:h-12 sm:px-8 text-white flex items-center justify-center transition-colors rounded-full shadow-lg ${currentStep === totalSteps - 1 ? 'bg-green-600 hover:bg-green-500' : 'bg-black hover:bg-gray-800'}`}><span className="text-xs sm:text-sm font-semibold tracking-wide mr-2 whitespace-nowrap">{currentStep === totalSteps - 1 ? 'Finish Session' : 'Next Step'}</span><ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-white" /></button>
+      <footer className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 z-40">
+        <div className="max-w-screen-xl mx-auto px-6 md:px-12 h-24 flex items-center justify-between">
+           <button onClick={onExit} className="text-xs font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors">Abort</button>
+          <div className="flex items-center gap-3">
+            <button onClick={handlePrev} disabled={currentStep === 0} className="h-12 px-6 border-2 border-gray-100 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black text-black"><span className="text-xs font-black uppercase tracking-widest">Back</span></button>
+            <button onClick={handleNext} className={`h-12 px-10 text-white flex items-center justify-center transition-all rounded-full shadow-xl ${currentStep === totalSteps - 1 ? 'bg-green-600 hover:bg-green-500' : 'bg-black hover:bg-gray-800'}`}><span className="text-xs font-black uppercase tracking-widest whitespace-nowrap">{currentStep === totalSteps - 1 ? 'Finish' : 'Next Step'}</span></button>
           </div>
         </div>
       </footer>

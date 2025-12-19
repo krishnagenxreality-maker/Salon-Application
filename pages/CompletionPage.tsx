@@ -12,7 +12,7 @@ interface CompletionPageProps {
 const Confetti: React.FC = () => {
     return (
         <div className="absolute inset-0 pointer-events-none">
-            {Array.from({ length: 50 }).map((_, i) => (
+            {Array.from({ length: 40 }).map((_, i) => (
                 <div
                     key={i}
                     className="confetti"
@@ -35,62 +35,74 @@ const formatTime = (ms: number) => {
   return `${minutes}:${seconds}`;
 };
 
-
 const CompletionPage: React.FC<CompletionPageProps> = ({ technique, stepTimings, onRestart, onBackToLibrary }) => {
   const totalTime = stepTimings.reduce((sum, time) => sum + time, 0);
 
   return (
-    <div className="w-full min-h-screen bg-white flex items-center justify-center text-center p-4 sm:p-6 pt-32 md:pt-40 animate-fade-in confetti-container">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-white animate-fade-in relative">
       <Confetti />
-      <div className="max-w-3xl w-full">
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          Technique Completed
-        </h1>
-        <p className="mt-2 sm:mt-4 text-base sm:text-xl text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          You have successfully mastered the <span className="font-semibold text-black">{technique.title}</span> technique.
-        </p>
+      
+      {/* Main Split Content */}
+      <div className="flex-1 flex flex-col md:flex-row items-stretch px-6 sm:px-12 md:px-16 gap-8 md:gap-16">
+        
+        {/* Left Half: Typography */}
+        <div className="flex-1 flex flex-col justify-center text-center md:text-left z-10">
+          <span className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-[0.3em] mb-4 animate-slide-up">Mission Accomplished</span>
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-black tracking-tight leading-[1.1] animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            Technique<br/>Completed
+          </h1>
+          <p className="mt-6 text-base sm:text-lg text-gray-500 font-medium max-w-md animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            You have mastered the <span className="text-black font-bold">{technique.title}</span>. Your technical precision is improving.
+          </p>
+        </div>
 
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 my-8 sm:my-10 text-left animate-slide-up shadow-sm" style={{ animationDelay: '0.4s' }}>
-            <h2 className="text-lg sm:text-xl font-bold text-black tracking-tight mb-1">Performance Summary</h2>
-            <p className="text-sm sm:text-base text-gray-500 mb-6">Your time to complete each step of the {technique.title} technique.</p>
+        {/* Right Half: Performance Summary Card */}
+        <div className="flex-1 flex flex-col justify-center items-center md:items-end py-4 md:py-12 z-10">
+          <div className="w-full max-w-xl bg-white border border-gray-100 rounded-3xl shadow-xl flex flex-col max-h-[50vh] md:max-h-[65vh] overflow-hidden animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            <div className="p-6 border-b border-gray-50">
+              <h2 className="text-lg font-bold text-black tracking-tight">Performance Summary</h2>
+              <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest mt-1">Detailed Breakdown</p>
+            </div>
             
-            <div className="space-y-3 sm:space-y-4 max-h-[40vh] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
                 {technique.steps.map((step, index) => (
-                    <div key={index} className="flex justify-between items-center pb-3 border-b border-gray-100 last:border-b-0 last:pb-0">
+                    <div key={index} className="flex justify-between items-center pb-3 border-b border-gray-50 last:border-b-0 last:pb-0">
                         <div className="pr-4">
-                            <p className="font-semibold text-black text-sm sm:text-base">{step.title}</p>
-                            <p className="text-xs text-gray-400">Step {index + 1}</p>
+                            <p className="font-semibold text-black text-sm">{step.title}</p>
+                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Step {index + 1}</p>
                         </div>
-                        <p className="text-base sm:text-lg font-semibold text-black tabular-nums">
+                        <p className="text-sm font-mono font-semibold text-black">
                             {formatTime(stepTimings[index] || 0)}
                         </p>
                     </div>
                 ))}
             </div>
 
-            <div className="flex justify-between items-center pt-6 mt-6 border-t border-gray-300">
-                <p className="text-base sm:text-lg font-bold text-black">Total Time</p>
-                <p className="text-lg sm:text-xl font-extrabold text-black tabular-nums">
+            <div className="p-6 bg-gray-50 flex justify-between items-center">
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Total Time</p>
+                <p className="text-xl font-bold text-black tabular-nums">
                     {formatTime(totalTime)}
                 </p>
             </div>
-        </div>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up pb-8" style={{ animationDelay: '0.6s' }}>
-          <button
-            onClick={onRestart}
-            className="border border-gray-300 text-black text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:border-black transition-colors rounded-full"
-          >
-            Restart Technique
-          </button>
-          <button
-            onClick={onBackToLibrary}
-            className="bg-black text-white text-sm font-semibold tracking-wide uppercase px-8 py-3 sm:px-10 sm:py-4 w-full sm:w-auto hover:bg-gray-800 transition-colors rounded-full shadow-lg"
-          >
-            Back to Library
-          </button>
+          </div>
         </div>
       </div>
+
+      {/* Center Footer Buttons */}
+      <footer className="h-24 flex items-center justify-center gap-4 px-6 z-20 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+        <button
+          onClick={onRestart}
+          className="h-12 px-8 border-2 border-gray-200 text-black text-xs font-semibold tracking-[0.2em] uppercase hover:bg-black hover:text-white hover:border-black transition-all rounded-full"
+        >
+          Restart
+        </button>
+        <button
+          onClick={onBackToLibrary}
+          className="h-12 px-10 bg-black text-white text-xs font-semibold tracking-[0.2em] uppercase hover:bg-gray-800 transition-all rounded-full shadow-lg"
+        >
+          Back to Library
+        </button>
+      </footer>
     </div>
   );
 };

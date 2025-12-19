@@ -26,19 +26,14 @@ const SALON_SERVICES = [
 
 const CustomerServiceMenuPage: React.FC<CustomerServiceMenuPageProps> = ({ onSelectService, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white pt-28 md:pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
+    <div className="w-full min-h-screen bg-white pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
       <div className="max-w-screen-xl mx-auto text-center">
         
-        {/* Back Button */}
-        <div className="absolute top-28 md:top-32 left-4 sm:left-6 md:left-12 z-50">
-            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
-              Back
-            </button>
-        </div>
+        {/* Adjusted top spacer */}
+        <div className="h-6 sm:h-8" />
 
         {/* Header */}
-        <div className="mb-12 sm:mb-16 animate-slide-up pt-12 sm:pt-8 px-4">
+        <div className="mb-10 sm:mb-12 animate-slide-up px-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
                 Service Menu
             </h1>

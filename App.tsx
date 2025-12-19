@@ -1,5 +1,4 @@
 
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Technique, Page, UserRole, CustomerDetails, SessionImage, CustomerSession } from './types';
 import Header from './components/Header';
@@ -205,6 +204,50 @@ const App: React.FC = () => {
       setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
+  const handleGlobalBack = useCallback(() => {
+    switch (currentPage) {
+      case 'TECHNIQUE':
+      case 'TRAINING':
+      case 'COMPLETED':
+        handleBackToHome();
+        break;
+      case 'HOME':
+        setCurrentPage('SERVICE_SELECTION');
+        break;
+      case 'SERVICE_SELECTION':
+        setCurrentPage('WELCOME');
+        break;
+      case 'WELCOME':
+      case 'CUSTOMER_WELCOME':
+        setCurrentPage('MODE_SELECTION');
+        break;
+      case 'CUSTOMER_DETAILS':
+        setCurrentPage('CUSTOMER_WELCOME');
+        break;
+      case 'CUSTOMER_SERVICE_MENU':
+        setCurrentPage('CUSTOMER_DETAILS');
+        break;
+      case 'HAIRCUTS_SELECTION':
+        setCurrentPage('CUSTOMER_SERVICE_MENU');
+        break;
+      case 'LIVE_SESSION':
+        handleBackToCustomerMenu();
+        break;
+      case 'LIVE_SESSION_COMPLETED':
+        handleNewCustomer();
+        break;
+      case 'ADMIN_CANDIDATE_DETAILS':
+        setCurrentPage('ADMIN');
+        break;
+      case 'ADMIN_SESSION_DETAILS':
+        setCurrentPage('ADMIN_CANDIDATE_DETAILS');
+        break;
+      default:
+        // Already at root or no mapping
+        break;
+    }
+  }, [currentPage, handleBackToHome, handleBackToCustomerMenu, handleNewCustomer]);
+
   const handleSelectCandidate = useCallback((candidateId: string) => {
       setSelectedCandidateId(candidateId);
       setCurrentPage('ADMIN_CANDIDATE_DETAILS');
@@ -244,7 +287,13 @@ const App: React.FC = () => {
     setCurrentPage('ROLE_SELECTION');
   }, [resetTrainingState]);
 
-  const showHeader = ['WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION', 'ADMIN', 'ADMIN_CANDIDATE_DETAILS', 'ADMIN_SESSION_DETAILS', 'HOME', 'CUSTOMER_WELCOME', 'CUSTOMER_DETAILS', 'CUSTOMER_SERVICE_MENU', 'HAIRCUTS_SELECTION', 'LIVE_SESSION_COMPLETED'].includes(currentPage);
+  const showHeader = [
+    'WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION', 'ADMIN', 
+    'ADMIN_CANDIDATE_DETAILS', 'ADMIN_SESSION_DETAILS', 'HOME', 
+    'TECHNIQUE', 'TRAINING', 'COMPLETED',
+    'CUSTOMER_WELCOME', 'CUSTOMER_DETAILS', 'CUSTOMER_SERVICE_MENU', 
+    'HAIRCUTS_SELECTION', 'LIVE_SESSION', 'LIVE_SESSION_COMPLETED'
+  ].includes(currentPage);
 
   const renderContent = () => {
     switch (currentPage) {
@@ -357,7 +406,6 @@ const App: React.FC = () => {
                       stepTimings={liveSessionTimings}
                       customerDetails={currentCustomer}
                       sessionImages={sessionImages}
-                      // Use the correctly defined handleBackToCustomerMenu instead of the non-existent handleBackToMenu
                       onBackToMenu={handleBackToCustomerMenu}
                       onNewCustomer={handleNewCustomer}
                   />
@@ -376,16 +424,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="antialiased text-black bg-white transition-colors duration-300">
+    <div className="antialiased text-black bg-white flex flex-col min-h-screen">
       {showHeader && (
         <Header 
             userRole={userRole} 
             currentPage={currentPage} 
             onNavigate={handleNavigate} 
             onSignOut={handleSignOut} 
+            onBack={handleGlobalBack}
         />
       )}
-      {renderContent()}
+      <div className={`flex-1 flex flex-col ${showHeader ? 'pt-28' : ''}`}>
+        {renderContent()}
+      </div>
     </div>
   );
 };

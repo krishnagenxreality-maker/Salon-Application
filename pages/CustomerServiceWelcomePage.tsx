@@ -9,18 +9,7 @@ interface CustomerServiceWelcomePageProps {
 
 const CustomerServiceWelcomePage: React.FC<CustomerServiceWelcomePageProps> = ({ onDive, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-4 sm:p-8 pt-24 md:pt-32 animate-fade-in relative">
-        {/* Back Button */}
-        <div className="absolute top-24 left-4 sm:top-28 sm:left-12 z-50">
-            <button 
-                onClick={onBack}
-                className="flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
-            >
-                <ChevronLeftIcon className="w-5 h-5 mr-1" />
-                Back
-            </button>
-        </div>
-
+    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in relative">
         <div className="max-w-4xl text-center px-4">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight mb-4 sm:mb-6 animate-slide-up">
                 Customer Service <br/> Lobby

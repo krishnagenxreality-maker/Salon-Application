@@ -33,7 +33,7 @@ const TechniqueCard: React.FC<TechniqueCardProps> = ({ technique, onSelect }) =>
         )}
       </div>
       <div className="p-4 sm:p-5">
-        <p className="text-[10px] sm:text-xs font-bold text-gray-400 tracking-widest uppercase">{technique.category}</p>
+        <p className="text-[10px] sm:text-xs font-semibold text-gray-400 tracking-widest uppercase">{technique.category}</p>
         <h3 className="text-base sm:text-lg font-bold tracking-tight text-black mt-1">{technique.title}</h3>
       </div>
     </button>
@@ -62,36 +62,31 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
   }, [activeCategory, searchTerm]);
 
   return (
-    <div className="w-full min-h-screen bg-white pt-28 md:pt-32 pb-20">
+    <div className="w-full min-h-screen bg-white pb-20">
       <main className="max-w-screen-2xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in">
         
-        {/* Back Button */}
-        <div className="mb-6 sm:mb-8">
-            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
-              Back to Services
-            </button>
-        </div>
+        {/* Increased spacer for consistency */}
+        <div className="h-8 sm:h-10" />
 
         {/* Hero Section */}
-        <section className="text-left py-8 md:py-12 border-b border-gray-200">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-black tracking-tighter leading-tight animate-slide-up">
+        <section className="text-left py-4 md:py-8 border-b border-gray-100">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black tracking-tight leading-tight animate-slide-up">
             TONI&GUY
             <br />
-            <span className="text-gray-400">Haircut Training</span>
+            <span className="text-gray-400 font-semibold">Haircut Training</span>
           </h1>
-          <p className="mt-4 sm:mt-6 max-w-2xl text-sm sm:text-base md:text-lg text-gray-600 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on training designed by industry masters.
+          <p className="mt-2 sm:mt-4 max-w-2xl text-sm sm:text-base md:text-lg text-gray-600 font-medium animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            Experience the future of hairdressing education. Master iconic techniques with immersive, hands-on training.
           </p>
         </section>
 
         {/* Filters & Grid */}
-        <section className="py-8 sm:py-12 md:py-20">
+        <section className="py-6 sm:py-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 sm:mb-10">
              <div className="flex flex-wrap justify-start gap-2">
                 <button
                     onClick={() => setActiveCategory('All')}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === 'All' ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors font-semibold ${activeCategory === 'All' ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
                 >
                     All
                 </button>
@@ -99,7 +94,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
                 <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors ${activeCategory === category ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm rounded-full transition-colors font-semibold ${activeCategory === category ? 'bg-black text-white' : 'bg-light-grey text-gray-700 hover:bg-gray-200'}`}
                 >
                     {category}
                 </button>
@@ -111,7 +106,7 @@ const HomePage: React.FC<HomePageProps> = ({ onSelectTechnique, onBack }) => {
                     placeholder="Search techniques..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full md:w-64 pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-full bg-white text-black focus:ring-2 focus:ring-black focus:border-black outline-none transition"
+                    className="w-full md:w-64 pl-9 sm:pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-full bg-white text-black focus:ring-2 focus:ring-black focus:border-black outline-none transition font-medium"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
             </div>
