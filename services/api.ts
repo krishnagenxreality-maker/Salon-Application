@@ -1,13 +1,14 @@
+
 import { User, CompletedTechnique, CustomerSession } from '../types';
 
-// SMART CONFIGURATION:
-// This looks for an environment variable 'VITE_API_URL'.
-// If found (on Vercel), it uses that.
-// If not found (Localhost), it defaults to 'http://localhost:3001/api'.
+/**
+ * API configuration.
+ * VITE_API_URL should be set in Vercel settings for production.
+ * Locally, it defaults to localhost:5000.
+ */
+const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000/api';
 
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3001/api';
-
-console.log("Using Backend URL:", API_URL); // Debug log to check connection
+console.log("API Gateway Active:", API_URL);
 
 export const api = {
     async login(id: string, password: string, role: 'admin' | 'candidate') {

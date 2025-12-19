@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ChevronLeftIcon } from '../components/AppIcons';
 
@@ -8,12 +9,12 @@ interface WelcomePageProps {
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 flex flex-col items-center justify-center p-4 sm:p-8 pt-24 md:pt-32 animate-fade-in relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center p-4 sm:p-8 pt-24 md:pt-32 animate-fade-in relative">
         {/* Back Button */}
         <div className="absolute top-24 left-4 sm:top-28 sm:left-12 z-50">
             <button 
                 onClick={onBack}
-                className="flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
+                className="flex items-center text-sm font-medium text-gray-500 hover:text-black transition-colors"
             >
                 <ChevronLeftIcon className="w-5 h-5 mr-1" />
                 Change Mode
@@ -21,21 +22,21 @@ const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore, onBack }) => {
         </div>
 
         <div className="max-w-4xl text-center px-4">
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-black dark:text-white tracking-tighter mb-2 sm:mb-4 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
+            <h2 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-black tracking-tighter mb-2 sm:mb-4 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
                 TONI&GUY
             </h2>
 
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 tracking-tight leading-tight mb-4 sm:mb-6 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 tracking-tight leading-tight mb-4 sm:mb-6 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                 Welcome to the <br/> Future of Styling.
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 sm:mb-12 max-w-xl sm:max-w-2xl mx-auto animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-12 max-w-xl sm:max-w-2xl mx-auto animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
                 Immerse yourself in world-class education. Master precision, creativity, and technique through our advanced interactive training platform.
             </p>
 
             <button
                 onClick={onExplore}
-                className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-bold text-white bg-black dark:bg-white dark:text-black rounded-full transition-all duration-300 hover:bg-gray-800 dark:hover:bg-gray-200 hover:scale-105 focus:outline-none animate-slide-up opacity-0"
+                className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base font-bold text-white bg-black rounded-full transition-all duration-300 hover:bg-gray-800 hover:scale-105 focus:outline-none animate-slide-up opacity-0"
                 style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
             >
                 <span className="mr-2">Explore our services</span>

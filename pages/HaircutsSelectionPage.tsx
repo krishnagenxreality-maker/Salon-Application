@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon } from '../components/AppIcons';
 
@@ -53,56 +54,56 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
   };
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-gray-900 pt-28 md:pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative transition-colors duration-300">
+    <div className="w-full min-h-screen bg-white pt-28 md:pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
       <div className="max-w-2xl mx-auto">
         
         {/* Back Button */}
         <div className="absolute top-28 md:top-32 left-4 sm:left-6 md:left-12 z-50">
-            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center group">
-              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black dark:group-hover:text-white transition-colors" />
+            <button onClick={onBack} className="text-xs sm:text-sm font-medium text-gray-500 hover:text-black transition-colors flex items-center group">
+              <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-1 text-gray-400 group-hover:text-black transition-colors" />
               Back
             </button>
         </div>
 
         <div className="mt-12 sm:mt-12 text-center mb-10 sm:mb-16 px-2">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black dark:text-white tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
                 Haircuts & Styling
             </h1>
-            <p className="mt-2 text-gray-500 dark:text-gray-400 text-sm sm:text-base">
+            <p className="mt-2 text-gray-500 text-sm sm:text-base">
                 Select the specific treatment required.
             </p>
         </div>
 
         <div className="space-y-3 sm:space-y-4 animate-slide-up pb-8">
             {HAIRCUT_OPTIONS.map((category) => (
-                <div key={category.title} className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-sm transition-all duration-300">
+                <div key={category.title} className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-300">
                     <button 
                         onClick={() => toggleCategory(category.title)}
-                        className="w-full flex items-center justify-between p-4 sm:p-6 text-left bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+                        className="w-full flex items-center justify-between p-4 sm:p-6 text-left bg-white hover:bg-gray-50 transition-colors"
                     >
-                        <span className="text-lg sm:text-xl font-bold text-black dark:text-white">{category.title}</span>
+                        <span className="text-lg sm:text-xl font-bold text-black">{category.title}</span>
                         {openCategory === category.title ? (
-                            <ChevronUpIcon className="w-5 h-5 text-black dark:text-white" />
+                            <ChevronUpIcon className="w-5 h-5 text-black" />
                         ) : (
-                            <ChevronDownIcon className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <ChevronDownIcon className="w-5 h-5 text-gray-400" />
                         )}
                     </button>
                     
                     {openCategory === category.title && (
-                        <div className="bg-gray-50 dark:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700 p-2 space-y-1">
+                        <div className="bg-gray-50 border-t border-gray-100 p-2 space-y-1">
                             {category.options.map((option) => (
                                 <button
                                     key={option}
                                     onClick={() => handleOptionSelect(option)}
                                     className={`w-full text-left px-4 sm:px-6 py-3 sm:py-4 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-between ${
                                         selectedOption === option 
-                                            ? 'bg-black text-white dark:bg-white dark:text-black' 
-                                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                            ? 'bg-black text-white' 
+                                            : 'text-gray-600 hover:bg-gray-200'
                                     }`}
                                 >
                                     {option}
                                     {selectedOption === option && (
-                                        <div className="w-2 h-2 bg-white dark:bg-black rounded-full"></div>
+                                        <div className="w-2 h-2 bg-white rounded-full"></div>
                                     )}
                                 </button>
                             ))}
@@ -118,8 +119,8 @@ const HaircutsSelectionPage: React.FC<HaircutsSelectionPageProps> = ({ onStartSe
                 disabled={!selectedOption}
                 className={`px-8 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg transition-all duration-300 shadow-lg w-full sm:w-auto ${
                     selectedOption 
-                        ? 'bg-black text-white dark:bg-white dark:text-black hover:scale-105 hover:bg-gray-800 dark:hover:bg-gray-200 cursor-pointer' 
-                        : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                        ? 'bg-black text-white hover:scale-105 hover:bg-gray-800 cursor-pointer' 
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                 }`}
             >
                 Start Session

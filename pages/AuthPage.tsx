@@ -48,11 +48,18 @@ const AuthPage: React.FC<AuthPageProps> = ({
     };
 
     return (
-        <div className="w-full min-h-screen flex flex-col md:flex-row bg-white dark:bg-gray-900 transition-colors duration-500">
+        <div className="w-full min-h-screen flex flex-col md:flex-row bg-white transition-colors duration-500">
             
             {/* Left Branding Panel: TONI&GUY GLOW */}
             <div className="md:w-1/2 bg-black flex flex-col items-center justify-center p-12 text-center relative overflow-hidden min-h-[45vh] md:min-h-screen">
-                <div className="relative z-10 animate-fade-in">
+                <div className="relative z-10 animate-fade-in flex flex-col items-center">
+                    {/* GenXReality Logo */}
+                    <img 
+                        src="/images/logo.png" 
+                        alt="GenXReality Logo" 
+                        className="h-10 sm:h-14 md:h-16 w-auto mb-8 brightness-0 invert opacity-90"
+                    />
+                    
                     <h1 className="text-5xl sm:text-7xl md:text-9xl font-black text-white tracking-tighter leading-[0.85] drop-shadow-[0_0_35px_rgba(255,255,255,0.6)] select-none">
                         TONI<br/>&GUY
                     </h1>
@@ -69,21 +76,21 @@ const AuthPage: React.FC<AuthPageProps> = ({
             </div>
 
             {/* Right Auth Panel: Interaction */}
-            <div className="md:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white dark:bg-gray-900 transition-colors duration-500">
+            <div className="md:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-white">
                 <div className="max-w-md w-full animate-slide-up">
                     
                     {/* Role Switcher Bar */}
                     <div className="mb-12">
-                        <label className="text-[10px] font-black text-gray-400 dark:text-gray-500 tracking-widest uppercase mb-4 block text-center">
+                        <label className="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-4 block text-center">
                             Select Your Role
                         </label>
-                        <div className="bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl flex items-center shadow-inner border border-gray-200/50 dark:border-gray-700/50">
+                        <div className="bg-gray-100 p-1.5 rounded-2xl flex items-center shadow-inner border border-gray-200/50">
                             <button
                                 onClick={() => toggleRole('candidate')}
                                 className={`flex-1 py-3.5 px-6 rounded-xl text-sm font-bold transition-all duration-300 transform ${
                                     role === 'candidate' 
-                                        ? 'bg-black text-white dark:bg-white dark:text-black shadow-xl scale-100' 
-                                        : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-200 scale-95'
+                                        ? 'bg-black text-white shadow-xl scale-100' 
+                                        : 'text-gray-500 hover:text-black scale-95'
                                 }`}
                             >
                                 Candidate
@@ -92,8 +99,8 @@ const AuthPage: React.FC<AuthPageProps> = ({
                                 onClick={() => toggleRole('admin')}
                                 className={`flex-1 py-3.5 px-6 rounded-xl text-sm font-bold transition-all duration-300 transform ${
                                     role === 'admin' 
-                                        ? 'bg-black text-white dark:bg-white dark:text-black shadow-xl scale-100' 
-                                        : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-gray-200 scale-95'
+                                        ? 'bg-black text-white shadow-xl scale-100' 
+                                        : 'text-gray-500 hover:text-black scale-95'
                                 }`}
                             >
                                 Admin
@@ -104,17 +111,17 @@ const AuthPage: React.FC<AuthPageProps> = ({
                     {/* Login Form Container */}
                     <div key={role} className="animate-fade-in">
                         <header className="mb-10">
-                            <h2 className="text-3xl font-black text-black dark:text-white tracking-tight mb-2">
+                            <h2 className="text-3xl font-black text-black tracking-tight mb-2">
                                 Welcome back.
                             </h2>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
-                                Accessing the <span className="text-black dark:text-white font-bold capitalize">{role}</span> environment.
+                            <p className="text-gray-500 text-sm font-medium">
+                                Accessing the <span className="text-black font-bold capitalize">{role}</span> environment.
                             </p>
                         </header>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-black dark:text-white tracking-widest uppercase">
+                                <label className="text-[10px] font-black text-black tracking-widest uppercase">
                                     {role === 'admin' ? 'Admin Identifier' : 'Candidate Identifier'}
                                 </label>
                                 <input
@@ -122,25 +129,25 @@ const AuthPage: React.FC<AuthPageProps> = ({
                                     required
                                     value={userId}
                                     onChange={(e) => setUserId(e.target.value)}
-                                    className="block w-full px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all"
+                                    className="block w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                                     placeholder={role === 'admin' ? "Admin ID" : "Candidate ID"}
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-black text-black dark:text-white tracking-widest uppercase">Secret Key</label>
+                                <label className="text-[10px] font-black text-black tracking-widest uppercase">Secret Key</label>
                                 <input
                                     type="password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="block w-full px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all"
+                                    className="block w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                                     placeholder="••••••••"
                                 />
                             </div>
 
                             {error && (
-                                <div className="text-red-500 dark:text-red-400 text-xs font-bold bg-red-50 dark:bg-red-900/10 py-4 px-6 rounded-2xl border border-red-100 dark:border-red-900/30">
+                                <div className="text-red-500 text-xs font-bold bg-red-50 py-4 px-6 rounded-2xl border border-red-100">
                                     {error}
                                 </div>
                             )}
@@ -148,7 +155,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full flex justify-center items-center py-5 px-8 border border-transparent rounded-2xl shadow-2xl text-sm font-black text-white bg-black dark:bg-white dark:text-black hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                                className="w-full flex justify-center items-center py-5 px-8 border border-transparent rounded-2xl shadow-2xl text-sm font-black text-white bg-black hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                             >
                                 {isLoading ? (
                                     <div className="flex items-center gap-3">
@@ -159,18 +166,18 @@ const AuthPage: React.FC<AuthPageProps> = ({
                             </button>
                         </form>
 
-                        <footer className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                        <footer className="mt-12 pt-8 border-t border-gray-100 space-y-4">
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <button 
                                     onClick={() => onNavigateToForgotPassword(role)} 
-                                    className="text-xs font-bold text-gray-400 hover:text-black dark:hover:text-white transition-colors uppercase tracking-widest"
+                                    className="text-xs font-bold text-gray-400 hover:text-black transition-colors uppercase tracking-widest"
                                 >
                                     Forgot Password?
                                 </button>
                                 
                                 <button 
                                     onClick={() => onNavigateToCreateId(role)} 
-                                    className="text-xs font-bold text-black dark:text-white hover:opacity-70 transition-opacity uppercase tracking-widest flex items-center gap-2"
+                                    className="text-xs font-bold text-black hover:opacity-70 transition-opacity uppercase tracking-widest flex items-center gap-2"
                                 >
                                     Create Account
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>

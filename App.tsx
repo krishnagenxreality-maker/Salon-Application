@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Technique, Page, UserRole, CustomerDetails, SessionImage, CustomerSession } from './types';
 import Header from './components/Header';
@@ -21,7 +22,6 @@ import CustomerServiceMenuPage from './pages/CustomerServiceMenuPage';
 import HaircutsSelectionPage from './pages/HaircutsSelectionPage';
 import LiveSessionPage from './pages/LiveSessionPage';
 import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
-import { SunIcon, MoonIcon } from './components/AppIcons';
 import { api } from './services/api';
 
 
@@ -30,16 +30,13 @@ type StepTimings = number[];
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('ROLE_SELECTION');
   const [userRole, setUserRole] = useState<UserRole>(null);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null); // Track logged in user
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   const [trainingMode, setTrainingMode] = useState<'virtual' | 'live'>('virtual');
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
   
-  // Theme State
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-
   // Live Session State
   const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
   const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
@@ -50,19 +47,8 @@ const App: React.FC = () => {
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
   const [selectedCustomerSession, setSelectedCustomerSession] = useState<CustomerSession | null>(null);
 
-  // Initialize Data & Theme
+  // Initialize Data
   useEffect(() => {
-    // Restore Theme
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
-    if (savedTheme) {
-        setTheme(savedTheme);
-        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
-        else document.documentElement.classList.remove('dark');
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        setTheme('dark');
-        document.documentElement.classList.add('dark');
-    }
-
     // Restore Session
     const savedUserId = localStorage.getItem('currentUserId');
     const savedUserRole = localStorage.getItem('userRole') as UserRole;
@@ -74,19 +60,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(prev => {
-        const newTheme = prev === 'light' ? 'dark' : 'light';
-        localStorage.setItem('theme', newTheme);
-        if (newTheme === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-        return newTheme;
-    });
-  }, []);
-
   const resetTrainingState = useCallback(() => {
     setTrainingStartTime(null);
     setStepTimings([]);
@@ -95,7 +68,6 @@ const App: React.FC = () => {
     setSessionImages([]);
   }, []);
 
-  // Generalized navigation handler for the Header
   const handleNavigate = useCallback((page: Page) => {
     if (currentPage === 'TECHNIQUE' || currentPage === 'TRAINING' || currentPage === 'LIVE_SESSION') {
         setSelectedTechnique(null);
@@ -128,7 +100,6 @@ const App: React.FC = () => {
   }, []);
 
   const handleCompleteTraining = useCallback(async (technique: Technique) => {
-    // Log to Backend
     if (trainingStartTime && currentUserId) {
         const totalTime = stepTimings.reduce((a, b) => a + b, 0);
         await api.saveCompletedTechnique(currentUserId, {
@@ -202,7 +173,6 @@ const App: React.FC = () => {
   const handleLiveSessionFinish = useCallback(async (images: SessionImage[]) => {
       setSessionImages(images);
       
-      // Log to Backend
       if (selectedLiveService && currentCustomer && currentUserId) {
            await api.saveCustomerSession(currentUserId, {
                id: `sess_${Date.now()}`,
@@ -235,7 +205,6 @@ const App: React.FC = () => {
       setCurrentPage('CUSTOMER_DETAILS');
   }, []);
 
-  // Admin Navigation Handlers
   const handleSelectCandidate = useCallback((candidateId: string) => {
       setSelectedCandidateId(candidateId);
       setCurrentPage('ADMIN_CANDIDATE_DETAILS');
@@ -275,7 +244,6 @@ const App: React.FC = () => {
     setCurrentPage('ROLE_SELECTION');
   }, [resetTrainingState]);
 
-  // Determine if Header should be visible
   const showHeader = ['WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION', 'ADMIN', 'ADMIN_CANDIDATE_DETAILS', 'ADMIN_SESSION_DETAILS', 'HOME', 'CUSTOMER_WELCOME', 'CUSTOMER_DETAILS', 'CUSTOMER_SERVICE_MENU', 'HAIRCUTS_SELECTION', 'LIVE_SESSION_COMPLETED'].includes(currentPage);
 
   const renderContent = () => {
@@ -345,7 +313,6 @@ const App: React.FC = () => {
         }
         return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
       
-      // ADMIN PAGES
       case 'ADMIN':
           return <AdminPage onSelectCandidate={handleSelectCandidate} />;
       case 'ADMIN_CANDIDATE_DETAILS':
@@ -370,7 +337,6 @@ const App: React.FC = () => {
           }
           return <AdminPage onSelectCandidate={handleSelectCandidate} />;
 
-      // LIVE SESSIONS
       case 'LIVE_SESSION':
           if (selectedLiveService) {
               return (
@@ -391,6 +357,7 @@ const App: React.FC = () => {
                       stepTimings={liveSessionTimings}
                       customerDetails={currentCustomer}
                       sessionImages={sessionImages}
+                      // Use the correctly defined handleBackToCustomerMenu instead of the non-existent handleBackToMenu
                       onBackToMenu={handleBackToCustomerMenu}
                       onNewCustomer={handleNewCustomer}
                   />
@@ -409,31 +376,15 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="antialiased text-black dark:text-white bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="antialiased text-black bg-white transition-colors duration-300">
       {showHeader && (
         <Header 
             userRole={userRole} 
             currentPage={currentPage} 
-            theme={theme}
-            onToggleTheme={toggleTheme}
             onNavigate={handleNavigate} 
             onSignOut={handleSignOut} 
         />
       )}
-      
-      {/* Floating Theme Toggle for pages without Header */}
-      {!showHeader && (
-          <button 
-            onClick={toggleTheme}
-            className={`fixed z-50 p-2 sm:p-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-300 hover:text-black dark:hover:text-white transition-all duration-300 ${
-                currentPage === 'TRAINING' ? 'top-4 sm:top-6 left-4 sm:left-6' : 'top-4 sm:top-6 right-4 sm:right-6'
-            }`}
-            title="Toggle Theme"
-          >
-             {theme === 'dark' ? <SunIcon className="w-5 h-5 sm:w-6 sm:h-6" /> : <MoonIcon className="w-5 h-5 sm:w-6 sm:h-6" />}
-          </button>
-      )}
-
       {renderContent()}
     </div>
   );
