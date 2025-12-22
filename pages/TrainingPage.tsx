@@ -22,9 +22,9 @@ const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
   return (
-    <div className="flex items-center gap-1.5 px-3 py-1 bg-white/5 rounded-lg border border-white/5 backdrop-blur-md">
-      <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-      <span className="text-sm md:text-base font-black tabular-nums text-white tracking-widest">{minutes}:{seconds}</span>
+    <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-xl">
+      <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+      <span className="text-sm sm:text-base font-black tabular-nums text-white tracking-[0.2em]">{minutes}:{seconds}</span>
     </div>
   );
 };
@@ -90,78 +90,82 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
   const handlePrev = () => { if (currentStep > 0) setCurrentStep(currentStep - 1); };
 
   return (
-    <div className="fixed inset-0 w-full h-full bg-black flex flex-col items-center overflow-hidden animate-fade-in">
+    <div className="fixed inset-0 w-full h-full bg-black flex flex-col items-center overflow-y-auto custom-scrollbar animate-fade-in">
       
-      {/* PERSISTENT CINEMATIC BACKGROUND - 80% Opacity */}
-      <div className="absolute inset-0 z-0">
+      {/* PERSISTENT CINEMATIC BACKGROUND */}
+      <div className="fixed inset-0 z-0">
         <div 
-          className="absolute inset-0 opacity-80"
+          className="absolute inset-0 opacity-40"
           style={{ 
             backgroundImage: `url("${DEFAULT_BG}")`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         />
-        {/* Cinematic Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black/95 via-black/40 to-black/95 z-[1]" />
-        <div className="absolute inset-0 backdrop-blur-[1.5px] z-[2]" />
+        <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-black via-black/60 to-black z-[1]" />
+        <div className="absolute inset-0 backdrop-blur-[1px] z-[2]" />
       </div>
 
       {/* Progress Bar Top */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-white/5 z-[100]">
+      <div className="fixed top-0 left-0 right-0 h-1.5 bg-white/5 z-[100]">
           <div 
-            className="h-full bg-white transition-all duration-700 ease-out shadow-[0_0_15px_rgba(255,255,255,0.8)]" 
+            className="h-full bg-white transition-all duration-700 ease-out shadow-[0_0_15px_rgba(255,255,255,1)]" 
             style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
           />
       </div>
       
-      {/* Main Content Container - Optimized for Responsive Sizes */}
-      <div className="relative z-10 w-full h-full max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center px-6 sm:px-12 md:px-16 lg:px-20 gap-8 md:gap-16 lg:gap-24 pt-24 md:pt-16 pb-36 overflow-y-auto no-scrollbar">
+      {/* Main Content Container */}
+      <div className="relative z-10 w-full min-h-screen max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-center px-6 sm:px-12 md:px-16 py-32 md:py-24 gap-12 md:gap-20">
         
-        {/* Left: Text Info - Focused Typography with Responsive Sizing */}
-        <div className="w-full md:w-[55%] text-center md:text-left animate-fade-in-up">
-          <span className="text-[9px] md:text-[10px] font-black text-white/30 uppercase tracking-[0.5em] mb-3 md:mb-5 block">
-            STEP {currentStep + 1} OF {totalSteps}
-          </span>
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tighter leading-tight uppercase mb-5 md:mb-8 drop-shadow-2xl">
+        {/* Left: Text Info */}
+        <div className="w-full md:w-3/5 text-center md:text-left animate-fade-in-up">
+          <div className="flex items-center justify-center md:justify-start gap-4 mb-6">
+            <span className="text-[10px] font-black text-white/30 uppercase tracking-[0.5em] block">
+              Step {String(currentStep + 1).padStart(2, '0')} / {String(totalSteps).padStart(2, '0')}
+            </span>
+            <div className="h-px w-8 bg-white/10 hidden sm:block"></div>
+          </div>
+          
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter leading-tight uppercase mb-6 sm:mb-10 drop-shadow-2xl">
             {stepData.title}
           </h2>
-          <p className="text-sm md:text-base lg:text-lg text-white/50 max-w-md leading-relaxed font-medium mb-6 md:mb-8 drop-shadow-xl mx-auto md:mx-0">
+          
+          <p className="text-base sm:text-lg text-white/50 max-w-lg leading-relaxed font-medium mb-10 sm:mb-14 drop-shadow-xl mx-auto md:mx-0">
             {stepData.instructions}
           </p>
           
           {/* Voice Controls Cluster */}
-          <div className="flex items-center justify-center md:justify-start gap-3">
+          <div className="flex items-center justify-center md:justify-start gap-4">
             <button 
               onClick={pauseSpeech}
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center group"
+              className="w-12 h-12 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center group shadow-xl"
             >
-              {isPaused ? <PlayIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-white" /> : <PauseIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/40 group-hover:text-white" />}
+              {isPaused ? <PlayIcon className="w-4 h-4 text-white" /> : <PauseIcon className="w-4 h-4 text-white/60 group-hover:text-white" />}
             </button>
             <button 
               onClick={replaySpeech}
-              className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center group"
+              className="w-12 h-12 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center group shadow-xl"
             >
-              <ArrowPathIcon className="w-3.5 h-3.5 md:w-4 md:h-4 text-white/40 group-hover:text-white" />
+              <ArrowPathIcon className="w-4 h-4 text-white/60 group-hover:text-white" />
             </button>
-            <div className="flex items-center gap-2.5 ml-1">
-              <VoiceIcon className={`w-3.5 h-3.5 ${isSpeaking ? 'text-white animate-pulse' : 'text-white/20'}`} />
-              <span className="text-[8px] font-black uppercase tracking-widest text-white/30 whitespace-nowrap hidden xs:block">
-                {isPaused ? 'Voice Paused' : isSpeaking ? 'Audio Active' : 'Voice Ready'}
+            <div className="flex items-center gap-3 ml-4">
+              <VoiceIcon className={`w-4 h-4 ${isSpeaking ? 'text-white animate-pulse' : 'text-white/20'}`} />
+              <span className="text-[9px] font-black uppercase tracking-widest text-white/30 hidden xs:block">
+                {isPaused ? 'Voice Interrupted' : isSpeaking ? 'Transmitting audio' : 'Standby'}
               </span>
             </div>
           </div>
         </div>
         
-        {/* Right: Visual Support - Responsive Scaling */}
-        <div className="w-full md:w-[45%] flex justify-center md:justify-end animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <div className="relative w-full max-w-[280px] sm:max-w-[340px] md:max-w-[380px] aspect-[4/5] bg-white/[0.05] rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.7)] border border-white/10">
+        {/* Right: Visual Support */}
+        <div className="w-full md:w-2/5 flex justify-center md:justify-end animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="relative w-full max-w-[320px] sm:max-w-[400px] aspect-[4/5] bg-white/[0.05] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.8)] border border-white/10">
                 {stepData.videoUrl ? (
                     <video 
                       ref={videoRef} 
                       key={stepData.videoUrl} 
                       src={stepData.videoUrl} 
-                      className="w-full h-full object-cover" 
+                      className="w-full h-full object-cover grayscale-[20%]" 
                       autoPlay 
                       loop 
                       muted 
@@ -170,64 +174,54 @@ const TrainingPage: React.FC<TrainingPageProps> = ({ technique, trainingStartTim
                 ) : (
                     <img 
                       src={stepData.imageUrl || technique.imageUrl} 
-                      className="w-full h-full object-cover opacity-90" 
-                      alt="Step Visualization"
+                      className="w-full h-full object-cover grayscale-[20%]" 
+                      alt="Procedure Visual"
                     />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
             </div>
         </div>
       </div>
 
-      {/* Modern Open Footer Navigation - Updated Padding for Precise Positioning */}
-      <footer className="fixed bottom-0 left-0 right-0 h-24 md:h-32 flex items-center justify-between px-12 sm:px-20 md:px-44 z-[100] pointer-events-none">
+      {/* Persistent Bottom Navigation */}
+      <footer className="fixed bottom-0 left-0 right-0 h-28 sm:h-32 flex items-center justify-between px-8 sm:px-16 md:px-24 z-50 pointer-events-none">
           
-          {/* Left: Exit + Timer Combined - Pulled inwards from left wall */}
-          <div className="flex items-center gap-2 sm:gap-4 pointer-events-auto">
+          {/* Left: Exit + Timer */}
+          <div className="flex items-center gap-4 sm:gap-8 pointer-events-auto">
             <button 
               onClick={onExit} 
-              className="text-[9px] md:text-[10px] font-black text-red-500 hover:text-red-400 uppercase tracking-widest transition-all whitespace-nowrap"
+              className="text-[10px] font-black text-red-500 hover:text-red-400 uppercase tracking-[0.4em] transition-all drop-shadow-md"
             >
-              Exit
+              EXIT
             </button>
-            <div className="h-6 w-[1px] bg-white/5 hidden sm:block"></div>
+            <div className="h-6 w-px bg-white/10 hidden sm:block"></div>
             <LiveTimer startTime={trainingStartTime} />
           </div>
           
-          {/* Right: Step Navigation - Pulled inwards from right wall */}
-          <div className="flex items-center gap-3 sm:gap-6 pointer-events-auto">
+          {/* Right: Step Navigation */}
+          <div className="flex items-center gap-4 sm:gap-6 pointer-events-auto">
               <button 
                 onClick={handlePrev} 
                 disabled={currentStep === 0} 
-                className="h-10 w-10 md:h-12 md:w-12 flex items-center justify-center rounded-full border border-white/10 text-white disabled:opacity-5 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all active:scale-90"
+                className="h-12 w-12 flex items-center justify-center rounded-full border border-white/10 text-white disabled:opacity-0 bg-white/5 backdrop-blur-3xl hover:bg-white/10 transition-all active:scale-90"
               >
-                  <ChevronLeftIcon className="w-4 h-4" />
+                  <ChevronLeftIcon className="w-5 h-5" />
               </button>
               <button 
                 onClick={handleNext} 
-                className="h-10 md:h-12 px-6 md:px-14 bg-white text-black rounded-full flex items-center gap-2 md:gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_15px_40px_rgba(255,255,255,0.15)]"
+                className="h-12 sm:h-14 px-8 sm:px-16 bg-white text-black rounded-full flex items-center gap-4 hover:bg-silver active:scale-95 transition-all shadow-2xl"
               >
-                  <span className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.15em] md:tracking-[0.2em] whitespace-nowrap">
-                    {currentStep === totalSteps - 1 ? 'Finish Module' : 'Next'}
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] whitespace-nowrap">
+                    {currentStep === totalSteps - 1 ? 'Complete' : 'Advance'}
                   </span>
-                  <ChevronRightIcon className="w-3 md:w-3.5 h-3 md:h-3.5" />
+                  <ChevronRightIcon className="w-4 h-4" />
               </button>
           </div>
       </footer>
 
       <style>{`
-        @keyframes fade-in-up {
-          0% { opacity: 0; transform: translateY(20px); filter: blur(4px); }
-          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @media (max-width: 400px) {
-          .xs\\:block { display: none; }
-        }
       `}</style>
     </div>
   );
