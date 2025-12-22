@@ -89,6 +89,55 @@ const App: React.FC = () => {
     setCurrentPage('ROLE_SELECTION');
   }, [resetTrainingState]);
 
+  // NEW: Save Training Progress to Backend
+  const handleTrainingComplete = useCallback(async () => {
+    if (!currentUserId || !selectedTechnique) return;
+
+    const techniqueData = {
+        techniqueId: selectedTechnique.id,
+        techniqueTitle: selectedTechnique.title,
+        completedAt: Date.now(),
+        stepTimings: stepTimings,
+        totalTime: stepTimings.reduce((a, b) => a + b, 0)
+    };
+
+    try {
+        await api.saveCompletedTechnique(currentUserId, techniqueData);
+        setCurrentPage('COMPLETED');
+    } catch (err) {
+        console.error("Failed to save training progress:", err);
+        setCurrentPage('COMPLETED'); // Navigate anyway, but log error
+    }
+  }, [currentUserId, selectedTechnique, stepTimings]);
+
+  // NEW: Save Live Session to Backend
+  const handleFinishLiveSession = useCallback(async (videoUrl: string) => {
+    if (!currentUserId || !currentCustomer || !selectedLiveService) return;
+
+    const sessionData: CustomerSession = {
+        id: 'sess_' + Date.now(),
+        timestamp: Date.now(),
+        serviceName: 'Haircuts & Styling', // Main category
+        subService: selectedLiveService,    // e.g., "Cut & Blow Dry"
+        customerRequest: '',
+        customerDetails: currentCustomer,
+        stepTimings: liveSessionTimings,
+        images: [],
+        videoUrl: videoUrl,
+        rating: 0
+    };
+
+    try {
+        await api.saveCustomerSession(currentUserId, sessionData);
+        setSessionVideo(videoUrl);
+        setCurrentPage('LIVE_SESSION_COMPLETED');
+    } catch (err) {
+        console.error("Failed to save live session:", err);
+        setSessionVideo(videoUrl);
+        setCurrentPage('LIVE_SESSION_COMPLETED');
+    }
+  }, [currentUserId, currentCustomer, selectedLiveService, liveSessionTimings]);
+
   const handleGlobalBack = useCallback(() => {
     switch (currentPage) {
       case 'WELCOME':
@@ -194,7 +243,7 @@ const App: React.FC = () => {
       case 'TECHNIQUE':
         return selectedTechnique ? <TechniquePage technique={selectedTechnique} onStartTraining={(t) => { setTrainingStartTime(Date.now()); setCurrentPage('TRAINING'); }} onBack={handleGlobalBack} /> : null;
       case 'TRAINING':
-        return selectedTechnique && trainingStartTime ? <TrainingPage technique={selectedTechnique} trainingStartTime={trainingStartTime} onStepComplete={(d) => setStepTimings(prev => [...prev, d])} onComplete={() => setCurrentPage('COMPLETED')} onExit={() => setCurrentPage('HOME')} /> : null;
+        return selectedTechnique && trainingStartTime ? <TrainingPage technique={selectedTechnique} trainingStartTime={trainingStartTime} onStepComplete={(d) => setStepTimings(prev => [...prev, d])} onComplete={handleTrainingComplete} onExit={() => setCurrentPage('HOME')} /> : null;
       case 'COMPLETED':
         return selectedTechnique ? <CompletionPage technique={selectedTechnique} stepTimings={stepTimings} onRestart={() => { setStepTimings([]); setTrainingStartTime(Date.now()); setCurrentPage('TRAINING'); }} onBackToLibrary={() => setCurrentPage('HOME')} /> : null;
       case 'CUSTOMER_DETAILS':
@@ -204,7 +253,7 @@ const App: React.FC = () => {
       case 'HAIRCUTS_SELECTION':
         return <HaircutsSelectionPage onStartSession={(s) => { setSelectedLiveService(s); setCurrentPage('LIVE_SESSION'); }} onBack={handleGlobalBack} />;
       case 'LIVE_SESSION':
-        return selectedLiveService ? <LiveSessionPage serviceName={selectedLiveService} onStepComplete={(d) => setLiveSessionTimings(p => [...p, d])} onFinishSession={(video) => { setSessionVideo(video); setCurrentPage('LIVE_SESSION_COMPLETED'); }} onExit={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onBack={handleGlobalBack} /> : null;
+        return selectedLiveService ? <LiveSessionPage serviceName={selectedLiveService} onStepComplete={(d) => setLiveSessionTimings(p => [...p, d])} onFinishSession={handleFinishLiveSession} onExit={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onBack={handleGlobalBack} /> : null;
       case 'LIVE_SESSION_COMPLETED':
         return selectedLiveService ? <LiveSessionCompletionPage serviceName={selectedLiveService} stepTimings={liveSessionTimings} customerDetails={currentCustomer} sessionImages={[]} videoUrl={sessionVideo} onBackToMenu={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onNewCustomer={() => setCurrentPage('CUSTOMER_DETAILS')} /> : null;
       case 'ADMIN': 
