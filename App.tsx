@@ -23,19 +23,19 @@ import LiveSessionPage from './pages/LiveSessionPage';
 import LiveSessionCompletionPage from './pages/LiveSessionCompletionPage';
 import { api } from './services/api';
 
-
 type StepTimings = number[];
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>('ROLE_SELECTION');
   const [userRole, setUserRole] = useState<UserRole>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [authRole, setAuthRole] = useState<'admin' | 'candidate'>('candidate');
 
   const [trainingMode, setTrainingMode] = useState<'virtual' | 'live'>('virtual');
   const [selectedTechnique, setSelectedTechnique] = useState<Technique | null>(null);
   const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null);
   const [stepTimings, setStepTimings] = useState<StepTimings>([]);
-  
+
   // Live Session State
   const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
   const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
@@ -44,11 +44,9 @@ const App: React.FC = () => {
 
   // Admin State
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
-  const [selectedCustomerSession, setSelectedCustomerSession] = useState<CustomerSession | null>(null);
+  const [selectedSession, setSelectedSession] = useState<CustomerSession | null>(null);
 
-  // Initialize Data
   useEffect(() => {
-    // Restore Session
     const savedUserId = localStorage.getItem('currentUserId');
     const savedUserRole = localStorage.getItem('userRole') as UserRole;
     if (savedUserId && savedUserRole) {
@@ -68,155 +66,32 @@ const App: React.FC = () => {
   }, []);
 
   const handleNavigate = useCallback((page: Page) => {
-    if (currentPage === 'TECHNIQUE' || currentPage === 'TRAINING' || currentPage === 'LIVE_SESSION') {
-        setSelectedTechnique(null);
-        setSelectedLiveService(null);
-        resetTrainingState();
-    }
     setCurrentPage(page);
-  }, [currentPage, resetTrainingState]);
-
-  const handleSelectTechnique = useCallback((technique: Technique) => {
-    setSelectedTechnique(technique);
-    setCurrentPage('TECHNIQUE');
-  }, []);
-
-  const handleStartTraining = useCallback((technique: Technique) => {
-    setSelectedTechnique(technique);
-    setTrainingStartTime(Date.now());
-    setStepTimings([]);
-    setCurrentPage('TRAINING');
-  }, []);
-  
-  const handleBackToHome = useCallback(() => {
-    setSelectedTechnique(null);
-    setCurrentPage('HOME');
-    resetTrainingState();
-  }, [resetTrainingState]);
-
-  const handleStepComplete = useCallback((duration: number) => {
-    setStepTimings(prev => [...prev, duration]);
-  }, []);
-
-  const handleCompleteTraining = useCallback(async (technique: Technique) => {
-    if (trainingStartTime && currentUserId) {
-        const totalTime = stepTimings.reduce((a, b) => a + b, 0);
-        await api.saveCompletedTechnique(currentUserId, {
-            techniqueId: technique.id,
-            techniqueTitle: technique.title,
-            completedAt: Date.now(),
-            stepTimings: stepTimings,
-            totalTime: totalTime
-        });
-    }
-    setCurrentPage('COMPLETED');
-  }, [stepTimings, trainingStartTime, currentUserId]);
-  
-  const handleLoginSuccess = useCallback((userId: string, role: UserRole) => {
-    setCurrentUserId(userId);
-    setUserRole(role);
-    localStorage.setItem('currentUserId', userId);
-    if (role) localStorage.setItem('userRole', role);
-
-    if (role === 'admin') {
-        setCurrentPage('ADMIN');
-    } else {
-        setCurrentPage('MODE_SELECTION');
-    }
   }, []);
 
   const handleModeSelect = useCallback((mode: 'with-customer' | 'without-customer') => {
-      if (mode === 'without-customer') {
-          setTrainingMode('virtual');
-          setCurrentPage('WELCOME');
-      } else {
-          setTrainingMode('live');
-          setCurrentPage('CUSTOMER_WELCOME');
-      }
-  }, []);
-  
-  const handleExploreServices = useCallback(() => {
-    setCurrentPage('SERVICE_SELECTION');
+      setTimeout(() => {
+        if (mode === 'without-customer') {
+            setTrainingMode('virtual');
+            setCurrentPage('WELCOME');
+        } else {
+            setTrainingMode('live');
+            setCurrentPage('CUSTOMER_WELCOME');
+        }
+      }, 600); 
   }, []);
 
-  const handleDiveIntoCustomerService = useCallback(() => {
-    setCurrentPage('CUSTOMER_DETAILS');
-  }, []);
-
-  const handleCustomerDetailsSubmit = useCallback((details: CustomerDetails) => {
-    setCurrentCustomer(details);
-    setCurrentPage('CUSTOMER_SERVICE_MENU');
-  }, []);
-
-  const handleServiceSelect = useCallback((serviceId: string) => {
-      if (serviceId === 'hair-training') {
-          setCurrentPage('HOME');
-      } else if (serviceId === 'haircuts-styling') {
-          setCurrentPage('HAIRCUTS_SELECTION');
-      } else {
-          alert("Details for this service will be added in the next update.");
-      }
-  }, []);
-
-  const handleStartSession = useCallback((subService: string) => {
-      setSelectedLiveService(subService);
-      setLiveSessionTimings([]);
-      setSessionImages([]);
-      setCurrentPage('LIVE_SESSION');
-  }, []);
-  
-  const handleLiveSessionStepComplete = useCallback((duration: number) => {
-      setLiveSessionTimings(prev => [...prev, duration]);
-  }, []);
-
-  const handleLiveSessionFinish = useCallback(async (images: SessionImage[]) => {
-      setSessionImages(images);
-      
-      if (selectedLiveService && currentCustomer && currentUserId) {
-           await api.saveCustomerSession(currentUserId, {
-               id: `sess_${Date.now()}`,
-               timestamp: Date.now(),
-               serviceName: 'Haircuts & Styling',
-               subService: selectedLiveService,
-               customerRequest: '', 
-               customerDetails: currentCustomer,
-               stepTimings: liveSessionTimings,
-               images: images,
-               rating: 0 
-           });
-      }
-
-      setCurrentPage('LIVE_SESSION_COMPLETED');
-  }, [selectedLiveService, currentCustomer, liveSessionTimings, currentUserId]);
-
-  const handleBackToCustomerMenu = useCallback(() => {
-      setSelectedLiveService(null);
-      setLiveSessionTimings([]);
-      setSessionImages([]);
-      setCurrentPage('CUSTOMER_SERVICE_MENU');
-  }, []);
-
-  const handleNewCustomer = useCallback(() => {
-      setSelectedLiveService(null);
-      setLiveSessionTimings([]);
-      setCurrentCustomer(null);
-      setSessionImages([]);
-      setCurrentPage('CUSTOMER_DETAILS');
-  }, []);
+  const handleSignOut = useCallback(() => {
+    localStorage.removeItem('currentUserId');
+    localStorage.removeItem('userRole');
+    setUserRole(null);
+    setCurrentUserId(null);
+    resetTrainingState();
+    setCurrentPage('ROLE_SELECTION');
+  }, [resetTrainingState]);
 
   const handleGlobalBack = useCallback(() => {
     switch (currentPage) {
-      case 'TECHNIQUE':
-      case 'TRAINING':
-      case 'COMPLETED':
-        handleBackToHome();
-        break;
-      case 'HOME':
-        setCurrentPage('SERVICE_SELECTION');
-        break;
-      case 'SERVICE_SELECTION':
-        setCurrentPage('WELCOME');
-        break;
       case 'WELCOME':
       case 'CUSTOMER_WELCOME':
         setCurrentPage('MODE_SELECTION');
@@ -224,17 +99,32 @@ const App: React.FC = () => {
       case 'CUSTOMER_DETAILS':
         setCurrentPage('CUSTOMER_WELCOME');
         break;
-      case 'CUSTOMER_SERVICE_MENU':
-        setCurrentPage('CUSTOMER_DETAILS');
+      case 'HOME':
+        setCurrentPage('SERVICE_SELECTION');
+        break;
+      case 'SERVICE_SELECTION':
+        setCurrentPage('WELCOME');
+        break;
+      case 'TECHNIQUE':
+        setCurrentPage('HOME');
+        break;
+      case 'TRAINING':
+        setCurrentPage('TECHNIQUE');
         break;
       case 'HAIRCUTS_SELECTION':
         setCurrentPage('CUSTOMER_SERVICE_MENU');
         break;
+      case 'CUSTOMER_SERVICE_MENU':
+        setCurrentPage('CUSTOMER_DETAILS');
+        break;
       case 'LIVE_SESSION':
-        handleBackToCustomerMenu();
+        setCurrentPage('HAIRCUTS_SELECTION');
         break;
       case 'LIVE_SESSION_COMPLETED':
-        handleNewCustomer();
+        setCurrentPage('CUSTOMER_SERVICE_MENU');
+        break;
+      case 'COMPLETED':
+        setCurrentPage('HOME');
         break;
       case 'ADMIN_CANDIDATE_DETAILS':
         setCurrentPage('ADMIN');
@@ -243,53 +133,12 @@ const App: React.FC = () => {
         setCurrentPage('ADMIN_CANDIDATE_DETAILS');
         break;
       default:
-        // Already at root or no mapping
         break;
     }
-  }, [currentPage, handleBackToHome, handleBackToCustomerMenu, handleNewCustomer]);
-
-  const handleSelectCandidate = useCallback((candidateId: string) => {
-      setSelectedCandidateId(candidateId);
-      setCurrentPage('ADMIN_CANDIDATE_DETAILS');
-  }, []);
-
-  const handleSelectSession = useCallback((session: CustomerSession) => {
-      setSelectedCustomerSession(session);
-      setCurrentPage('ADMIN_SESSION_DETAILS');
-  }, []);
-
-  const handleNavigateToCreateId = useCallback((role: UserRole) => {
-    setUserRole(role);
-    setCurrentPage('CREATE_ID');
-  }, []);
-  
-  const handleCreateId = useCallback(() => {
-    setCurrentPage('ROLE_SELECTION');
-  }, []);
-
-  const handleNavigateToForgotPassword = useCallback((role: UserRole) => {
-    setUserRole(role);
-    setCurrentPage('FORGOT_PASSWORD');
-  }, []);
-  
-  const handlePasswordReset = useCallback(() => {
-    setCurrentPage('ROLE_SELECTION');
-  }, []);
-
-  const handleSignOut = useCallback(() => {
-    localStorage.removeItem('currentUserId');
-    localStorage.removeItem('userRole');
-    setUserRole(null);
-    setCurrentUserId(null);
-    setSelectedTechnique(null);
-    setTrainingMode('virtual');
-    resetTrainingState();
-    setCurrentPage('ROLE_SELECTION');
-  }, [resetTrainingState]);
+  }, [currentPage]);
 
   const showHeader = [
-    'WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION', 'ADMIN', 
-    'ADMIN_CANDIDATE_DETAILS', 'ADMIN_SESSION_DETAILS', 'HOME', 
+    'WELCOME', 'MODE_SELECTION', 'SERVICE_SELECTION', 'HOME', 
     'TECHNIQUE', 'TRAINING', 'COMPLETED',
     'CUSTOMER_WELCOME', 'CUSTOMER_DETAILS', 'CUSTOMER_SERVICE_MENU', 
     'HAIRCUTS_SELECTION', 'LIVE_SESSION', 'LIVE_SESSION_COMPLETED'
@@ -299,132 +148,92 @@ const App: React.FC = () => {
     switch (currentPage) {
       case 'ROLE_SELECTION':
         return (
-          <AuthPage 
-            onLoginSuccess={handleLoginSuccess}
-            onNavigateToCreateId={handleNavigateToCreateId}
-            onNavigateToForgotPassword={handleNavigateToForgotPassword}
-          />
+            <AuthPage 
+                onLoginSuccess={(uid, role) => { 
+                    setCurrentUserId(uid); 
+                    setUserRole(role); 
+                    localStorage.setItem('currentUserId', uid);
+                    localStorage.setItem('userRole', role || '');
+                    setCurrentPage(role === 'admin' ? 'ADMIN' : 'MODE_SELECTION'); 
+                }} 
+                onNavigateToCreateId={(role) => {
+                    setAuthRole(role as 'admin' | 'candidate');
+                    setCurrentPage('CREATE_ID');
+                }} 
+                onNavigateToForgotPassword={(role) => {
+                    setAuthRole(role as 'admin' | 'candidate');
+                    setCurrentPage('FORGOT_PASSWORD');
+                }} 
+            />
         );
       case 'CREATE_ID':
-        return <CreateIdPage role={userRole || 'candidate'} onCreateId={handleCreateId} onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} />;
+        return (
+            <CreateIdPage 
+                role={authRole} 
+                onCreateId={() => setCurrentPage('ROLE_SELECTION')} 
+                onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} 
+            />
+        );
       case 'FORGOT_PASSWORD':
-        return <ForgotPasswordPage role={userRole || 'candidate'} onSubmit={handlePasswordReset} onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} />;
+        return (
+            <ForgotPasswordPage 
+                role={authRole} 
+                onSubmit={() => setCurrentPage('ROLE_SELECTION')} 
+                onNavigateToLogin={() => setCurrentPage('ROLE_SELECTION')} 
+            />
+        );
       case 'MODE_SELECTION':
         return <ModeSelectionPage onSelect={handleModeSelect} />;
       case 'WELCOME':
-        return <WelcomePage onExplore={handleExploreServices} onBack={() => setCurrentPage('MODE_SELECTION')} />;
-      case 'SERVICE_SELECTION':
-        return <ServiceSelectionPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('WELCOME')} />;
+        return <WelcomePage onExplore={() => setCurrentPage('SERVICE_SELECTION')} onBack={handleGlobalBack} />;
       case 'CUSTOMER_WELCOME':
-        return <CustomerServiceWelcomePage onDive={handleDiveIntoCustomerService} onBack={() => setCurrentPage('MODE_SELECTION')} />;
-      case 'CUSTOMER_DETAILS':
-        return <CustomerDetailsPage onNext={handleCustomerDetailsSubmit} onBack={() => setCurrentPage('CUSTOMER_WELCOME')} />;
-      case 'CUSTOMER_SERVICE_MENU':
-        return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
-      case 'HAIRCUTS_SELECTION':
-        return <HaircutsSelectionPage onStartSession={handleStartSession} onBack={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} />;
+        return <CustomerServiceWelcomePage onDive={() => setCurrentPage('CUSTOMER_DETAILS')} onBack={handleGlobalBack} />;
+      case 'SERVICE_SELECTION':
+        return <ServiceSelectionPage onSelectService={(id) => id === 'hair-training' ? setCurrentPage('HOME') : alert('Coming Soon')} onBack={handleGlobalBack} />;
       case 'HOME':
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return <HomePage onSelectTechnique={(t) => { setSelectedTechnique(t); setCurrentPage('TECHNIQUE'); }} onBack={handleGlobalBack} />;
       case 'TECHNIQUE':
-        if (selectedTechnique) {
-          return (
-            <TechniquePage
-              technique={selectedTechnique}
-              onStartTraining={handleStartTraining}
-              onBack={handleBackToHome}
-            />
-          );
-        }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return selectedTechnique ? <TechniquePage technique={selectedTechnique} onStartTraining={(t) => { setTrainingStartTime(Date.now()); setCurrentPage('TRAINING'); }} onBack={handleGlobalBack} /> : null;
       case 'TRAINING':
-         if (selectedTechnique && trainingStartTime) {
-          return (
-            <TrainingPage
-              technique={selectedTechnique}
-              trainingStartTime={trainingStartTime}
-              onStepComplete={handleStepComplete}
-              onComplete={() => handleCompleteTraining(selectedTechnique)}
-              onExit={handleBackToHome}
-            />
-          );
-        }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
+        return selectedTechnique && trainingStartTime ? <TrainingPage technique={selectedTechnique} trainingStartTime={trainingStartTime} onStepComplete={(d) => setStepTimings(prev => [...prev, d])} onComplete={() => setCurrentPage('COMPLETED')} onExit={() => setCurrentPage('HOME')} /> : null;
       case 'COMPLETED':
-         if (selectedTechnique) {
-          return (
-            <CompletionPage
-              technique={selectedTechnique}
-              stepTimings={stepTimings}
-              onRestart={() => handleStartTraining(selectedTechnique)}
-              onBackToLibrary={handleBackToHome}
-            />
-          );
-        }
-        return <HomePage onSelectTechnique={handleSelectTechnique} onBack={() => setCurrentPage('SERVICE_SELECTION')} />;
-      
-      case 'ADMIN':
-          return <AdminPage onSelectCandidate={handleSelectCandidate} />;
-      case 'ADMIN_CANDIDATE_DETAILS':
-          if (selectedCandidateId) {
-            return (
-                <AdminCandidateDetailsPage 
-                    candidateId={selectedCandidateId} 
-                    onBack={() => setCurrentPage('ADMIN')}
-                    onSelectSession={handleSelectSession}
-                />
-            );
-          }
-          return <AdminPage onSelectCandidate={handleSelectCandidate} />;
-      case 'ADMIN_SESSION_DETAILS':
-          if (selectedCustomerSession) {
-              return (
-                  <AdminSessionDetailsPage 
-                    session={selectedCustomerSession} 
-                    onBack={() => setCurrentPage('ADMIN_CANDIDATE_DETAILS')}
-                  />
-              );
-          }
-          return <AdminPage onSelectCandidate={handleSelectCandidate} />;
-
+        return selectedTechnique ? <CompletionPage technique={selectedTechnique} stepTimings={stepTimings} onRestart={() => { setStepTimings([]); setTrainingStartTime(Date.now()); setCurrentPage('TRAINING'); }} onBackToLibrary={() => setCurrentPage('HOME')} /> : null;
+      case 'CUSTOMER_DETAILS':
+        return <CustomerDetailsPage onNext={(d) => { setCurrentCustomer(d); setCurrentPage('CUSTOMER_SERVICE_MENU'); }} onBack={handleGlobalBack} />;
+      case 'CUSTOMER_SERVICE_MENU':
+        return <CustomerServiceMenuPage onSelectService={(id) => id === 'haircuts-styling' ? setCurrentPage('HAIRCUTS_SELECTION') : alert('Coming Soon')} onBack={handleGlobalBack} />;
+      case 'HAIRCUTS_SELECTION':
+        return <HaircutsSelectionPage onStartSession={(s) => { setSelectedLiveService(s); setCurrentPage('LIVE_SESSION'); }} onBack={handleGlobalBack} />;
       case 'LIVE_SESSION':
-          if (selectedLiveService) {
-              return (
-                  <LiveSessionPage
-                    serviceName={selectedLiveService}
-                    onStepComplete={handleLiveSessionStepComplete}
-                    onFinishSession={handleLiveSessionFinish}
-                    onExit={handleBackToCustomerMenu}
-                  />
-              );
-          }
-          return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
+        return selectedLiveService ? <LiveSessionPage serviceName={selectedLiveService} onStepComplete={(d) => setLiveSessionTimings(p => [...p, d])} onFinishSession={(img) => { setSessionImages(img); setCurrentPage('LIVE_SESSION_COMPLETED'); }} onExit={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onBack={handleGlobalBack} /> : null;
       case 'LIVE_SESSION_COMPLETED':
-          if (selectedLiveService) {
-              return (
-                  <LiveSessionCompletionPage
-                      serviceName={selectedLiveService}
-                      stepTimings={liveSessionTimings}
-                      customerDetails={currentCustomer}
-                      sessionImages={sessionImages}
-                      onBackToMenu={handleBackToCustomerMenu}
-                      onNewCustomer={handleNewCustomer}
-                  />
-              );
-          }
-          return <CustomerServiceMenuPage onSelectService={handleServiceSelect} onBack={() => setCurrentPage('CUSTOMER_DETAILS')} />;
-      default:
-        return (
-          <AuthPage 
-            onLoginSuccess={handleLoginSuccess}
-            onNavigateToCreateId={handleNavigateToCreateId}
-            onNavigateToForgotPassword={handleNavigateToForgotPassword}
+        return selectedLiveService ? <LiveSessionCompletionPage serviceName={selectedLiveService} stepTimings={liveSessionTimings} customerDetails={currentCustomer} sessionImages={sessionImages} onBackToMenu={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onNewCustomer={() => setCurrentPage('CUSTOMER_DETAILS')} /> : null;
+      case 'ADMIN': 
+        return <AdminPage onSelectCandidate={(id) => { setSelectedCandidateId(id); setCurrentPage('ADMIN_CANDIDATE_DETAILS'); }} onSignOut={handleSignOut} />;
+      case 'ADMIN_CANDIDATE_DETAILS':
+        return selectedCandidateId ? (
+            <AdminCandidateDetailsPage 
+                candidateId={selectedCandidateId} 
+                onBack={handleGlobalBack}
+                onSignOut={handleSignOut}
+                onSelectSession={(session) => { setSelectedSession(session); setCurrentPage('ADMIN_SESSION_DETAILS'); }} 
+            />
+        ) : null;
+      case 'ADMIN_SESSION_DETAILS':
+        return selectedSession ? (
+          <AdminSessionDetailsPage 
+            session={selectedSession} 
+            onBack={handleGlobalBack} 
+            onSignOut={handleSignOut}
           />
-        );
+        ) : null;
+      default: 
+        return <AuthPage onLoginSuccess={(uid, role) => { setCurrentUserId(uid); setUserRole(role); setCurrentPage(role === 'admin' ? 'ADMIN' : 'MODE_SELECTION'); }} onNavigateToCreateId={(r) => { setAuthRole(r as 'admin' | 'candidate'); setCurrentPage('CREATE_ID'); }} onNavigateToForgotPassword={(r) => { setAuthRole(r as 'admin' | 'candidate'); setCurrentPage('FORGOT_PASSWORD'); }} />;
     }
   };
 
   return (
-    <div className="antialiased text-black bg-white flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen w-full overflow-hidden relative">
       {showHeader && (
         <Header 
             userRole={userRole} 
@@ -434,9 +243,11 @@ const App: React.FC = () => {
             onBack={handleGlobalBack}
         />
       )}
-      <div className={`flex-1 flex flex-col ${showHeader ? 'pt-28' : ''}`}>
-        {renderContent()}
-      </div>
+      <main className="flex-1 w-full relative">
+        <div key={currentPage} className="h-full w-full">
+            {renderContent()}
+        </div>
+      </main>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeftIcon, CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon, ChevronDownIcon } from '../components/AppIcons';
+import { CalendarIcon, ClockIcon, UserCircleIcon, UserGroupIcon, ChevronDownIcon } from '../components/AppIcons';
 import { CustomerDetails } from '../types';
 
 interface CustomerDetailsPageProps {
@@ -56,172 +56,191 @@ const CustomerDetailsPage: React.FC<CustomerDetailsPageProps> = ({ onNext, onBac
   };
 
   return (
-    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4 animate-fade-in relative">
-      <div className="max-w-lg w-full">
-        <div className="mb-8 sm:mb-10 text-center animate-slide-up">
-             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter mb-2">
-                Customer Details
-             </h1>
-             <p className="text-gray-500 text-sm sm:text-base">
-                Customer requirements.
-             </p>
-        </div>
+    <div className="fixed inset-0 w-full h-full flex items-center justify-center p-4 animate-fade-in bg-black overflow-y-auto custom-scrollbar">
+      
+      {/* CINEMATIC BACKGROUND */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 opacity-50"
+          style={{ 
+            backgroundImage: `url("/images/service-bg.jpeg")`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Dark dim overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/50 to-black/95 z-[1]" />
+        <div className="absolute inset-0 backdrop-blur-[1px] z-[2]" />
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+      <div className="relative z-10 w-full max-w-md pt-32 pb-16 px-4">
+        {/* FLOATING CONTENT */}
+        <div className="animate-fade-in-up">
             
-            {/* Customer Name */}
-            <div className="space-y-1 sm:space-y-2">
-                <label className="block text-sm font-semibold text-black">Customer Name</label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <UserCircleIcon className="h-5 w-5 text-gray-400" />
-                    </div>
-                    <input 
-                        type="text" 
-                        className="block w-full pl-10 pr-3 py-3 border border-gray-300 bg-white rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
-                        placeholder="Enter client's full name"
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        required
-                    />
-                </div>
+            <div className="mb-10 text-center">
+                 <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tighter mb-2 uppercase drop-shadow-lg">
+                    Customer Details
+                 </h1>
+                 <p className="text-white/40 text-[9px] font-black uppercase tracking-[0.4em] drop-shadow-md">
+                    Consultation Requirements
+                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Date */}
-                <div className="space-y-1 sm:space-y-2">
-                    <label className="block text-sm font-semibold text-black">Date</label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <CalendarIcon className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input 
-                            type="date" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 bg-white rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-
-                {/* Time */}
-                <div className="space-y-1 sm:space-y-2">
-                    <label className="block text-sm font-semibold text-black">Time</label>
-                    <div className="relative">
-                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <ClockIcon className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input 
-                            type="time" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 bg-white rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-            </div>
-
-             {/* Duration Dropdown with Tooltip */}
-             <div className="space-y-1 sm:space-y-2 relative">
-                <div className="flex items-center gap-2">
-                    <label className="block text-sm font-semibold text-black">Service Duration (Minutes)</label>
-                    <div className="relative">
-                        <button 
-                            type="button"
-                            onMouseEnter={() => setShowTooltip(true)}
-                            onMouseLeave={() => setShowTooltip(false)}
-                            onClick={() => setShowTooltip(!showTooltip)}
-                            className="w-4 h-4 rounded-full border border-gray-400 text-gray-500 text-[10px] flex items-center justify-center hover:bg-gray-100"
-                        >
-                            i
-                        </button>
-                        {showTooltip && (
-                            <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 w-48 bg-black text-white text-xs p-2 rounded shadow-lg z-10 pointer-events-none">
-                                Select 0 if customer doesn't request any specific duration
-                                <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-2 h-2 bg-black rotate-45"></div>
-                            </div>
-                        )}
-                    </div>
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
                 
-                <div className="relative">
-                    <select 
-                        value={duration}
-                        onChange={(e) => setDuration(e.target.value)}
-                        className="block w-full px-4 py-3 border border-gray-300 bg-white rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base appearance-none cursor-pointer"
-                    >
-                        <option value="0">0 Minutes (No Request)</option>
-                        <option value="10">10 Minutes</option>
-                        <option value="30">30 Minutes</option>
-                        <option value="60">60 Minutes</option>
-                        <option value="90">90 Minutes</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDownIcon className="w-4 h-4 text-gray-500" />
-                    </div>
-                </div>
-            </div>
-
-            {/* Membership Toggle */}
-            <div className="space-y-1 sm:space-y-2">
-                <label className="block text-sm font-semibold text-black">Member?</label>
-                <div className="flex gap-4">
-                    <button
-                        type="button"
-                        onClick={() => setIsMember(true)}
-                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 text-sm sm:text-base ${
-                            isMember 
-                            ? 'bg-black text-white border-black' 
-                            : 'bg-white text-gray-500 border-gray-300 hover:border-black'
-                        }`}
-                    >
-                        Yes
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => { setIsMember(false); setMemberId(''); }}
-                        className={`flex-1 py-3 px-4 rounded-lg border font-medium transition-all duration-200 text-sm sm:text-base ${
-                            !isMember 
-                            ? 'bg-black text-white border-black' 
-                            : 'bg-white text-gray-500 border-gray-300 hover:border-black'
-                        }`}
-                    >
-                        No
-                    </button>
-                </div>
-            </div>
-
-            {/* Member ID Input (Conditional) */}
-            {isMember && (
-                <div className="space-y-1 sm:space-y-2 animate-slide-up">
-                    <label className="block text-sm font-semibold text-black">Member ID</label>
+                {/* Customer Name */}
+                <div className="space-y-1.5">
+                    <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Customer Name</label>
                     <div className="relative">
-                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <UserGroupIcon className="h-5 w-5 text-gray-400" />
+                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <UserCircleIcon className="h-4 w-4 text-white/20" />
                         </div>
                         <input 
                             type="text" 
-                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 bg-white rounded-lg text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all text-sm sm:text-base" 
-                            placeholder="Enter member ID"
-                            value={memberId}
-                            onChange={(e) => setMemberId(e.target.value)}
-                            required={isMember}
+                            className="block w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-sm text-white placeholder-white/10 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-semibold shadow-xl" 
+                            placeholder="Enter client's full name"
+                            value={customerName}
+                            onChange={(e) => setCustomerName(e.target.value)}
+                            required
                         />
                     </div>
                 </div>
-            )}
 
-            <div className="pt-6">
-                <button
-                    type="submit"
-                    className="w-full flex items-center justify-center py-3 sm:py-4 px-8 border border-transparent rounded-full shadow-lg text-sm sm:text-base font-bold text-white bg-black hover:bg-gray-800 transition-colors"
-                >
-                    Select Service
-                </button>
-            </div>
-        </form>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Date */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Date</label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <CalendarIcon className="h-4 w-4 text-white/20" />
+                            </div>
+                            <input 
+                                type="date" 
+                                className="block w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-semibold [color-scheme:dark] shadow-xl" 
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    {/* Time */}
+                    <div className="space-y-1.5">
+                        <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Time</label>
+                        <div className="relative">
+                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <ClockIcon className="h-4 w-4 text-white/20" />
+                            </div>
+                            <input 
+                                type="time" 
+                                className="block w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-semibold [color-scheme:dark] shadow-xl" 
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                 {/* Duration Dropdown */}
+                 <div className="space-y-1.5 relative">
+                    <div className="flex items-center gap-2">
+                        <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Service Duration</label>
+                        <div className="relative">
+                            <button 
+                                type="button"
+                                onMouseEnter={() => setShowTooltip(true)}
+                                onMouseLeave={() => setShowTooltip(false)}
+                                className="w-3.5 h-3.5 rounded-full border border-white/20 text-white/30 text-[8px] flex items-center justify-center hover:bg-white/10 transition-colors"
+                            >
+                                i
+                            </button>
+                            {showTooltip && (
+                                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 w-40 bg-white text-black text-[8px] font-bold uppercase p-2.5 rounded-lg shadow-2xl z-50 pointer-events-none tracking-wider">
+                                    Select 0 if customer doesn't request specific duration
+                                    <div className="absolute left-0 top-1/2 -translate-x-1 -translate-y-1/2 w-1.5 h-1.5 bg-white rotate-45"></div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                    
+                    <div className="relative">
+                        <select 
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
+                            className="block w-full px-5 py-3.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-semibold appearance-none cursor-pointer shadow-xl"
+                        >
+                            <option value="0" className="bg-neutral-900">0 Minutes (No Request)</option>
+                            <option value="10" className="bg-neutral-900">10 Minutes</option>
+                            <option value="30" className="bg-neutral-900">30 Minutes</option>
+                            <option value="60" className="bg-neutral-900">60 Minutes</option>
+                            <option value="90" className="bg-neutral-900">90 Minutes</option>
+                        </select>
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <ChevronDownIcon className="w-3 h-3 text-white/30" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Membership Toggle */}
+                <div className="space-y-1.5">
+                    <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Member Status</label>
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => setIsMember(true)}
+                            className={`flex-1 py-3.5 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-lg ${
+                                isMember 
+                                ? 'bg-white text-black border-white shadow-[0_10px_20px_rgba(255,255,255,0.15)] scale-[1.02] z-10' 
+                                : 'bg-white/5 text-white/20 border-white/5 hover:border-white/10'
+                            }`}
+                        >
+                            Member
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setIsMember(false); setMemberId(''); }}
+                            className={`flex-1 py-3.5 px-4 rounded-xl border font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-lg ${
+                                !isMember 
+                                ? 'bg-white text-black border-white shadow-[0_10px_20px_rgba(255,255,255,0.15)] scale-[1.02] z-10' 
+                                : 'bg-white/5 text-white/20 border-white/5 hover:border-white/10'
+                            }`}
+                        >
+                            Guest
+                        </button>
+                    </div>
+                </div>
+
+                {/* Member ID Input (Conditional) */}
+                {isMember && (
+                    <div className="space-y-1.5 animate-fade-in-up">
+                        <label className="block text-[9px] font-black text-white/40 uppercase tracking-widest ml-1">Member ID</label>
+                        <div className="relative">
+                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <UserGroupIcon className="h-4 w-4 text-white/20" />
+                            </div>
+                            <input 
+                                type="text" 
+                                className="block w-full pl-12 pr-4 py-3.5 bg-white/10 backdrop-blur-md border border-white/10 rounded-xl text-xs text-white placeholder-white/10 focus:outline-none focus:ring-1 focus:ring-white/20 transition-all font-semibold shadow-xl" 
+                                placeholder="Enter member ID"
+                                value={memberId}
+                                onChange={(e) => setMemberId(e.target.value)}
+                                required={isMember}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <div className="pt-6">
+                    <button
+                        type="submit"
+                        className="w-full flex items-center justify-center py-4 bg-white text-black rounded-full shadow-[0_20px_40px_rgba(255,255,255,0.1)] text-[10px] font-black uppercase tracking-[0.3em] hover:scale-105 active:scale-95 transition-all"
+                    >
+                        Select Service
+                    </button>
+                </div>
+            </form>
+        </div>
       </div>
     </div>
   );

@@ -25,25 +25,36 @@
             },
             animation: {
               'subtle-pulse': 'subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-              'fade-in': 'fade-in 0.5s ease-out forwards',
-              'slide-up': 'slide-up 0.5s ease-out forwards',
-              'draw-check': 'draw-check 0.5s ease-out forwards 0.5s',
+              'fade-in': 'fade-in 2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-in-up': 'fade-in-up 2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'fade-out': 'fade-out 0.8s ease-in forwards',
+              'squeeze-in': 'squeeze-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              'slide-in-right': 'slide-in-right 0.8s cubic-bezier(0.2, 0, 0, 1) forwards',
+              'slide-in-left': 'slide-in-left 0.8s cubic-bezier(0.2, 0, 0, 1) forwards',
+              'zoom-in-bg': 'zoom-in-bg 1s cubic-bezier(0.2, 0, 0, 1) forwards',
             },
             keyframes: {
-              'subtle-pulse': {
-                '0%, 100%': { opacity: 0.7 },
-                '50%': { opacity: 1 },
+              'fade-in': { '0%': { opacity: 0 }, '100%': { opacity: 1 } },
+              'fade-in-up': { 
+                '0%': { opacity: 0, transform: 'translateY(20px)' }, 
+                '100%': { opacity: 1, transform: 'translateY(0)' } 
               },
-              'fade-in': {
-                '0%': { opacity: 0 },
-                '100%': { opacity: 1 },
+              'fade-out': { '0%': { opacity: 1 }, '100%': { opacity: 0 } },
+              'squeeze-in': {
+                '0%': { opacity: 0, transform: 'scaleX(0.7) scale(0.95)', filter: 'blur(10px)' },
+                '100%': { opacity: 1, transform: 'scaleX(1) scale(1)', filter: 'blur(0)' }
               },
-              'slide-up': {
-                '0%': { transform: 'translateY(20px)', opacity: 0 },
-                '100%': { transform: 'translateY(0)', opacity: 1 },
+              'slide-in-right': {
+                '0%': { transform: 'translateX(100%)', opacity: 0 },
+                '100%': { transform: 'translateX(0)', opacity: 1 }
               },
-              'draw-check': {
-                'to': { 'stroke-dashoffset': 0 }
+              'slide-in-left': {
+                '0%': { transform: 'translateX(-100%)', opacity: 0 },
+                '100%': { transform: 'translateX(0)', opacity: 1 }
+              },
+              'zoom-in-bg': {
+                '0%': { transform: 'scale(1.1)', opacity: 0.5 },
+                '100%': { transform: 'scale(1)', opacity: 1 }
               }
             }
           }
@@ -53,49 +64,33 @@
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <style>
-      html { font-family: 'Inter', sans-serif; }
-      @supports (font-variation-settings: normal) {
-        html { font-family: 'Inter var', sans-serif; }
+      html, body { 
+        font-family: 'Inter', sans-serif; 
+        background: black; 
+        color: white; 
+        overflow: hidden; 
+        height: 100%; 
+        width: 100%;
       }
-      .confetti-container {
-        position: relative;
-        overflow: hidden;
+      .glass-header {
+        background: rgba(255, 255, 255, 0.15); /* Significantly reduced transparency (increased opacity) */
+        backdrop-filter: blur(24px) saturate(200%); /* Enhanced blur for a premium look */
+        border: 1px solid rgba(255, 255, 255, 0.2); /* More prominent border */
       }
-      .confetti {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        background-color: #E5E7EB;
-        border-radius: 50%;
-        opacity: 0;
-        animation: confetti-fall 5s ease-out infinite;
-      }
-      @keyframes confetti-fall {
-        0% { transform: translateY(-100px) rotateZ(0deg); opacity: 1; }
-        100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; }
-      }
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background-color: #e5e7eb;
-        border-radius: 20px;
-      }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     </style>
-  <script type="importmap">
+<script type="importmap">
 {
   "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
   }
 }
 </script>
 </head>
-  <body class="bg-white transition-colors duration-300">
+  <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

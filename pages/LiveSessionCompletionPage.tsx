@@ -15,8 +15,8 @@ interface LiveSessionCompletionPageProps {
 
 const Confetti: React.FC = () => {
     return (
-        <div className="absolute inset-0 pointer-events-none">
-            {Array.from({ length: 50 }).map((_, i) => (
+        <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+            {Array.from({ length: 40 }).map((_, i) => (
                 <div
                     key={i}
                     className="confetti"
@@ -24,6 +24,7 @@ const Confetti: React.FC = () => {
                         left: `${Math.random() * 100}%`,
                         animationDelay: `${Math.random() * 5}s`,
                         transform: `scale(${Math.random() * 0.5 + 0.5})`,
+                        backgroundColor: i % 2 === 0 ? '#fff' : '#444'
                     }}
                 />
             ))}
@@ -44,16 +45,17 @@ const StarRating: React.FC = () => {
     const [hover, setHover] = useState(0);
 
     return (
-        <div className="flex flex-col items-center mt-2 sm:mt-3">
-            <div className="flex space-x-1 sm:space-x-2">
+        <div className="flex flex-col items-center mt-4">
+            <div className="flex space-x-2">
                 {[...Array(5)].map((_, index) => {
                     const ratingValue = index + 1;
+                    const isActive = ratingValue <= (hover || rating);
                     return (
                         <button
                             key={index}
                             type="button"
-                            className={`w-7 h-7 sm:w-9 sm:h-9 transition-colors duration-200 ${
-                                ratingValue <= (hover || rating) ? "text-yellow-400" : "text-gray-200"
+                            className={`w-8 h-8 sm:w-10 sm:h-10 transition-all duration-300 transform ${
+                                isActive ? "text-white scale-110 drop-shadow-[0_0_12px_rgba(255,255,255,0.8)]" : "text-white/10 hover:text-white/30"
                             }`}
                             onClick={() => setRating(ratingValue)}
                             onMouseEnter={() => setHover(ratingValue)}
@@ -66,7 +68,7 @@ const StarRating: React.FC = () => {
                     );
                 })}
             </div>
-            <p className="mt-2 text-[10px] text-gray-500 font-semibold uppercase tracking-widest">
+            <p className="mt-3 text-[9px] text-white/40 font-black uppercase tracking-[0.3em]">
                 {rating > 0 ? `${rating} Star Experience` : "Tap to rate session"}
             </p>
         </div>
@@ -79,48 +81,63 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
   const targetDuration = customerDetails?.duration;
 
   return (
-    <div className="w-full min-h-screen bg-white flex flex-col items-center p-4 sm:p-6 pt-0 animate-fade-in confetti-container">
+    <div className="fixed inset-0 w-full h-full bg-black flex flex-col items-center overflow-y-auto no-scrollbar animate-fade-in text-white selection:bg-white selection:text-black">
+      
+      {/* GLOSSY BLACK BACKGROUND SYSTEM */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#111111_0%,_#000000_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-40" />
+        <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.02)_50%,transparent_60%)] animate-shimmer" />
+      </div>
+
       <Confetti />
-      <div className="max-w-4xl w-full">
-        <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-green-50 text-green-500 mb-2 sm:mb-3 animate-slide-up">
-                <CheckIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-32 pb-40">
+        
+        {/* Header Section */}
+        <div className="text-center mb-16 animate-fade-in-up">
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/5 backdrop-blur-3xl border border-white/10 text-white mb-8 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+                <CheckIcon className="w-10 h-10 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]" />
             </div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black tracking-tight leading-none animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-white tracking-tighter leading-none uppercase mb-4 drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">
                 Session Complete
             </h1>
-            <p className="mt-2 text-xs sm:text-sm text-gray-400 font-semibold uppercase tracking-widest animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                Service: <span className="text-black">{serviceName}</span>
+            <p className="text-[10px] sm:text-xs text-white/40 font-black uppercase tracking-[0.6em] mb-1">
+                {serviceName}
             </p>
+            <div className="w-16 h-[1px] bg-white/20 mx-auto mt-6" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        {/* Data Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
             
-            {/* Left Col: Time Analysis */}
-            <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm flex flex-col h-full">
-                <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-50">
-                    <h2 className="text-sm font-bold text-black tracking-widest uppercase text-[10px]">Time Analysis</h2>
-                    <div className="flex items-center gap-2">
-                        {targetDuration && targetDuration !== '0' && (
-                            <div className="text-[10px] font-bold text-gray-400 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+            {/* TIME ANALYSIS CARD */}
+            <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 sm:p-12 shadow-2xl flex flex-col animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                <div className="flex items-center justify-between mb-10">
+                    <div>
+                        <h2 className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Time Analysis</h2>
+                        <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest mt-1">Step Performance</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                         {targetDuration && targetDuration !== '0' && (
+                            <span className="text-[9px] font-black text-white/20 border border-white/10 px-4 py-1.5 rounded-full uppercase tracking-widest">
                                 TARGET: {targetDuration}M
-                            </div>
+                            </span>
                         )}
-                        <ClockIcon className="w-4 h-4 text-gray-300" />
+                        <ClockIcon className="w-5 h-5 text-white/20" />
                     </div>
                 </div>
                 
-                <div className="space-y-4 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar flex-grow">
+                <div className="space-y-6 max-h-[300px] overflow-y-auto no-scrollbar pr-2 mb-8 flex-grow">
                     {steps.map((step, index) => {
                         if (index >= stepTimings.length) return null;
-                        
                         return (
-                            <div key={index} className="flex justify-between items-center pb-1 border-b border-gray-50 last:border-0">
+                            <div key={index} className="flex justify-between items-center group">
                                 <div className="max-w-[70%]">
-                                    <p className="font-semibold text-black text-xs sm:text-sm">{step.title}</p>
-                                    <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Step {index + 1}</p>
+                                    <p className="font-bold text-white text-sm sm:text-base group-hover:translate-x-1 transition-transform">{step.title}</p>
+                                    <p className="text-[9px] text-white/20 font-black uppercase tracking-widest mt-0.5">Step {index + 1}</p>
                                 </div>
-                                <p className="text-sm font-mono font-semibold text-black tabular-nums">
+                                <p className="text-sm sm:text-base font-black text-white tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                                     {formatTime(stepTimings[index] || 0)}
                                 </p>
                             </div>
@@ -128,76 +145,63 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
                     })}
                 </div>
 
-                <div className="flex justify-between items-center pt-4 mt-4 border-t border-gray-100">
+                <div className="pt-10 border-t border-white/5 flex justify-between items-end">
                     <div>
-                        <p className="text-base font-bold text-black">Total Time</p>
-                        <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-widest">Actual Duration</p>
+                        <p className="text-[10px] text-white/30 font-black uppercase tracking-[0.3em] mb-1">Final Result</p>
+                        <p className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">Total Duration</p>
                     </div>
-                    <p className="text-xl sm:text-2xl font-bold text-black tabular-nums">
+                    <p className="text-4xl sm:text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
                         {formatTime(totalTime)}
                     </p>
                 </div>
             </div>
 
-            {/* Right Col: Customer Details & Review */}
-            <div className="flex flex-col gap-4">
+            {/* CUSTOMER & REVIEW PANEL */}
+            <div className="space-y-8 flex flex-col animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                 
-                {/* Customer Card */}
-                <div className="bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm">
-                     <h2 className="text-sm font-bold text-black tracking-widest mb-4 pb-4 border-b border-gray-50 uppercase text-[10px]">Customer Details</h2>
+                {/* Customer Details Card */}
+                <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 shadow-2xl flex-1">
+                     <div className="flex items-center gap-2 mb-10">
+                        <UserCircleIcon className="w-4 h-4 text-white/20" />
+                        <h2 className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Customer Record</h2>
+                     </div>
                      
-                     {customerDetails ? (
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-3">
-                                <UserCircleIcon className="w-5 h-5 text-gray-300" />
-                                <div>
-                                    <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-widest">Name</p>
-                                    <p className="text-base font-bold text-black">{customerDetails.name}</p>
-                                </div>
+                     {customerDetails && (
+                        <div className="space-y-8">
+                            <div>
+                                <p className="text-[9px] text-white/30 font-black uppercase tracking-widest mb-2">Primary Client</p>
+                                <p className="text-3xl sm:text-4xl font-black text-white tracking-tighter uppercase leading-none">{customerDetails.name}</p>
                             </div>
                             
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="flex items-center gap-3">
-                                    <CalendarIcon className="w-5 h-5 text-gray-300" />
-                                    <div>
-                                        <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-widest">Date</p>
-                                        <p className="text-xs font-semibold text-black">{customerDetails.date}</p>
-                                    </div>
+                            <div className="grid grid-cols-2 gap-10">
+                                <div>
+                                    <p className="text-[9px] text-white/30 font-black uppercase tracking-widest mb-1">Session Date</p>
+                                    <p className="text-sm font-black text-white uppercase tracking-widest">{customerDetails.date}</p>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <ClockIcon className="w-5 h-5 text-gray-300" />
-                                    <div>
-                                        <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-widest">Time</p>
-                                        <p className="text-xs font-semibold text-black">{customerDetails.time}</p>
-                                    </div>
+                                <div>
+                                    <p className="text-[9px] text-white/30 font-black uppercase tracking-widest mb-1">Start Time</p>
+                                    <p className="text-sm font-black text-white uppercase tracking-widest">{customerDetails.time}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 pt-1">
-                                <UserGroupIcon className={`w-5 h-5 ${customerDetails.isMember ? 'text-black' : 'text-gray-200'}`} />
-                                <div>
-                                    <p className="text-[9px] text-gray-400 font-semibold uppercase tracking-widest">Status</p>
-                                    <div className="flex items-center gap-2">
-                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-widest border ${customerDetails.isMember ? 'bg-black text-white border-black' : 'bg-gray-50 text-gray-400 border-gray-100'}`}>
-                                            {customerDetails.isMember ? 'MEMBER' : 'GUEST'}
-                                        </span>
-                                        {customerDetails.isMember && (
-                                            <span className="text-xs text-black font-mono font-semibold">#{customerDetails.memberId}</span>
-                                        )}
-                                    </div>
+                            <div className="pt-8 border-t border-white/5 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <UserGroupIcon className="w-5 h-5 text-white/20" />
+                                    <span className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.2em] border ${customerDetails.isMember ? 'bg-white text-black border-white' : 'bg-white/5 text-white/40 border-white/10'}`}>
+                                        {customerDetails.isMember ? 'MEMBER' : 'GUEST'}
+                                    </span>
                                 </div>
+                                {customerDetails.isMember && (
+                                    <span className="text-xs text-white/50 font-mono font-black tracking-widest">#{customerDetails.memberId}</span>
+                                )}
                             </div>
                         </div>
-                     ) : (
-                         <div className="text-center py-6 text-gray-400 font-bold uppercase text-[10px]">
-                             <p>Profile Not Loaded</p>
-                         </div>
                      )}
                 </div>
 
-                {/* Rating Card */}
-                <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm text-center">
-                    <h3 className="text-xs font-bold text-black uppercase tracking-widest">Customer Review</h3>
+                {/* Star Rating Component */}
+                <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-8 shadow-2xl text-center">
+                    <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em] mb-4">Post-Service Rating</h3>
                     <StarRating />
                 </div>
             </div>
@@ -205,17 +209,22 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
         
         {/* Gallery Section */}
         {sessionImages.length > 0 && (
-            <div className="mt-6 bg-white border border-gray-100 rounded-2xl p-6 md:p-8 shadow-sm animate-slide-up" style={{ animationDelay: '0.4s' }}>
-                <h2 className="text-sm font-bold text-black tracking-widest mb-6 flex items-center gap-2 uppercase text-[10px]">
-                    <PhotoIcon className="w-4 h-4 text-black" />
-                    Session Gallery
-                </h2>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+            <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-[2.5rem] p-10 sm:p-14 shadow-2xl animate-fade-in-up mb-16" style={{ animationDelay: '0.3s' }}>
+                <div className="flex items-center gap-4 mb-12">
+                    <PhotoIcon className="w-6 h-6 text-white" />
+                    <div>
+                        <h2 className="text-[11px] font-black text-white uppercase tracking-[0.4em]">Visual Documentation</h2>
+                        <p className="text-[9px] text-white/30 font-bold uppercase tracking-widest mt-1">Live Capture Gallery</p>
+                    </div>
+                </div>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     {sessionImages.map((img, idx) => (
-                        <div key={idx} className="relative group rounded-xl overflow-hidden border border-gray-100 aspect-[3/4] bg-gray-50">
-                            <img src={img.imageUrl} alt={`Capture ${idx}`} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-2">
-                                <p className="text-[9px] text-white font-bold uppercase tracking-widest truncate w-full">{img.stepTitle}</p>
+                        <div key={idx} className="relative group rounded-3xl overflow-hidden border border-white/5 aspect-[3/4] bg-white/5 transition-all duration-500 hover:scale-[1.03] hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+                            <img src={img.imageUrl} alt={`Capture ${idx}`} className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-5">
+                                <p className="text-[9px] text-white font-black uppercase tracking-[0.15em] mb-1 leading-tight">{img.stepTitle}</p>
+                                <p className="text-[8px] text-white/40 font-bold uppercase tracking-widest">Capture 0{idx + 1}</p>
                             </div>
                         </div>
                     ))}
@@ -223,21 +232,59 @@ const LiveSessionCompletionPage: React.FC<LiveSessionCompletionPageProps> = ({ s
             </div>
         )}
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 animate-slide-up pb-10" style={{ animationDelay: '0.6s' }}>
+        {/* Action Footer */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <button
             onClick={onNewCustomer}
-            className="bg-black text-white text-xs font-semibold uppercase tracking-[0.2em] px-10 py-4 w-full sm:w-auto hover:bg-gray-800 transition-all rounded-full shadow-lg hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-16 py-6 bg-white text-black text-[10px] font-black uppercase tracking-[0.3em] rounded-full shadow-[0_30px_60px_rgba(255,255,255,0.1)] hover:scale-105 active:scale-95 transition-all"
           >
             New Customer
           </button>
           <button
             onClick={onBackToMenu}
-            className="border-2 border-gray-100 text-gray-400 text-xs font-semibold uppercase tracking-[0.2em] px-10 py-4 w-full sm:w-auto hover:border-black hover:text-black transition-all rounded-full"
+            className="w-full sm:w-auto px-16 py-6 bg-transparent border border-white/10 text-white/50 hover:text-white hover:bg-white/5 text-[10px] font-black uppercase tracking-[0.3em] rounded-full transition-all"
           >
             Back to Menu
           </button>
         </div> 
+
+        <div className="mt-24 text-center opacity-10">
+             <p className="text-[8px] font-black uppercase tracking-[1em]">
+                GenXReality • Salon Precision Academy
+             </p>
+        </div>
       </div>
+
+      <style>{`
+        .confetti {
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          opacity: 0.15;
+          border-radius: 50%;
+          animation: confetti-fall 6s linear infinite;
+        }
+        @keyframes confetti-fall {
+          0% { transform: translateY(-100vh) rotate(0deg); opacity: 0.3; }
+          100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(40px); filter: blur(15px); }
+          100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+          background-size: 200% 100%;
+          animation: shimmer 12s linear infinite;
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon, ClockIcon, UserCircleIcon, CameraIcon } from '../components/AppIcons';
+import { CameraIcon, ChevronLeftIcon, ChevronRightIcon } from '../components/AppIcons';
 import { SERVICE_STEP_MAPPING, DEFAULT_STEPS } from '../data/serviceSteps';
 import { SessionImage } from '../types';
 
@@ -10,21 +10,18 @@ interface LiveTimerProps {
 
 const LiveTimer: React.FC<LiveTimerProps> = ({ startTime }) => {
   const [now, setNow] = useState(Date.now());
-
   useEffect(() => {
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, []);
-
   const elapsedMs = now - startTime;
   const totalSeconds = Math.floor(elapsedMs / 1000);
   const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
-
   return (
-    <div className="fixed top-20 right-4 sm:right-10 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full border border-gray-100 shadow-xl z-40 flex items-center gap-2 animate-fade-in">
-      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-      <p className="text-sm sm:text-lg font-mono font-black tabular-nums text-black">{minutes}:{seconds}</p>
+    <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-2xl rounded-xl border border-white/10 shadow-2xl">
+      <div className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
+      <p className="text-xs sm:text-sm font-black tabular-nums text-white tracking-widest">{minutes}:{seconds}</p>
     </div>
   );
 };
@@ -34,26 +31,23 @@ interface LiveSessionPageProps {
   onStepComplete: (duration: number) => void;
   onFinishSession: (images: SessionImage[]) => void;
   onExit: () => void;
+  onBack?: () => void;
 }
 
-const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepComplete, onFinishSession, onExit }) => {
+const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepComplete, onFinishSession, onExit, onBack }) => {
   const [hasStarted, setHasStarted] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [stepStartTime, setStepStartTime] = useState<number | null>(null);
-  const [customerRequest, setCustomerRequest] = useState('');
+  const [capturedImages, setCapturedImages] = useState<SessionImage[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [capturedImages, setCapturedImages] = useState<SessionImage[]>([]);
-  const [cameraError, setCameraError] = useState(false);
-  const [isFlashing, setIsFlashing] = useState(false);
 
   const steps = SERVICE_STEP_MAPPING[serviceName] || DEFAULT_STEPS;
   const totalSteps = steps.length;
   const stepData = steps[currentStep];
-  const isConsultationStep = stepData.title.toLowerCase().includes('customer requirements');
 
-  const handleBeginSession = () => {
+  const handleBegin = () => {
       const now = Date.now();
       setSessionStartTime(now);
       setStepStartTime(now);
@@ -62,116 +56,164 @@ const LiveSessionPage: React.FC<LiveSessionPageProps> = ({ serviceName, onStepCo
 
   useEffect(() => {
     if (hasStarted) {
-        let stream: MediaStream | null = null;
-        const startCamera = async () => {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: 'user', aspectRatio: 3/4 } 
-                });
-                if (videoRef.current) { videoRef.current.srcObject = stream; }
-                setCameraError(false);
-            } catch (err) { setCameraError(true); }
-        };
-        startCamera();
-        return () => { if (stream) { stream.getTracks().forEach(track => track.stop()); } };
+        navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+            if (videoRef.current) videoRef.current.srcObject = stream;
+        }).catch(err => console.error("Camera error:", err));
     }
   }, [hasStarted]);
 
   const handleCapture = () => {
       if (videoRef.current && canvasRef.current) {
-          const video = videoRef.current;
-          const canvas = canvasRef.current;
-          const context = canvas.getContext('2d');
+          const context = canvasRef.current.getContext('2d');
           if (context) {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageUrl = canvas.toDataURL('image/jpeg');
-            setCapturedImages(prev => [
-                ...prev, 
-                { stepIndex: currentStep, stepTitle: stepData.title, imageUrl, timestamp: Date.now() }
-            ]);
-            setIsFlashing(true);
-            setTimeout(() => { setIsFlashing(false); }, 150);
+              canvasRef.current.width = videoRef.current.videoWidth;
+              canvasRef.current.height = videoRef.current.videoHeight;
+              context.drawImage(videoRef.current, 0, 0);
+              const imageUrl = canvasRef.current.toDataURL('image/jpeg');
+              setCapturedImages(prev => [...prev, { 
+                stepIndex: currentStep, 
+                stepTitle: stepData.title, 
+                imageUrl, 
+                timestamp: Date.now() 
+              }]);
           }
       }
   };
 
   const handleNext = () => {
-    if (stepStartTime) { onStepComplete(Date.now() - stepStartTime); }
-    if (currentStep < totalSteps - 1) { setCurrentStep(currentStep + 1); setStepStartTime(Date.now()); }
-    else { onFinishSession(capturedImages); }
+    if (stepStartTime) onStepComplete(Date.now() - stepStartTime);
+    if (currentStep < totalSteps - 1) { 
+        setCurrentStep(currentStep + 1); 
+        setStepStartTime(Date.now()); 
+    } else {
+        onFinishSession(capturedImages);
+    }
   };
 
-  const handlePrev = () => { if (currentStep > 0) { setCurrentStep(currentStep - 1); setStepStartTime(Date.now()); } };
+  const handlePrev = () => { 
+    if (currentStep > 0) {
+        setCurrentStep(currentStep - 1); 
+        setStepStartTime(Date.now());
+    }
+  };
+
+  const BackgroundLayer = () => (
+    <div className="absolute inset-0 z-[-1] overflow-hidden pointer-events-none bg-black">
+      <img 
+        src="/images/service-bg.jpeg" 
+        alt="" 
+        className="w-full h-full object-cover opacity-50 scale-105"
+      />
+      <div className="absolute inset-0 bg-black/70"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+    </div>
+  );
 
   if (!hasStarted) {
       return (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-in text-center">
-            <div className="max-w-2xl w-full">
-                <span className="px-4 py-1.5 bg-black text-white rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-8 inline-block shadow-lg">Session Lobby</span>
-                <h1 className="text-4xl sm:text-6xl font-black text-black tracking-tighter mb-6 leading-[0.9]">{serviceName}</h1>
-                <p className="text-lg sm:text-xl text-gray-500 mb-12 font-medium max-w-lg mx-auto">Ensure your workstation is prepared. Click below to begin the live service with the client.</p>
-                <div className="flex flex-col gap-4 items-center">
-                    <button onClick={handleBeginSession} className="h-14 px-14 bg-black text-white text-xs font-black uppercase tracking-[0.2em] rounded-full shadow-2xl hover:scale-105 transition-all">Begin Session</button>
-                    <button onClick={onExit} className="text-gray-400 hover:text-red-500 text-xs font-black uppercase tracking-widest transition-colors mt-4">Cancel Session</button>
-                </div>
+        <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-8 animate-fade-in text-center overflow-hidden">
+            <BackgroundLayer />
+            <div className="relative z-10 animate-fade-in-up">
+                <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-2xl">
+                    {serviceName}
+                </h1>
+                <p className="text-base sm:text-xl text-white/40 mb-10 max-w-md mx-auto font-bold uppercase tracking-[0.4em]">
+                    Ready to Initiate
+                </p>
+                <button 
+                    onClick={handleBegin} 
+                    className="bg-white text-black px-12 py-5 rounded-full text-[10px] font-black uppercase tracking-[0.4em] shadow-2xl transition-all hover:scale-105 active:scale-95"
+                >
+                    Begin Session
+                </button>
             </div>
         </div>
       );
   }
 
-  const progressPercentage = ((currentStep + 1) / totalSteps) * 100;
-
   return (
-    <div className="flex-1 flex flex-col animate-fade-in relative overflow-hidden h-full">
-        <div className="fixed top-0 left-0 right-0 h-1 bg-light-grey z-50">
-            <div className="h-1 bg-black transition-all duration-500 ease-in-out" style={{ width: `${progressPercentage}%` }}></div>
-        </div>
-        {sessionStartTime && <LiveTimer startTime={sessionStartTime} />}
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 md:px-16 pt-8 pb-28">
-        <div className="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
-          <div className="animate-slide-up order-2 md:order-1">
-            <div className="mb-4 flex flex-wrap items-center gap-3">
-                <span className="text-xs font-black text-gray-400 tracking-[0.2em] uppercase">Step {currentStep + 1} / {totalSteps}</span>
+    <div className="fixed inset-0 w-full h-full flex flex-col animate-fade-in overflow-hidden">
+        <BackgroundLayer />
+        
+        {/* Main Content Area - Refined for "Cleaner" Appearance */}
+        <div className="relative z-10 flex-1 flex flex-col lg:flex-row items-center justify-center px-10 sm:px-20 lg:px-32 pt-24 pb-32 overflow-y-auto no-scrollbar gap-10 lg:gap-24">
+            
+            {/* Step Description - Reduced text sizes */}
+            <div className="w-full lg:w-1/2 text-center lg:text-left animate-fade-in-up">
+                <span className="text-[9px] font-black text-white/30 tracking-[0.6em] uppercase mb-4 block">
+                  STEP {currentStep + 1} / {totalSteps}
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tighter uppercase leading-[0.9] drop-shadow-2xl mb-6">
+                  {stepData.title}
+                </h2>
+                <p className="text-sm sm:text-base lg:text-lg text-white/50 font-medium leading-relaxed max-w-sm mx-auto lg:mx-0">
+                  {stepData.instructions}
+                </p>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-black text-black tracking-tighter leading-[0.95]">{stepData.title}</h2>
-            <p className="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed font-medium border-l-4 border-black pl-6">{stepData.instructions}</p>
-            {isConsultationStep && (
-                <div className="mt-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                    <label className="block text-[10px] font-black text-black tracking-widest uppercase mb-3">Consultation Notes</label>
-                    <textarea value={customerRequest} onChange={(e) => setCustomerRequest(e.target.value)} placeholder="Note the client's specific requests here..." className="w-full p-4 border border-gray-200 bg-gray-50/50 text-black rounded-2xl focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all min-h-[100px] sm:min-h-[140px] text-sm sm:text-base resize-none shadow-inner" />
+            
+            {/* Camera Preview - Slightly smaller scale */}
+            <div className="w-full lg:w-1/2 flex justify-center lg:justify-end animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                <div className="relative w-full aspect-[3/4] max-w-[280px] sm:max-w-[320px] lg:max-w-[360px] bg-black rounded-[2.5rem] overflow-hidden border-2 border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)]">
+                    <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform scale-x-[-1]" />
+                    <canvas ref={canvasRef} className="hidden" />
+                    
+                    <button 
+                      onClick={handleCapture} 
+                      className="absolute bottom-8 left-1/2 -translate-x-1/2 h-14 w-14 sm:h-16 sm:w-16 bg-white rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all z-20 flex items-center justify-center group"
+                    >
+                      <CameraIcon className="w-6 h-6 sm:w-8 sm:h-8 text-black group-hover:scale-110 transition-transform" />
+                    </button>
                 </div>
-            )}
-          </div>
-          <div className="animate-slide-up order-1 md:order-2 flex justify-center" style={{ animationDelay: '0.2s' }}>
-             <div className="relative w-full max-w-xs sm:max-w-sm aspect-[3/4] bg-black rounded-3xl overflow-hidden shadow-2xl group border-4 border-white">
-                 {!cameraError ? (
-                     <div className="relative w-full h-full">
-                         <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform scale-x-[-1]" />
-                         <div className={`absolute inset-0 bg-white pointer-events-none transition-opacity duration-150 ease-out z-10 ${isFlashing ? 'opacity-100' : 'opacity-0'}`} />
-                     </div>
-                 ) : (
-                     <div className="w-full h-full flex flex-col items-center justify-center bg-gray-800 text-white p-4 text-center"><p className="font-bold mb-2">Camera Unavailable</p></div>
-                 )}
-                 <canvas ref={canvasRef} className="hidden" />
-                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-                    <button onClick={handleCapture} disabled={cameraError} className="h-16 w-16 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform duration-200 border-4 border-gray-100"><CameraIcon className="w-8 h-8 text-black" /></button>
-                 </div>
-                 <div className="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-black px-2 py-1 rounded-full flex items-center gap-1.5 animate-pulse z-20"><div className="w-1.5 h-1.5 bg-white rounded-full"></div>LIVE</div>
-             </div>
-          </div>
+            </div>
         </div>
-      </div>
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-gray-100 z-40">
-        <div className="max-w-screen-xl mx-auto px-6 md:px-12 h-24 flex items-center justify-between">
-           <button onClick={onExit} className="text-xs font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors">Abort</button>
-          <div className="flex items-center gap-3">
-            <button onClick={handlePrev} disabled={currentStep === 0} className="h-12 px-6 border-2 border-gray-100 rounded-full flex items-center justify-center transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:border-black text-black"><span className="text-xs font-black uppercase tracking-widest">Back</span></button>
-            <button onClick={handleNext} className={`h-12 px-10 text-white flex items-center justify-center transition-all rounded-full shadow-xl ${currentStep === totalSteps - 1 ? 'bg-green-600 hover:bg-green-500' : 'bg-black hover:bg-gray-800'}`}><span className="text-xs font-black uppercase tracking-widest whitespace-nowrap">{currentStep === totalSteps - 1 ? 'Finish' : 'Next Step'}</span></button>
-          </div>
-        </div>
-      </footer>
+
+        {/* REFINED FOOTER - SLIMMER AND PERFECTLY ALIGNED */}
+        <footer className="fixed bottom-0 left-0 right-0 h-24 sm:h-28 flex items-center justify-between px-10 sm:px-20 lg:px-32 z-50">
+            
+            {/* Left Cluster: EXIT | TIMER */}
+            <div className="flex items-center gap-4 sm:gap-6 h-full">
+                <button 
+                    onClick={onExit} 
+                    className="text-[9px] sm:text-[10px] font-black text-red-600 hover:text-red-500 uppercase tracking-[0.4em] transition-all whitespace-nowrap drop-shadow-lg"
+                >
+                    EXIT
+                </button>
+                <div className="h-5 w-[1px] bg-white/10" />
+                {sessionStartTime && <LiveTimer startTime={sessionStartTime} />}
+            </div>
+            
+            {/* Right Cluster: Nav Buttons - Scaled down for cleanliness */}
+            <div className="flex items-center gap-3 sm:gap-4">
+                <button 
+                    onClick={handlePrev} 
+                    disabled={currentStep === 0} 
+                    className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center rounded-full border border-white/5 text-white disabled:opacity-0 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-all active:scale-90"
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                </button>
+                <button 
+                    onClick={handleNext} 
+                    className="h-11 sm:h-12 px-8 sm:px-10 bg-white text-black rounded-full flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-xl"
+                >
+                  <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] whitespace-nowrap">
+                    {currentStep === totalSteps - 1 ? 'Finish' : 'Next Step'}
+                  </span>
+                  <ChevronRightIcon className="w-3.5 h-3.5" />
+                </button>
+            </div>
+        </footer>
+
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+          @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+          }
+          .animate-fade-in-up {
+            animation: fade-in-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+        `}</style>
     </div>
   );
 };

@@ -12,8 +12,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ userRole, currentPage, onNavigate, onSignOut, onBack }) => {
+  const isModeSelection = currentPage === 'MODE_SELECTION';
   
-  // Pages where a back button makes sense in the global nav
   const showBack = ![
     'ROLE_SELECTION', 
     'MODE_SELECTION', 
@@ -23,56 +23,46 @@ const Header: React.FC<HeaderProps> = ({ userRole, currentPage, onNavigate, onSi
   ].includes(currentPage);
 
   return (
-    <div className="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 animate-fade-in">
-      <header className="h-16 bg-white/70 backdrop-blur-lg border border-gray-200/40 rounded-full shadow-lg px-8 sm:px-12 flex items-center justify-between">
+    <div className="fixed top-6 left-1/2 -translate-x-1/2 w-[94%] max-w-7xl z-[100] animate-fade-in">
+      <header className="h-16 flex items-center justify-between px-8 sm:px-12 rounded-full glass-header shadow-[0_8px_32px_rgba(0,0,0,0.4)] border border-white/10">
         
-        {/* Left Side: Back Navigations */}
-        <div className="flex-1 flex items-center justify-start">
-          {showBack && onBack && (
+        {/* Left: Navigation (Back Button) */}
+        <div className="flex-1 flex items-center">
+          {!isModeSelection && showBack && onBack && (
             <button 
               onClick={onBack}
-              className="group flex items-center text-[10px] sm:text-xs font-semibold text-gray-400 hover:text-black transition-colors uppercase tracking-[0.2em]"
+              className="flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all group"
             >
-              <ChevronLeftIcon className="w-4 h-4 mr-1.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span className="hidden xs:block">Back</span>
+              <ChevronLeftIcon className="w-4 h-4 mr-1 group-hover:-translate-x-1 transition-transform" />
+              <span className="hidden sm:inline">Back</span>
             </button>
           )}
         </div>
 
-        {/* Center: Logo - Increased size slightly for visibility */}
-        <div className="flex-shrink-0 flex items-center justify-center">
+        {/* Center: Brand Logo (Locked in center for all pages) */}
+        <div className="flex-1 flex justify-center">
           <button 
-            onClick={() => onNavigate(userRole === 'admin' ? 'ADMIN' : 'MODE_SELECTION')} 
-            className="focus:outline-none hover:opacity-80 transition-opacity"
+            onClick={() => onNavigate(userRole === 'admin' ? 'ADMIN' : 'MODE_SELECTION')}
+            className="hover:scale-105 transition-transform flex-shrink-0"
           >
             <img 
               src="/images/logo.png" 
-              alt="GenXReality" 
-              className="h-9 w-auto object-contain"
+              alt="GenXReality Logo" 
+              className="h-9 w-auto brightness-0 invert opacity-100 object-contain" 
             />
           </button>
         </div>
 
-        {/* Right Side: Switch Mode & Signout */}
-        <div className="flex-1 flex items-center justify-end gap-3 sm:gap-6">
-          {userRole === 'candidate' && currentPage !== 'MODE_SELECTION' && (
-            <button
-              onClick={() => onNavigate('MODE_SELECTION')}
-              className="hidden md:block text-[10px] font-semibold tracking-[0.2em] text-gray-400 hover:text-black transition-colors uppercase"
-            >
-              Switch Mode
-            </button>
-          )}
-
+        {/* Right: Signature Red Sign Out */}
+        <div className="flex-1 flex justify-end">
           <button 
-            onClick={onSignOut} 
+            onClick={onSignOut}
             title="Sign Out"
-            className="flex items-center justify-center h-10 w-10 rounded-full border border-gray-100 text-gray-400 hover:bg-black hover:text-white hover:border-black transition-all duration-300"
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500/10 text-red-500 transition-all duration-300 border border-red-500/20 hover:border-red-500/50 hover:scale-110 shadow-lg"
           >
-            <LogoutIcon className="w-4 h-4" />
+            <LogoutIcon className="w-5 h-5" />
           </button>
         </div>
-
       </header>
     </div>
   );

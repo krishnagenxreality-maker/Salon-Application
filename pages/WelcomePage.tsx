@@ -8,35 +8,39 @@ interface WelcomePageProps {
 
 const WelcomePage: React.FC<WelcomePageProps> = ({ onExplore }) => {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 animate-fade-in relative">
-        <div className="max-w-4xl text-center px-4">
-            <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-black tracking-tighter mb-2 uppercase leading-none animate-slide-up opacity-0" style={{ animationFillMode: 'forwards' }}>
-                TONI&GUY
+    <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center animate-fade-in">
+        {/* Background Layer */}
+        <div className="absolute inset-0 z-0">
+            <img 
+                src="/images/lobby-bg.jpeg" 
+                alt="Lobby" 
+                className="w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90"></div>
+        </div>
+
+        {/* Content Layer */}
+        <div className="relative z-10 text-center px-6 max-w-4xl">
+            <h2 className="text-sm font-black text-white/40 tracking-[0.5em] uppercase mb-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                Training Portal
             </h2>
 
-            <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-gray-900 tracking-tight leading-tight mb-4 animate-slide-up opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
-                Welcome to the <br/> Future of Styling.
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-white tracking-tighter leading-[0.85] mb-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                TRAINING<br/>LOBBY
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 mb-6 sm:mb-10 max-w-xl sm:max-w-2xl mx-auto animate-slide-up opacity-0" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
-                Immerse yourself in world-class education. Master precision, creativity, and technique through our advanced interactive platform.
+            <p className="text-lg sm:text-xl text-white/60 mb-12 max-w-xl mx-auto opacity-0 animate-fade-in-up font-medium" style={{ animationDelay: '0.3s' }}>
+                Master precision, creativity, and world-class technique through our immersive interactive platform.
             </p>
 
             <button
                 onClick={onExplore}
-                className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-3.5 text-sm sm:text-base font-bold text-white bg-black rounded-full transition-all duration-300 hover:bg-gray-800 hover:scale-105 focus:outline-none animate-slide-up opacity-0 shadow-lg"
-                style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
+                className="inline-flex items-center justify-center px-12 py-5 bg-white text-black text-xs font-black uppercase tracking-[0.3em] rounded-full hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(255,255,255,0.15)] group opacity-0 animate-fade-in-up"
+                style={{ animationDelay: '0.4s' }}
             >
-                <span className="mr-2">Explore our services</span>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                    className="w-4 h-4 sm:w-5 sm:h-5"
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                Explore Modules
+                <svg className="w-4 h-4 ml-4 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
             </button>
         </div>

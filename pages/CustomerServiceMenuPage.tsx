@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScissorsIcon, SparklesIcon, ChevronLeftIcon, UserGroupIcon } from '../components/AppIcons';
+import { ScissorsIcon, SparklesIcon, UserGroupIcon } from '../components/AppIcons';
 
 interface CustomerServiceMenuPageProps {
   onSelectService: (serviceId: string) => void;
@@ -26,45 +26,77 @@ const SALON_SERVICES = [
 
 const CustomerServiceMenuPage: React.FC<CustomerServiceMenuPageProps> = ({ onSelectService, onBack }) => {
   return (
-    <div className="w-full min-h-screen bg-white pb-20 px-4 sm:px-6 md:px-8 lg:px-12 animate-fade-in relative">
-      <div className="max-w-screen-xl mx-auto text-center">
-        
-        {/* Adjusted top spacer */}
-        <div className="h-6 sm:h-8" />
+    <div className="fixed inset-0 w-full h-full flex flex-col bg-black overflow-y-auto custom-scrollbar animate-fade-in">
+      
+      {/* CINEMATIC BACKGROUND */}
+      <div className="fixed inset-0 z-0">
+        <div 
+          className="absolute inset-0 opacity-50"
+          style={{ 
+            backgroundImage: `url("/images/auth-bg.jpeg")`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Dark dim overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/40 to-black/95 z-[1]" />
+        <div className="absolute inset-0 backdrop-blur-[2px] z-[2]" />
+      </div>
 
-        {/* Header */}
-        <div className="mb-10 sm:mb-12 animate-slide-up px-4">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black tracking-tighter">
+      <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 sm:px-12 md:px-16 pt-32 pb-24">
+        
+        {/* Header Section */}
+        <div className="text-center mb-12 sm:mb-16 animate-fade-in-up">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tighter uppercase drop-shadow-2xl">
                 Service Menu
             </h1>
-            <p className="mt-2 sm:mt-4 text-gray-500 text-sm sm:text-lg">
-                Select the service requested by the client.
+            <p className="mt-3 text-white/40 text-[10px] sm:text-xs font-black uppercase tracking-[0.4em] drop-shadow-md">
+                Select the service requested by the client
             </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 animate-slide-up pb-8" style={{ animationDelay: '0.2s' }}>
-            {SALON_SERVICES.map((service) => (
+        {/* Responsive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            {SALON_SERVICES.map((service, idx) => (
                 <button
                     key={service.id}
                     onClick={() => onSelectService(service.id)}
-                    className="group relative bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center hover:shadow-xl hover:-translate-y-1 transition-all duration-300 min-h-[160px] sm:min-h-[180px]"
+                    className="group relative flex flex-col items-center justify-center p-8 sm:p-10 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] text-center transition-all duration-500 hover:bg-white/10 hover:border-white/20 hover:-translate-y-2 shadow-2xl min-h-[180px] sm:min-h-[220px]"
+                    style={{ animationDelay: `${idx * 0.05}s` }}
                 >
-                    <div className="h-10 w-10 sm:h-12 sm:w-12 bg-light-grey rounded-full flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-black transition-colors duration-300">
-                        <service.icon className="w-5 h-5 sm:w-6 sm:h-6 text-black group-hover:text-white transition-colors duration-300" />
+                    {/* Icon Container */}
+                    <div className="h-12 w-12 sm:h-16 sm:w-16 bg-white/5 rounded-full flex items-center justify-center mb-5 sm:mb-6 group-hover:bg-white group-hover:scale-110 transition-all duration-500 border border-white/5">
+                        <service.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:text-black transition-colors duration-500" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-black leading-tight">{service.title}</h3>
+
+                    {/* Service Title */}
+                    <h3 className="text-sm sm:text-base font-black text-white/90 leading-tight uppercase tracking-widest group-hover:text-white transition-colors">
+                        {service.title}
+                    </h3>
                     
+                    {/* Status Badge for Active Services */}
                     {service.id === 'haircuts-styling' && (
-                         <span className="mt-2 text-[10px] sm:text-xs font-semibold text-white bg-black px-2 py-0.5 rounded-full">
+                         <span className="absolute top-4 right-6 text-[8px] font-black text-black bg-white/80 px-3 py-1 rounded-full uppercase tracking-[0.2em] shadow-lg animate-pulse">
                             Active
                         </span>
                     )}
                 </button>
             ))}
         </div>
-        
+
+        {/* Brand Signoff */}
+        <div className="mt-20 text-center opacity-20">
+             <p className="text-[10px] font-black uppercase tracking-[0.8em] text-white">
+                GenXReality • Precision Salon Training
+             </p>
+        </div>
       </div>
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      `}</style>
     </div>
   );
 };
