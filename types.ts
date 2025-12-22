@@ -22,13 +22,11 @@ export interface Technique {
   imageUrl: string;
 }
 
-// Admin & Progress Types
-
 export interface CompletedTechnique {
   techniqueId: string;
   techniqueTitle: string;
-  completedAt: number; // timestamp
-  stepTimings: number[]; // duration in ms for each step
+  completedAt: number;
+  stepTimings: number[];
   totalTime: number;
 }
 
@@ -37,9 +35,10 @@ export interface CustomerSession {
     customerDetails: CustomerDetails;
     serviceName: string;
     subService: string;
-    customerRequest: string; // From consultation
+    customerRequest: string;
     stepTimings: number[];
     images: SessionImage[];
+    videoUrl?: string; // New field for timelapse video
     rating: number;
     timestamp: number;
 }
@@ -47,7 +46,8 @@ export interface CustomerSession {
 export interface User {
   id: string;
   name: string;
-  applicationNumber: string; // Used as Candidate ID
+  applicationNumber: string;
+  password?: string;
   joinedAt: number;
   completedTechniques: CompletedTechnique[];
   customerSessions: CustomerSession[];

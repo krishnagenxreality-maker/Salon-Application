@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Technique, Page, UserRole, CustomerDetails, SessionImage, CustomerSession } from './types';
 import Header from './components/Header';
@@ -40,7 +39,7 @@ const App: React.FC = () => {
   const [selectedLiveService, setSelectedLiveService] = useState<string | null>(null);
   const [liveSessionTimings, setLiveSessionTimings] = useState<StepTimings>([]);
   const [currentCustomer, setCurrentCustomer] = useState<CustomerDetails | null>(null);
-  const [sessionImages, setSessionImages] = useState<SessionImage[]>([]);
+  const [sessionVideo, setSessionVideo] = useState<string | undefined>(undefined);
 
   // Admin State
   const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null);
@@ -62,7 +61,7 @@ const App: React.FC = () => {
     setStepTimings([]);
     setLiveSessionTimings([]);
     setCurrentCustomer(null);
-    setSessionImages([]);
+    setSessionVideo(undefined);
   }, []);
 
   const handleNavigate = useCallback((page: Page) => {
@@ -205,9 +204,9 @@ const App: React.FC = () => {
       case 'HAIRCUTS_SELECTION':
         return <HaircutsSelectionPage onStartSession={(s) => { setSelectedLiveService(s); setCurrentPage('LIVE_SESSION'); }} onBack={handleGlobalBack} />;
       case 'LIVE_SESSION':
-        return selectedLiveService ? <LiveSessionPage serviceName={selectedLiveService} onStepComplete={(d) => setLiveSessionTimings(p => [...p, d])} onFinishSession={(img) => { setSessionImages(img); setCurrentPage('LIVE_SESSION_COMPLETED'); }} onExit={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onBack={handleGlobalBack} /> : null;
+        return selectedLiveService ? <LiveSessionPage serviceName={selectedLiveService} onStepComplete={(d) => setLiveSessionTimings(p => [...p, d])} onFinishSession={(video) => { setSessionVideo(video); setCurrentPage('LIVE_SESSION_COMPLETED'); }} onExit={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onBack={handleGlobalBack} /> : null;
       case 'LIVE_SESSION_COMPLETED':
-        return selectedLiveService ? <LiveSessionCompletionPage serviceName={selectedLiveService} stepTimings={liveSessionTimings} customerDetails={currentCustomer} sessionImages={sessionImages} onBackToMenu={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onNewCustomer={() => setCurrentPage('CUSTOMER_DETAILS')} /> : null;
+        return selectedLiveService ? <LiveSessionCompletionPage serviceName={selectedLiveService} stepTimings={liveSessionTimings} customerDetails={currentCustomer} sessionImages={[]} videoUrl={sessionVideo} onBackToMenu={() => setCurrentPage('CUSTOMER_SERVICE_MENU')} onNewCustomer={() => setCurrentPage('CUSTOMER_DETAILS')} /> : null;
       case 'ADMIN': 
         return <AdminPage onSelectCandidate={(id) => { setSelectedCandidateId(id); setCurrentPage('ADMIN_CANDIDATE_DETAILS'); }} onSignOut={handleSignOut} />;
       case 'ADMIN_CANDIDATE_DETAILS':
@@ -233,7 +232,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full overflow-hidden relative">
+    <div className="flex flex-col min-h-screen w-full relative">
       {showHeader && (
         <Header 
             userRole={userRole} 
@@ -243,8 +242,8 @@ const App: React.FC = () => {
             onBack={handleGlobalBack}
         />
       )}
-      <main className="flex-1 w-full relative">
-        <div key={currentPage} className="h-full w-full">
+      <main className="flex-1 w-full relative overflow-y-auto">
+        <div key={currentPage} className="w-full">
             {renderContent()}
         </div>
       </main>
